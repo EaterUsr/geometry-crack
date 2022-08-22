@@ -31,7 +31,7 @@ export default class Cube implements ICube {
 
   update(): void {
     this.ctx.fillStyle = "black";
-    const speed = (Date.now() - this.startTime) / 100;
+    const speed = (Date.now() - this.startTime) / 110;
 
     const jumpHeight = Math.sin(this.jumpValue) * this.cubeSize * 1.5;
 
@@ -48,11 +48,15 @@ export default class Cube implements ICube {
       this.jumpValue = 0;
     }
 
+    this.ctx.save();
+
     this.ctx.translate(...cubeCenter);
     this.ctx.rotate((Math.PI / 180) * this.jumpValue * 50);
     this.ctx.translate(-cubeCenter[0], -cubeCenter[1]);
 
     this.ctx.fillRect(...cubeOrigin, this.cubeSize, this.cubeSize);
+
+    this.ctx.restore();
 
     this.startTime = Date.now();
   }
