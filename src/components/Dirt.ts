@@ -1,4 +1,4 @@
-import Cloud, { ICloud } from "./Cloud";
+import Cloud, { ICloud } from "@components/Cloud";
 
 interface IDirt extends ICloud {}
 

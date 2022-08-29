@@ -1,4 +1,4 @@
-import List from "./list";
+import List from "@utils/list";
 
 export default function makeListController<T extends { update: (speed: number) => unknown }>(
   frequency: number,

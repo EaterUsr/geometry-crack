@@ -1,8 +1,8 @@
 import "./style.css";
-import Cube from "./Cube";
-import Cloud from "./Cloud";
-import Dirt from "./Dirt";
-import makeListController from "./listController";
+import Cube from "@components/Cube";
+import Cloud from "@components/Cloud";
+import Dirt from "@components/Dirt";
+import makeListController from "@utils/listController";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
 
