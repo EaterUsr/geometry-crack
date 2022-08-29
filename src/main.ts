@@ -2,6 +2,7 @@ import "./style.css";
 import Cube from "./Cube";
 import Cloud from "./Cloud";
 import Dirt from "./Dirt";
+import makeListController from "./listController";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#game")!;
 
@@ -13,22 +14,24 @@ const speed = 0.5;
 const cubeSize = 30;
 const cube = new Cube(ctx, width, height, cubeSize);
 
-const clouds: Cloud[] = [];
-const dirts: Dirt[] = [];
+const cloudFrequency = 0.3;
+const cloudSpeed = speed / 4;
 
-setInterval(() => {
-  clouds.push(new Cloud(ctx, Math.random(), speed / 2, Math.random(), width));
-  if (clouds.length > 4) {
-    clouds.splice(0, 1);
-  }
-}, 1000);
+function cloudInstance() {
+  return new Cloud(ctx, Math.random(), cloudSpeed, Math.random(), width);
+}
 
-setInterval(() => {
-  dirts.push(new Dirt(ctx, Math.random(), speed, Math.random(), width));
-  if (dirts.length > 4) {
-    dirts.splice(0, 1);
-  }
-}, 500);
+const updateClouds = makeListController<Cloud>(cloudFrequency, cloudSpeed, width, cloudInstance);
+
+const dirtFrequency = 0.25;
+const dirtSpeed = speed;
+
+function dirtInstance() {
+  return new Dirt(ctx, Math.random(), dirtSpeed, Math.random(), width);
+}
+const updateDirts = makeListController<Dirt>(dirtFrequency, dirtSpeed, width, dirtInstance);
+
+let startTime = Date.now();
 
 function anim() {
   window.requestAnimationFrame(anim);
@@ -42,13 +45,13 @@ function anim() {
   ctx.fillStyle = "#1CA600";
   ctx.fillRect(0, height / 2 + cubeSize / 2, width, 15);
 
-  cube.update();
-  clouds.forEach(cloud => {
-    cloud.update();
-  });
-  dirts.forEach(dirt => {
-    dirt.update();
-  });
+  const speedFrame = Date.now() - startTime;
+
+  cube.update(speedFrame);
+  updateClouds(speedFrame);
+  updateDirts(speedFrame);
+
+  startTime = Date.now();
 }
 anim();
 document.addEventListener("keyup", e => {

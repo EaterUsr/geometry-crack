@@ -7,7 +7,7 @@ export interface ICloud {
   speed: number;
   height: number;
   canvasWidth: number;
-  update: () => void;
+  update: (speed: number) => void;
 }
 
 const cloudPath = new Path2D();
@@ -44,8 +44,7 @@ export default class Cloud implements ICloud {
     this.sizeX = minSize;
     this.sizeY = minSize;
   }
-  update(): void {
-    const speed = Date.now() - this.startTime;
+  update(speed: number): void {
     const distance = this.canvasWidth - this.position;
 
     this.ctx.save();
