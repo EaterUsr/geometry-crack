@@ -1,6 +1,4 @@
 export interface ICloud {
-  startTime: number;
-  ctx: CanvasRenderingContext2D;
   position: number;
   sizeX: number;
   sizeY: number;
@@ -25,7 +23,6 @@ cloudPath.closePath();
 
 export default class Cloud implements ICloud {
   public position = 0;
-  public startTime = Date.now();
   public sizeX: number;
   public sizeY: number;
   protected path = cloudPath;
@@ -34,7 +31,7 @@ export default class Cloud implements ICloud {
   protected minHeight = (height: number) => height * 20;
 
   constructor(
-    public ctx: CanvasRenderingContext2D,
+    private ctx: CanvasRenderingContext2D,
     size: number,
     public speed: number,
     public height: number,
@@ -57,6 +54,5 @@ export default class Cloud implements ICloud {
     this.ctx.restore();
 
     this.position += this.speed * speed;
-    this.startTime = Date.now();
   }
 }

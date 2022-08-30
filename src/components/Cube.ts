@@ -1,30 +1,22 @@
 interface ICube {
   cubeSize: number;
-  ctx: CanvasRenderingContext2D;
   height: number;
   width: number;
-  jumpValue: number;
-  isJumpping: boolean;
   update: (speed: number) => void;
   jump: () => void;
 }
 
 export default class Cube implements ICube {
-  public jumpValue = 0;
+  private jumpValue = 0;
 
-  public isJumpping = false;
+  private isJumpping = false;
 
   constructor(
-    public ctx: CanvasRenderingContext2D,
+    private ctx: CanvasRenderingContext2D,
     public width: number,
     public height: number,
     public cubeSize: number
-  ) {
-    this.ctx = ctx;
-    this.height = height;
-    this.width = width;
-    this.cubeSize = cubeSize;
-  }
+  ) {}
 
   update(speed: number): void {
     this.ctx.fillStyle = "black";
