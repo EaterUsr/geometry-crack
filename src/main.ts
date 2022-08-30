@@ -18,7 +18,7 @@ const cloudFrequency = 0.3;
 const cloudSpeed = speed / 4;
 
 function cloudInstance() {
-  return new Cloud(ctx, Math.random(), cloudSpeed, Math.random(), width);
+  return new Cloud(ctx, Math.random(), cloudSpeed, Math.random(), width, Boolean(Math.floor(Math.random() * 2)));
 }
 
 const updateClouds = makeListController<Cloud>(cloudFrequency, cloudSpeed, width, cloudInstance);

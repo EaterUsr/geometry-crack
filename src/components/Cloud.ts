@@ -35,18 +35,21 @@ export default class Cloud implements ICloud {
     size: number,
     public speed: number,
     public height: number,
-    public canvasWidth: number
+    public canvasWidth: number,
+    public isReturn: boolean
   ) {
     const minSize = this.minSize(size);
     this.sizeX = minSize;
     this.sizeY = minSize;
   }
   update(speed: number): void {
-    const distance = this.canvasWidth - this.position;
+    const distance = this.canvasWidth - this.position + (this.isReturn ? 140 : 0);
+
+    const sizeX = this.isReturn ? -this.sizeX : this.sizeX;
 
     this.ctx.save();
     this.ctx.translate(distance, this.minHeight(this.height));
-    this.ctx.scale(this.sizeX, this.sizeY);
+    this.ctx.scale(sizeX, this.sizeY);
 
     this.ctx.fillStyle = this.color;
 

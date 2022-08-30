@@ -12,6 +12,6 @@ export default class Dirt extends Cloud implements IDirt {
   protected minHeight = (height: number) => 250 + height * 20;
 
   constructor(ctx: CanvasRenderingContext2D, size: number, speed: number, height: number, canvasWidth: number) {
-    super(ctx, size, speed, height, canvasWidth);
+    super(ctx, size, speed, height, canvasWidth, false);
   }
 }
