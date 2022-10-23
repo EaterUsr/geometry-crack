@@ -1,49 +1,51 @@
 interface ICube {
-  cubeSize: number;
-  height: number;
-  width: number;
+  size: number;
+  originX: number;
+  originY: number;
   update: (speed: number) => void;
   jump: () => void;
+  deg: number;
+  jumpHeight: number;
 }
 
 export default class Cube implements ICube {
   private jumpValue = 0;
+  public jumpHeight = 0;
 
   private isJumpping = false;
+  public deg: number = 0;
 
   constructor(
     private ctx: CanvasRenderingContext2D,
-    public width: number,
-    public height: number,
-    public cubeSize: number
+    public originX: number,
+    public originY: number,
+    public size: number
   ) {}
 
   update(speed: number): void {
     this.ctx.fillStyle = "black";
 
-    let jumpHeight = Math.sin(this.jumpValue) * this.cubeSize * 1.5;
+    this.jumpHeight = Math.sin(this.jumpValue) * this.size * 1.5;
 
-    if (jumpHeight < 0) {
+    if (this.jumpHeight < 0) {
       this.isJumpping = false;
       this.jumpValue = 0;
-      jumpHeight = 0;
+      this.jumpHeight = 0;
     }
 
     if (this.isJumpping) this.jumpValue += speed * 0.01;
 
-    const cubeOrigin: [number, number] = [
-      this.width / 2 - this.cubeSize / 2,
-      this.height / 2 - this.cubeSize / 2 - jumpHeight,
-    ];
-    const cubeCenter: [number, number] = [cubeOrigin[0] + this.cubeSize / 2, cubeOrigin[1] + this.cubeSize / 2];
+    const cubeOrigin: [x: number, y: number] = [this.originX, this.originY - this.jumpHeight];
+    const cubeCenter: [x: number, y: number] = [cubeOrigin[0] + this.size / 2, cubeOrigin[1] + this.size / 2];
 
     this.ctx.save();
 
     this.ctx.translate(...cubeCenter);
-    this.ctx.rotate((Math.PI / 180) * this.jumpValue * 50);
+    this.deg = (Math.PI / 180) * this.jumpValue * 50;
+    this.ctx.rotate(this.deg);
     this.ctx.translate(-cubeCenter[0], -cubeCenter[1]);
 
-    this.ctx.fillRect(...cubeOrigin, this.cubeSize, this.cubeSize);
+    this.ctx.fillRect(...cubeOrigin, this.size, this.size);
 
     this.ctx.restore();
   }

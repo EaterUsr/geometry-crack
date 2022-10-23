@@ -26,7 +26,6 @@ export default function makeListController<T extends { update: (speed: number) =
   }, spaceTime);
 
   return (speed: number) => {
-    console.log(speed);
     elements.forEach(element => {
       element.update(speed);
     });
