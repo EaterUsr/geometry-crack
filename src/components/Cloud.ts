@@ -1,7 +1,6 @@
 export interface ICloud {
   position: number;
-  sizeX: number;
-  sizeY: number;
+  size: number;
   speed: number;
   height: number;
   canvasWidth: number;
@@ -23,33 +22,25 @@ cloudPath.closePath();
 
 export default class Cloud implements ICloud {
   public position = 0;
-  public sizeX: number;
-  public sizeY: number;
   protected path = cloudPath;
   protected color = "white";
-  protected minSize = (size: number) => 0.75 + size / 2;
-  protected minHeight = (height: number) => height * 20;
 
   constructor(
     private ctx: CanvasRenderingContext2D,
-    size: number,
+    public size: number,
     public speed: number,
     public height: number,
     public canvasWidth: number,
     public isReturn: boolean
-  ) {
-    const minSize = this.minSize(size);
-    this.sizeX = minSize;
-    this.sizeY = minSize;
-  }
+  ) {}
   update(speed: number): void {
-    const distance = this.canvasWidth - this.position + (this.isReturn ? 140 : 0);
+    const distance = this.canvasWidth - this.position + (this.isReturn ? this.size : 0);
 
-    const sizeX = this.isReturn ? -this.sizeX : this.sizeX;
+    const sizeX = this.isReturn ? -this.size : this.size;
 
     this.ctx.save();
-    this.ctx.translate(distance, this.minHeight(this.height));
-    this.ctx.scale(sizeX, this.sizeY);
+    this.ctx.translate(distance, this.height);
+    this.ctx.scale((1 / 140) * sizeX, (1 / 140) * this.size);
 
     this.ctx.fillStyle = this.color;
 

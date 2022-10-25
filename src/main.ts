@@ -14,20 +14,32 @@ const ctx = canvas.getContext("2d")!;
 
 const { width, height } = canvas;
 
-const speed = 0.5;
-const cubeSize = 30;
+function getRandomBetween(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+const speed = width / 365 / 4;
+const cubeSize = height / 10;
 
 const cubeOriginX = width / 2 - cubeSize / 2;
 const cubeOriginY = height / 2 - cubeSize / 2;
 const floorHeight = cubeOriginY + cubeSize;
+const grassHeight = height / 20;
 
 const cube = new Cube(ctx, cubeOriginX, cubeOriginY, cubeSize);
 
 const cloudFrequency = 0.3;
 const cloudSpeed = speed / 4;
 
-function cloudInstance() {
-  return new Cloud(ctx, Math.random(), cloudSpeed, Math.random(), width, Boolean(Math.floor(Math.random() * 2)));
+function getSizeCloud(): number {
+  return getRandomBetween(width / 6, width / 5);
+}
+function getHeightCloud(): number {
+  return Math.random() * Math.floor(width / 18);
+}
+
+function cloudInstance(): Cloud {
+  return new Cloud(ctx, getSizeCloud(), cloudSpeed, getHeightCloud(), width, Boolean(Math.floor(Math.random() * 2)));
 }
 
 const updateClouds = makeListController<Cloud>(cloudFrequency, cloudSpeed, width, cloudInstance);
@@ -35,8 +47,16 @@ const updateClouds = makeListController<Cloud>(cloudFrequency, cloudSpeed, width
 const dirtFrequency = 0.25;
 const dirtSpeed = speed;
 
-function dirtInstance() {
-  return new Dirt(ctx, Math.random(), dirtSpeed, Math.random(), width);
+function getSizeDirt(): number {
+  return getRandomBetween(width / 9, width / 7);
+}
+
+function getHeightDirt(): number {
+  return Math.random() * Math.floor(width / 18) + Math.floor(height / 1.5);
+}
+
+function dirtInstance(): Dirt {
+  return new Dirt(ctx, getSizeDirt(), dirtSpeed, getHeightDirt(), width);
 }
 const updateDirts = makeListController<Dirt>(dirtFrequency, dirtSpeed, width, dirtInstance);
 
@@ -57,10 +77,10 @@ function anim() {
   ctx.fillRect(0, 0, width, height);
 
   ctx.fillStyle = "#9B5400";
-  ctx.fillRect(0, floorHeight, width, height / 2 - 10);
+  ctx.fillRect(0, floorHeight, width, height / 2 - cube.size / 2);
 
   ctx.fillStyle = "#1CA600";
-  ctx.fillRect(0, floorHeight, width, 15);
+  ctx.fillRect(0, floorHeight, width, grassHeight);
 
   const speedFrame = Date.now() - startTime;
 
@@ -86,7 +106,7 @@ function anim() {
   startTime = Date.now();
 }
 anim();
-document.addEventListener("keyup", e => {
+document.addEventListener("keypress", e => {
   if (e.key === " ") {
     cube.jump();
   }
