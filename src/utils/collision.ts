@@ -30,6 +30,15 @@ export function getCoordTriangle(x: number, y: number, size: number): polygon {
   ];
 }
 
+export function getCoordSlab(x: number, y: number, size: number): polygon {
+  return [
+    [x, y],
+    [x + size, y],
+    [x + size, y + size / 2],
+    [x, y + size / 2],
+  ];
+}
+
 function lineLine(
   x1: number,
   y1: number,
