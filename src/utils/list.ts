@@ -1,20 +1,6 @@
 type node<T> = { value: T; next: null | node<T> };
 
-function makeNode<T>(value: T): node<T> {
-  return {
-    value,
-    next: null,
-  };
-}
-
-interface IList<T> {
-  append: (value: T) => node<T>;
-  forEach: (cb: (element: T, index: number) => unknown) => void;
-  removeFirst: () => node<T> | null;
-  length: number;
-}
-
-export default class List<T> implements IList<T> {
+export class List<T> {
   private head: null | node<T>;
   private tail: null | node<T>;
   public length = 0;
@@ -24,8 +10,15 @@ export default class List<T> implements IList<T> {
     this.tail = null;
   }
 
+  private makeNode(value: T): node<T> {
+    return {
+      value,
+      next: null,
+    };
+  }
+
   append(value: T): node<T> {
-    let node = makeNode(value);
+    let node = this.makeNode(value);
     this.length++;
 
     if (this.tail) {
@@ -39,7 +32,7 @@ export default class List<T> implements IList<T> {
     return node;
   }
 
-  forEach(cb: (element: T, index: number) => unknown): void {
+  forEach(cb: (element: T, index: number) => void) {
     let current = this.head;
     let index = 0;
 

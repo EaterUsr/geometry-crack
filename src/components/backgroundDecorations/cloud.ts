@@ -1,0 +1,32 @@
+import { BackgroundDecoration } from "@components/backgroundDecorations";
+import { random } from "@utils/math";
+import { trunc } from "@utils/decorators";
+
+export class Cloud extends BackgroundDecoration {
+  @trunc()
+  readonly y = random(0.3, 1.5, this.canvas.height / 10);
+  @trunc()
+  readonly isReturned = Boolean(Math.floor(random(0, 2)));
+  readonly sizeY = random(1.1, 1.5, this.canvas.width / 1000);
+  readonly sizeX = this.isReturned ? -this.sizeY : this.sizeY;
+  readonly color: color = "#fff";
+
+  setPath() {
+    this.path.moveTo(20, 50);
+    this.path.arcTo(-30, 40, 20, 20, 15);
+    this.path.arcTo(20, -15, 60, 20, 17);
+    this.path.arcTo(70, -10, 80, 25, 17);
+    this.path.arcTo(100, -10, 100, 25, 15);
+    this.path.arcTo(150, 35, 110, 50, 15);
+    this.path.arcTo(110, 100, 70, 60, 15);
+    this.path.arcTo(65, 80, 40, 50, 17);
+    this.path.arcTo(30, 80, 20, 50, 17);
+    this.path.closePath();
+  }
+
+  draw() {
+    if (this.isReturned) this.canvas.ctx.translate(this.sizeY * -110, 0);
+
+    this.canvas.ctx.fill(this.path);
+  }
+}

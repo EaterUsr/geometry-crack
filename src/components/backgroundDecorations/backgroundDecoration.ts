@@ -1,0 +1,36 @@
+import { forward } from "@utils/move";
+
+export abstract class BackgroundDecoration {
+  abstract readonly y: number;
+  abstract readonly color: color;
+  abstract readonly sizeX: number;
+  abstract readonly sizeY: number;
+  readonly path = new Path2D();
+  position = 0;
+
+  constructor(protected readonly canvas: canvasConfig, private readonly speed: number) {
+    this.setPath();
+  }
+
+  protected abstract setPath(): void;
+  protected abstract draw(): void;
+
+  update(speed: number) {
+    const distance = this.canvas.width - this.position;
+
+    this.canvas.ctx.save();
+    this.canvas.ctx.fillStyle = this.color;
+    this.canvas.ctx.translate(distance, this.y);
+    this.canvas.ctx.scale(this.sizeX, this.sizeY);
+
+    this.draw();
+
+    this.canvas.ctx.restore();
+
+    this.forward(speed);
+  }
+
+  private forward(speedFrame: number) {
+    this.position = forward(this.position, this.speed, speedFrame);
+  }
+}

@@ -1,28 +1,30 @@
-type polygon = [x: number, y: number][];
+import { toRadians } from "@utils/math";
 
-export function getCoordSquare(x: number, y: number, deg: number, size: number): polygon {
-  const vertices: polygon = [...new Array(4)];
-
-  let lastVert = [0, 0];
-  let pointX = 0;
-  let pointY = 0;
+export function squareHitbox(x: number, y: number, deg: number, size: number): hitbox {
+  const vertices: hitbox = [...new Array(4)];
+  const center: coords = [x + size / 2, y + size / 2];
 
   for (let i in vertices) {
-    pointX =
-      i === "0"
-        ? 0
-        : Math.floor(Math.sin((deg / 360) * Math.PI * 2 + ((Number(i) - 1) * Math.PI) / 2) * size + lastVert[0]);
-    pointY =
-      i === "0"
-        ? 0
-        : Math.floor(Math.cos((deg / 360) * Math.PI * 2 + ((Number(i) - 1) * Math.PI) / 2) * size + lastVert[1]);
-    lastVert = [pointX, pointY];
-    vertices[i] = [pointX + x, pointY + y];
+    const pointX = Math.sin(toRadians(deg + Number(i) * 90 - 45)) * Math.sqrt((size / 2) ** 2 * 2) + center[0];
+    const pointY = Math.cos(toRadians(deg + Number(i) * 90 - 45)) * Math.sqrt((size / 2) ** 2 * 2) + center[1];
+    vertices[i] = [pointX, pointY];
   }
 
   return vertices;
 }
-export function getCoordTriangle(x: number, y: number, size: number): polygon {
+export function rectHitbox(x: number, y: number, sizeX: number, sizeY: number): hitbox {
+  const vertices: hitbox = [...new Array(4)];
+  const center: coords = [x + sizeX / 2, y + sizeY / 2];
+
+  for (let i in vertices) {
+    const pointX = Math.sin(toRadians(Number(i) * 90 - 45)) * Math.sqrt((sizeX / 2) ** 2 * 2) + center[0];
+    const pointY = Math.cos(toRadians(Number(i) * 90 - 45)) * Math.sqrt((sizeY / 2) ** 2 * 2) + center[1];
+    vertices[i] = [pointX, pointY];
+  }
+
+  return vertices;
+}
+export function triangleHitbox(x: number, y: number, size: number): hitbox {
   return [
     [x, y + size],
     [x + size / 2, y],
@@ -30,7 +32,7 @@ export function getCoordTriangle(x: number, y: number, size: number): polygon {
   ];
 }
 
-export function getCoordSlab(x: number, y: number, size: number): polygon {
+export function getCoordSlab(x: number, y: number, size: number): hitbox {
   return [
     [x, y],
     [x + size, y],
@@ -58,19 +60,14 @@ function lineLine(
   return false;
 }
 
-export function isCollision(verticesP: polygon, verticesT: polygon): boolean {
-  let next;
-  let vc;
-  let vn;
-  let collision = false;
-
+export function isCollision(verticesP: hitbox, verticesT: hitbox): boolean {
   for (let current = 0; current < verticesP.length; current++) {
-    next = Number(current) + 1;
+    let next = Number(current) + 1;
     if (next === verticesP.length) next = 0;
-    vc = verticesP[current];
-    vn = verticesP[next];
+    const vc = verticesP[current];
+    const vn = verticesP[next];
 
-    collision = PolygonLine(vc[0], vc[1], vn[0], vn[1], verticesT);
+    const collision = PolygonLine(vc[0], vc[1], vn[0], vn[1], verticesT);
 
     if (collision) return collision;
   }
@@ -78,19 +75,14 @@ export function isCollision(verticesP: polygon, verticesT: polygon): boolean {
   return false;
 }
 
-function PolygonLine(x1: number, y1: number, x2: number, y2: number, vertices: polygon): boolean {
-  let next;
-  let vc;
-  let vn;
-  let collision = false;
-
+function PolygonLine(x1: number, y1: number, x2: number, y2: number, vertices: hitbox): boolean {
   for (let current = 0; current < vertices.length; current++) {
-    next = Number(current) + 1;
+    let next = Number(current) + 1;
     if (next === vertices.length) next = 0;
-    vc = vertices[current];
-    vn = vertices[next];
+    const vc = vertices[current];
+    const vn = vertices[next];
 
-    collision = lineLine(vc[0], vc[1], vn[0], vn[1], x1, y1, x2, y2);
+    const collision = lineLine(vc[0], vc[1], vn[0], vn[1], x1, y1, x2, y2);
 
     if (collision) return collision;
   }

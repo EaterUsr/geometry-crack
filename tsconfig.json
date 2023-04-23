@@ -14,11 +14,14 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "baseUrl": "./src",
     "paths": {
       "@utils/*": ["utils/*"],
       "@components/*": ["components/*"],
+      "@controllers/*": ["controllers/*"]
     }
   },
   "include": ["src"],
