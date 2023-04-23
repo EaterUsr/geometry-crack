@@ -2,14 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Geometry crack</title>
-    <script type="module" crossorigin src="./assets/index.74845317.js"></script>
-    <link rel="stylesheet" href="./assets/index.f99fc39d.css">
+    
+    <style>
+      *, ::before, ::after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f1f1f1;
+        height: 100vh;
+      }
+      #game {
+        width: 100%;
+      }
+
+      @media screen, (--prefers-colors-scheme: dark) {
+        body {
+          background: #333;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-89aa3457.js"></script>
   </head>
   <body>
     <canvas width="800" height="365" id="game"></canvas>
-    
   </body>
 </html>
