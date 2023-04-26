@@ -4,7 +4,7 @@ import { DirtsController } from "@controllers/backgroundDecorations/dirts";
 export class GraphicsController {
   readonly colors: colorScheme = {
     sky: "#00C2FF",
-    floor: "#9B5400",
+    dirt: "#A85100",
     grass: "#1CA600",
   };
   readonly config: graphicsConfig;
@@ -40,7 +40,7 @@ export class GraphicsController {
     this.clouds.update(speedFrame);
   }
   updateForeground(speedFrame: number) {
-    this.setFloor();
+    this.setDirt();
     this.setGrass();
     this.dirts.update(speedFrame);
   }
@@ -48,8 +48,8 @@ export class GraphicsController {
     this.canvas.ctx.fillStyle = this.colors.sky;
     this.canvas.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
-  private setFloor() {
-    this.canvas.ctx.fillStyle = this.colors.floor;
+  private setDirt() {
+    this.canvas.ctx.fillStyle = this.colors.dirt;
     this.canvas.ctx.fillRect(
       0,
       this.config.floorHeight,

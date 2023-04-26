@@ -53,9 +53,9 @@ export abstract class BackgroundDecorationsController<T extends BackgroundDecora
     return this.instanceDecoration(this.canvas, this.speed);
   }
 
-  update(speed: number) {
+  update(speedFrame: number) {
     this.content.forEach(decoration => {
-      decoration.update(speed);
+      decoration.update(speedFrame);
     });
   }
 }
