@@ -1,11 +1,13 @@
 import { Block } from "./index";
-import { triangleHitbox } from "@utils/collision";
+import { config } from "@config";
+
+const spikeConf = config.components.spike;
 
 export class Spike extends Block {
   get hitbox(): hitbox {
-    return triangleHitbox(...this.position, this.size);
+    return spikeConf.getHitbox(this);
   }
-  readonly color: color = "#f00";
+  readonly color: color = spikeConf.color;
 
   onCollision() {
     console.log("game over");

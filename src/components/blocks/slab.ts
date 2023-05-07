@@ -1,11 +1,13 @@
 import { Block } from ".";
-import { rectHitbox } from "@utils/collision";
+import { config } from "@config";
+
+const slabConf = config.components.slab;
 
 export class Slab extends Block {
   get hitbox() {
-    return rectHitbox(...this.position, this.size, this.size / 2);
+    return slabConf.getHitbox(this);
   }
-  readonly color: color = "#000";
+  readonly color: color = slabConf.color;
 
   constructor(
     canvas: canvasConfig,

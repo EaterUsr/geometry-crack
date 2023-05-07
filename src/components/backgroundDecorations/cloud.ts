@@ -1,13 +1,16 @@
 import { BackgroundDecoration } from "@components/backgroundDecorations";
-import { random } from "@utils/math";
+import { random, randomMinMax } from "@utils/math";
 import { trunc } from "@utils/decorators";
+import { config } from "@config";
+
+const cloudConf = config.decorations.clouds;
 
 export class Cloud extends BackgroundDecoration {
   @trunc()
-  readonly y = random(0.3, 1.5, this.canvas.height / 10);
+  readonly y = randomMinMax(cloudConf.y, this.canvas.height / 10);
   @trunc()
   readonly isReturned = Boolean(Math.floor(random(0, 2)));
-  readonly sizeY = random(1.1, 1.5, this.canvas.width / 1000);
+  readonly sizeY = randomMinMax(cloudConf.sizeY, this.canvas.width / 1000);
   readonly sizeX = this.isReturned ? -this.sizeY : this.sizeY;
   readonly color: color = "#fff";
 
@@ -25,7 +28,7 @@ export class Cloud extends BackgroundDecoration {
   }
 
   draw() {
-    if (this.isReturned) this.canvas.ctx.translate(this.sizeY * -110, 0);
+    if (this.isReturned) this.canvas.ctx.translate(this.sizeY * -cloudConf.originalSize, 0);
 
     this.canvas.ctx.fill(this.path);
   }

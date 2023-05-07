@@ -15,7 +15,7 @@ export abstract class BackgroundDecoration {
   protected abstract setPath(): void;
   protected abstract draw(): void;
 
-  update(speed: number) {
+  update(speedFrame: number) {
     const distance = this.canvas.width - this.position;
 
     this.canvas.ctx.save();
@@ -27,7 +27,7 @@ export abstract class BackgroundDecoration {
 
     this.canvas.ctx.restore();
 
-    this.forward(speed);
+    this.forward(speedFrame);
   }
 
   private forward(speedFrame: number) {
