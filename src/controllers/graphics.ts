@@ -1,26 +1,25 @@
+import { config } from "@config";
 import { CloudsController } from "@controllers/backgroundDecorations/clouds";
 import { DirtsController } from "@controllers/backgroundDecorations/dirts";
 
+const graphicsConf = config.graphics;
+
 export class GraphicsController {
-  readonly colors: colorScheme = {
-    sky: "#00C2FF",
-    dirt: "#A85100",
-    grass: "#1CA600",
-  };
+  readonly colors: colorScheme = graphicsConf.colors;
   readonly config: graphicsConfig;
   readonly clouds: CloudsController;
   readonly dirts: DirtsController;
 
   constructor(private readonly canvas: canvasConfig) {
-    const speed = canvas.width / 1460;
-    const blockSize = Math.floor(canvas.height / 9);
+    const speed = canvas.width / graphicsConf.speed;
+    const blockSize = Math.floor(canvas.height / graphicsConf.blockSize);
     const cubeOrigin: coords = [
       Math.floor(canvas.width / 2 - blockSize / 2),
-      Math.floor(canvas.height / 2 - blockSize / 2),
+      Math.floor(canvas.height * graphicsConf.floorHeight - blockSize / 2),
     ];
     const timePerBlock = Math.floor(blockSize / speed);
-    const floorHeight = Math.floor(cubeOrigin[1] + blockSize);
-    const grassHeight = Math.floor(canvas.height / 20);
+    const floorHeight = Math.floor(graphicsConf.floorHeight * canvas.height);
+    const grassHeight = Math.floor(canvas.height / graphicsConf.grassHeight);
 
     this.config = {
       speed,

@@ -1,25 +1,23 @@
-import { squareHitbox } from "@utils/collision";
 import { closestDeg, toDegrees } from "@utils/math";
 import { updateTarget } from "@utils/targetPosition";
 import { backward } from "@utils/move";
+import { config } from "@config";
+
+const cubeConf = config.components.cube;
 
 export class Cube {
   private readonly ctx: CanvasRenderingContext2D;
   private floorHeight: number;
   private speedFrame = 0;
-  private readonly deg: targetPosition<number>;
+  readonly deg: targetPosition<number>;
   readonly origin: targetPosition<coords>;
   private velocity = 0;
   private isFalling = true;
   private canForward = true;
   readonly size: number;
+  readonly color = cubeConf.color;
   get hitbox() {
-    return squareHitbox(
-      this.origin.content[0],
-      this.origin.content[1] - this.jumpHeight,
-      360 - this.deg.content,
-      this.size
-    );
+    return cubeConf.getHitbox(this);
   }
   center: coords;
   jumpHeight = 0;
@@ -33,7 +31,7 @@ export class Cube {
 
     this.deg = {
       content: 0,
-      speed: 0.6,
+      speed: cubeConf.speedDeg,
       target: null,
     };
 
@@ -51,11 +49,10 @@ export class Cube {
 
   update(speedFrame: number) {
     this.speedFrame = speedFrame;
-    this.ctx.fillStyle = "#000";
 
     this.velocity -= this.velocity === 0 ? 0 : 1;
 
-    this.jumpHeight += this.velocity * speedFrame * 0.05;
+    this.jumpHeight += this.velocity * speedFrame * cubeConf.fallingSpeed;
 
     this.deg.content %= 360;
 
@@ -72,13 +69,13 @@ export class Cube {
       speedFrame,
       (_, preventContent) => {
         if (this.isFalling) {
-          this.deg.content = preventContent + 0.5 * this.speedFrame;
+          this.deg.content = preventContent + cubeConf.speedDeg * this.speedFrame;
         }
       },
       360
     );
     updateTarget(this.origin, speedFrame, ([x, y]) => {
-      if (this.isFalling && y) this.jumpHeight -= 7;
+      if (this.isFalling && y) this.jumpHeight -= cubeConf.gravity;
       if (!this.canForward && x) {
         this.origin.content[0] = backward(this.origin.content[0], this.graphics.speed, speedFrame);
       }
@@ -93,6 +90,7 @@ export class Cube {
     this.ctx.rotate(toDegrees(this.deg.content));
     this.ctx.translate(-this.center[0], -this.center[1]);
 
+    this.ctx.fillStyle = this.color;
     this.ctx.fillRect(...originWithJump, this.size, this.size);
 
     this.ctx.restore();
@@ -101,7 +99,7 @@ export class Cube {
 
   jump() {
     if (this.touchTheFloor()) {
-      this.velocity = 22;
+      this.velocity = cubeConf.jumpVelocity;
       this.isFalling = true;
     }
   }

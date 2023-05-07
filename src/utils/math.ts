@@ -4,6 +4,10 @@ export function random(min: number, max: number, multiplier = 1) {
   return Math.random() * (max - min) + min;
 }
 
+export function randomMinMax(minmax: minmax, multiplier?: number) {
+  return random(minmax.min, minmax.max, multiplier);
+}
+
 export function diff(nbr1: number, nbr2: number) {
   return Math.abs(nbr1 - nbr2);
 }

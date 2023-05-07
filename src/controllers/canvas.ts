@@ -6,8 +6,8 @@ export class CanvasController {
   private isActive = false;
   private lastFrame = Date.now();
   private blocks: BlocksController;
-  graphics: GraphicsController;
-  cube: Cube;
+  readonly graphics: GraphicsController;
+  readonly cube: Cube;
 
   constructor(canvasHTMLQuery: HTMLSelector) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);

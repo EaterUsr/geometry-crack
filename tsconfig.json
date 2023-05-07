@@ -21,7 +21,8 @@
     "paths": {
       "@utils/*": ["utils/*"],
       "@components/*": ["components/*"],
-      "@controllers/*": ["controllers/*"]
+      "@controllers/*": ["controllers/*"],
+      "@config": ["config.ts"]
     }
   },
   "include": ["src"],
