@@ -18,7 +18,7 @@ export class DirtsController {
   constructor(private readonly canvas: canvasConfig, { speed, floorHeight }: graphicsConfig) {
     this.speed = speed * dirtConf.speed;
     this.floorHeight = floorHeight;
-    this.scale = (this.canvas.width / 10000) * dirtConf.scale;
+    this.scale = this.canvas.w(dirtConf.scale);
   }
 
   private draw(position: number, img: HTMLImageElement, depth: number) {
@@ -35,7 +35,7 @@ export class DirtsController {
 
     this.images.forEach((img, index) => {
       calcCarousel(img.width * this.scale, this.canvas.width).forEach(position => {
-        this.draw(position - this.position + this.margins[index] * (this.canvas.width / 10), img, this.depths[index]);
+        this.draw(position - this.position + this.canvas.w(this.margins[index] * 1000), img, this.depths[index]);
       });
     });
   }

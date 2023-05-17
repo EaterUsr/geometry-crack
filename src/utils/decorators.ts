@@ -1,14 +1,15 @@
-export function trunc(decimals = 2) {
-  return function <T, U extends keyof T>(target: T, key: U) {
+import { truncNbr } from "@utils/math";
+
+export function trunc(decimals?: number) {
+  return function <T extends Object, U extends keyof T>(target: T, key: U) {
     const value = target[key];
 
     Object.defineProperty(target, key, {
       get: () => value,
-      set: (nbr: unknown): number | never => {
+      set: (nbr: unknown): number => {
         if (typeof nbr !== "number") throw new Error("Invalid property: Exepted number");
 
-        const multiplier = 10 ** decimals;
-        return Math.floor(nbr * multiplier) / multiplier;
+        return truncNbr(nbr, decimals);
       },
     });
   };

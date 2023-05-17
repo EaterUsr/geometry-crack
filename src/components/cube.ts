@@ -22,7 +22,7 @@ export class Cube {
   center: coords;
   jumpHeight = 0;
 
-  constructor({ ctx }: canvasConfig, private readonly graphics: graphicsConfig) {
+  constructor(private readonly canvas: canvasConfig, private readonly graphics: graphicsConfig) {
     this.origin = {
       content: graphics.cubeOrigin,
       target: [null, null],
@@ -35,7 +35,7 @@ export class Cube {
       target: null,
     };
 
-    this.ctx = ctx;
+    this.ctx = canvas.ctx;
     this.floorHeight = graphics.floorHeight;
     this.size = this.graphics.blockSize;
     this.center = this.updateCenter();
@@ -52,7 +52,7 @@ export class Cube {
 
     this.velocity -= this.velocity === 0 ? 0 : 1;
 
-    this.jumpHeight += this.velocity * speedFrame * cubeConf.fallingSpeed;
+    this.jumpHeight += this.velocity * speedFrame * this.canvas.w(cubeConf.jumpSpeed / 10);
 
     this.deg.content %= 360;
 
@@ -69,13 +69,13 @@ export class Cube {
       speedFrame,
       (_, preventContent) => {
         if (this.isFalling) {
-          this.deg.content = preventContent + cubeConf.speedDeg * this.speedFrame;
+          this.deg.content = preventContent + this.deg.speed * this.speedFrame;
         }
       },
       360
     );
     updateTarget(this.origin, speedFrame, ([x, y]) => {
-      if (this.isFalling && y) this.jumpHeight -= cubeConf.gravity;
+      if (this.isFalling && y) this.jumpHeight -= this.canvas.w(cubeConf.gravity * 10);
       if (!this.canForward && x) {
         this.origin.content[0] = backward(this.origin.content[0], this.graphics.speed, speedFrame);
       }

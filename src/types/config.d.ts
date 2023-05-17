@@ -2,6 +2,7 @@ declare type canvasConfig = Readonly<{
   ctx: CanvasRenderingContext2D;
   width: number;
   height: number;
+  w: (size: number) => number;
 }>;
 
 declare type graphicsConfig = Readonly<{
@@ -20,6 +21,8 @@ declare type blockConfig = Readonly<{
 
 declare type Config = import("ts-essentials").DeepReadonly<{
   graphics: {
+    width: number;
+    height: number;
     speed: number;
     blockSize: number;
     grassHeight: number;
@@ -33,7 +36,7 @@ declare type Config = import("ts-essentials").DeepReadonly<{
   components: {
     cube: blockConfig & {
       speedDeg: number;
-      fallingSpeed: number;
+      jumpSpeed: number;
       gravity: number;
       jumpVelocity: number;
     };

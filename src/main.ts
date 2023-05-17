@@ -1,7 +1,6 @@
 import { CanvasController } from "@controllers/canvas";
 
 const canvas = new CanvasController("#game");
-
 canvas.start();
 
 document.addEventListener("keyup", e => {

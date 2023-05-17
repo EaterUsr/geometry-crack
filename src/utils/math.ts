@@ -50,3 +50,8 @@ export function smallest<T extends unknown[]>(cb: (...args: T) => number, ...arg
 
   return minNbr;
 }
+
+export function truncNbr(nbr: number, decimals = 2) {
+  const multiplier = 10 ** decimals;
+  return Math.floor(nbr * multiplier) / multiplier;
+}

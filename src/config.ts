@@ -7,9 +7,9 @@ export const config: Config = {
   components: {
     cube: {
       color: "#000",
-      speedDeg: 0.6,
-      fallingSpeed: 0.05,
-      gravity: 6.5,
+      speedDeg: 0.5,
+      jumpSpeed: 5,
+      gravity: 6,
       jumpVelocity: 22,
       getHitbox(cube: Cube) {
         return squareHitbox(
@@ -66,5 +66,7 @@ export const config: Config = {
     blockSize: 9,
     grassHeight: 20,
     floorHeight: 0.5,
+    width: 800,
+    height: 365,
   },
 };

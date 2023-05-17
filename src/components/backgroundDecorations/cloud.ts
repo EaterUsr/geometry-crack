@@ -12,7 +12,7 @@ export class Cloud extends BackgroundDecoration {
   readonly isReturned = Boolean(Math.floor(random(0, 2)));
   readonly sizeY = randomMinMax(cloudConf.sizeY, this.canvas.width / 1000);
   readonly sizeX = this.isReturned ? -this.sizeY : this.sizeY;
-  readonly color: color = "#fff";
+  readonly color = cloudConf.color;
 
   setPath() {
     this.path.moveTo(20, 50);
