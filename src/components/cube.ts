@@ -57,8 +57,8 @@ export class Cube {
       this.isFalling = false;
       this.jumpHeight = 0;
       this.velocity = 0;
-      this.deg.target = closestDeg(this.deg.content);
-      this.deg.target %= 360;
+      this.deg.target = closestDeg(this.deg.content) % 360;
+      console.log(this.deg.target);
       this.origin.content[1] = this.floorHeight - this.size;
     }
 
