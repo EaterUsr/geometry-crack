@@ -7,14 +7,14 @@ export class Slab extends Block {
   get hitbox() {
     return slabConf.getHitbox(this);
   }
-  readonly color: color = slabConf.color;
+  readonly color: Color = slabConf.color;
 
   constructor(
-    canvas: canvasConfig,
-    position: coords,
+    canvas: CanvasConfig,
+    position: Coords,
     speed: number,
     size: number,
-    private readonly cubeOnSlabCollision: (position: coords) => void
+    private readonly cubeOnSlabCollision: (position: Coords) => void
   ) {
     super(canvas, position, speed, size);
   }

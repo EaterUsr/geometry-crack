@@ -1,4 +1,4 @@
-import { BackgroundDecoration } from "@components/backgroundDecorations";
+import { BackgroundDecoration } from "@components/backgroundDecoration";
 import { List } from "@utils/list";
 
 export abstract class BackgroundDecorationsController<T extends BackgroundDecoration> {
@@ -7,10 +7,10 @@ export abstract class BackgroundDecorationsController<T extends BackgroundDecora
   abstract readonly depth: number;
   private timeBetweenDecorations = 0;
   private content = new List<T>();
+  private count = 0;
   speed = 0;
-  count = 0;
 
-  constructor(private readonly canvas: canvasConfig, { speed }: graphicsConfig) {
+  constructor(private readonly canvas: CanvasConfig, { speed }: DecorationsConfig) {
     this.globalSpeed = speed;
     this.content = new List<T>();
     setTimeout(() => {
@@ -47,7 +47,7 @@ export abstract class BackgroundDecorationsController<T extends BackgroundDecora
     this.content.removeFirst();
   }
 
-  protected abstract instanceDecoration(canvas: canvasConfig, speed: number): T;
+  protected abstract instanceDecoration(canvas: CanvasConfig, speed: number): T;
 
   private instance(): T {
     return this.instanceDecoration(this.canvas, this.speed);

@@ -1,6 +1,6 @@
-import { Block } from "@components/blocks";
-import { Spike } from "@components/blocks/spike";
-import { Slab } from "@components/blocks/slab";
+import { Block } from "@components/block";
+import { Spike } from "@components/block/spike";
+import { Slab } from "@components/block/slab";
 import { List } from "@utils/list";
 import { isCollision } from "@utils/collision";
 
@@ -9,13 +9,13 @@ export class BlocksController {
 
   constructor(
     private readonly cubeSize: number,
-    private readonly canvas: canvasConfig,
-    private readonly graphics: graphicsConfig,
-    private readonly onCubeSlabCollision: (position: coords) => void
+    private readonly canvas: CanvasConfig,
+    private readonly graphics: DecorationsConfig,
+    private readonly onCubeSlabCollision: (position: Coords) => void
   ) {}
 
-  add(type: blockType, height?: number) {
-    const args: [canvasConfig, coords, number, number] = [
+  add(type: BlockType, height?: number) {
+    const args: [CanvasConfig, Coords, number, number] = [
       this.canvas,
       [
         this.canvas.width,
@@ -25,6 +25,7 @@ export class BlocksController {
       this.graphics.blockSize,
     ];
     let block: Block;
+
     switch (type) {
       case "Spike":
         block = new Spike(...args);
@@ -36,12 +37,14 @@ export class BlocksController {
     this.content.append(block);
   }
 
-  update(cubeOrigin: coords, speedFrame: number, cubeHitbox: hitbox) {
+  update(cubeOrigin: Coords, speedFrame: number, cubeHitbox: Hitbox) {
     this.content.forEach(block => {
       block.update(speedFrame);
+
       if (block.position[0] >= cubeOrigin[0] - this.cubeSize && block.position[0] < cubeOrigin[0] + this.cubeSize) {
         if (isCollision(block.hitbox, cubeHitbox)) block.onCollision();
       }
+
       if (block.position[0] + block.size < 0) {
         setTimeout(() => {
           this.content.removeFirst();

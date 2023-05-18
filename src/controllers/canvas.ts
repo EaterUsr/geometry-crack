@@ -1,22 +1,23 @@
-import { GraphicsController } from "@controllers/graphics";
+import { DecorationsController } from "@controllers/decorations";
 import { Cube } from "@components/cube";
 import { BlocksController } from "@controllers/blocks";
 import { truncNbr } from "@utils/math";
 import { config } from "@config";
+
 export class CanvasController {
-  readonly config: canvasConfig;
+  readonly config: CanvasConfig;
   private isActive = false;
   private lastFrame = Date.now();
-  private blocks: BlocksController;
-  readonly graphics: GraphicsController;
+  private readonly blocks: BlocksController;
+  readonly decorations: DecorationsController;
   readonly cube: Cube;
 
   constructor(canvasHTMLQuery: HTMLSelector) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
     if (!canvas) throw new Error(`Invalid input: The query ${canvasHTMLQuery} does not match any HTML element`);
 
-    canvas.width = config.graphics.width;
-    canvas.height = config.graphics.height;
+    canvas.width = config.canvasWidth;
+    canvas.height = config.canvasHeight;
 
     this.config = {
       ctx: canvas.getContext("2d")!,
@@ -26,12 +27,13 @@ export class CanvasController {
         return truncNbr(size * (this.width / 10000));
       },
     };
-    this.graphics = new GraphicsController(this.config);
-    this.cube = new Cube(this.config, this.graphics.config);
+
+    this.decorations = new DecorationsController(this.config);
+    this.cube = new Cube(this.config, this.decorations.config);
     this.blocks = new BlocksController(
       this.cube.size,
       this.config,
-      this.graphics.config,
+      this.decorations.config,
       this.cube.onSlabCollision.bind(this.cube)
     );
   }
@@ -42,7 +44,7 @@ export class CanvasController {
     this.isActive = true;
     this.animate();
   }
-  addBlock(block: blockType) {
+  addBlock(block: BlockType) {
     this.blocks.add(block);
   }
 
@@ -52,10 +54,10 @@ export class CanvasController {
     const speedFrame = Date.now() - this.lastFrame;
     this.lastFrame = Date.now();
 
-    this.graphics.updateBackground(speedFrame);
+    this.decorations.updateBackground(speedFrame);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.cube.update(speedFrame);
-    this.graphics.updateForeground(speedFrame);
+    this.decorations.updateForeground(speedFrame);
   }
   stop() {
     this.isActive = false;

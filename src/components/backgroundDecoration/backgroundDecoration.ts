@@ -2,13 +2,13 @@ import { forward } from "@utils/move";
 
 export abstract class BackgroundDecoration {
   abstract readonly y: number;
-  abstract readonly color: color;
+  abstract readonly color: Color;
   abstract readonly sizeX: number;
   abstract readonly sizeY: number;
   readonly path = new Path2D();
   position = 0;
 
-  constructor(protected readonly canvas: canvasConfig, private readonly speed: number) {
+  constructor(protected readonly canvas: CanvasConfig, private readonly speed: number) {
     this.setPath();
   }
 

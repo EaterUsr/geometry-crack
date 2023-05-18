@@ -1,8 +1,8 @@
-type node<T> = { value: T; next: null | node<T> };
+type Node<TValue> = { value: TValue; next: null | Node<TValue> };
 
 export class List<T> {
-  private head: null | node<T>;
-  private tail: null | node<T>;
+  private head: null | Node<T>;
+  private tail: null | Node<T>;
   public length = 0;
 
   constructor() {
@@ -10,14 +10,14 @@ export class List<T> {
     this.tail = null;
   }
 
-  private makeNode(value: T): node<T> {
+  private makeNode(value: T): Node<T> {
     return {
       value,
       next: null,
     };
   }
 
-  append(value: T): node<T> {
+  append(value: T): Node<T> {
     let node = this.makeNode(value);
     this.length++;
 
@@ -43,7 +43,7 @@ export class List<T> {
     }
   }
 
-  removeFirst(): node<T> | null {
+  removeFirst(): Node<T> | null {
     this.length--;
 
     if (!this.head) {

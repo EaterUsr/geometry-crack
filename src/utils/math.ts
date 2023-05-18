@@ -4,7 +4,7 @@ export function random(min: number, max: number, multiplier = 1) {
   return Math.random() * (max - min) + min;
 }
 
-export function randomMinMax(minmax: minmax, multiplier?: number) {
+export function randomMinMax(minmax: Minmax, multiplier?: number) {
   return random(minmax.min, minmax.max, multiplier);
 }
 
@@ -12,22 +12,13 @@ export function diff(nbr1: number, nbr2: number) {
   return Math.abs(nbr1 - nbr2);
 }
 
-const cornersDeg = [...new Array(5)].map((_, index) => index * 90);
-
 export function closestDeg(deg: number) {
-  const distances = [...new Array(5)].map((_, index) => diff(cornersDeg[index], deg));
+  const difference = deg % 90;
+  const rightAngle = deg / 90 - difference;
 
-  let smallestDistance = 361;
-  let smallestDistanceIndex = 0;
+  if (difference > 45) return rightAngle + 90;
 
-  distances.forEach((deg, index) => {
-    if (smallestDistance > deg) {
-      smallestDistance = deg;
-      smallestDistanceIndex = index;
-    }
-  });
-
-  return cornersDeg[smallestDistanceIndex];
+  return rightAngle;
 }
 
 export function toDegrees(angle: number) {

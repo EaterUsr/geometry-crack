@@ -1,8 +1,8 @@
 import { toRadians } from "@utils/math";
 
-export function squareHitbox(x: number, y: number, deg: number, size: number): hitbox {
-  const vertices: hitbox = [...new Array(4)];
-  const center: coords = [x + size / 2, y + size / 2];
+export function squareHitbox(x: number, y: number, deg: number, size: number): Hitbox {
+  const vertices: Hitbox = [...new Array(4)];
+  const center: Coords = [x + size / 2, y + size / 2];
 
   for (let i in vertices) {
     const pointX = Math.sin(toRadians(deg + Number(i) * 90 - 45)) * Math.sqrt((size / 2) ** 2 * 2) + center[0];
@@ -12,9 +12,9 @@ export function squareHitbox(x: number, y: number, deg: number, size: number): h
 
   return vertices;
 }
-export function rectHitbox(x: number, y: number, sizeX: number, sizeY: number): hitbox {
-  const vertices: hitbox = [...new Array(4)];
-  const center: coords = [x + sizeX / 2, y + sizeY / 2];
+export function rectHitbox(x: number, y: number, sizeX: number, sizeY: number): Hitbox {
+  const vertices: Hitbox = [...new Array(4)];
+  const center: Coords = [x + sizeX / 2, y + sizeY / 2];
 
   for (let i in vertices) {
     const pointX = Math.sin(toRadians(Number(i) * 90 - 45)) * Math.sqrt((sizeX / 2) ** 2 * 2) + center[0];
@@ -24,7 +24,7 @@ export function rectHitbox(x: number, y: number, sizeX: number, sizeY: number): 
 
   return vertices;
 }
-export function triangleHitbox(x: number, y: number, size: number): hitbox {
+export function triangleHitbox(x: number, y: number, size: number): Hitbox {
   return [
     [x, y + size],
     [x + size / 2, y],
@@ -32,7 +32,7 @@ export function triangleHitbox(x: number, y: number, size: number): hitbox {
   ];
 }
 
-export function getCoordSlab(x: number, y: number, size: number): hitbox {
+export function getCoordSlab(x: number, y: number, size: number): Hitbox {
   return [
     [x, y],
     [x + size, y],
@@ -60,7 +60,7 @@ function lineLine(
   return false;
 }
 
-export function isCollision(verticesP: hitbox, verticesT: hitbox): boolean {
+export function isCollision(verticesP: Hitbox, verticesT: Hitbox): boolean {
   for (let current = 0; current < verticesP.length; current++) {
     let next = Number(current) + 1;
     if (next === verticesP.length) next = 0;
@@ -75,7 +75,7 @@ export function isCollision(verticesP: hitbox, verticesT: hitbox): boolean {
   return false;
 }
 
-function PolygonLine(x1: number, y1: number, x2: number, y2: number, vertices: hitbox): boolean {
+function PolygonLine(x1: number, y1: number, x2: number, y2: number, vertices: Hitbox): boolean {
   for (let current = 0; current < vertices.length; current++) {
     let next = Number(current) + 1;
     if (next === vertices.length) next = 0;

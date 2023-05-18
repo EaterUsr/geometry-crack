@@ -2,10 +2,10 @@ import { backward } from "@utils/move";
 
 export abstract class Block {
   protected readonly ctx: CanvasRenderingContext2D;
-  abstract readonly hitbox: hitbox;
-  abstract readonly color: color;
+  abstract readonly hitbox: Hitbox;
+  abstract readonly color: Color;
 
-  constructor({ ctx }: canvasConfig, public position: coords, public speed: number, public size: number) {
+  constructor({ ctx }: CanvasConfig, public position: Coords, public speed: number, public size: number) {
     this.ctx = ctx;
   }
 

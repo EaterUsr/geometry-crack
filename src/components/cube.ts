@@ -4,13 +4,11 @@ import { backward } from "@utils/move";
 import { config } from "@config";
 
 const cubeConf = config.components.cube;
-
 export class Cube {
-  private readonly ctx: CanvasRenderingContext2D;
   private floorHeight: number;
   private speedFrame = 0;
-  readonly deg: targetPosition<number>;
-  readonly origin: targetPosition<coords>;
+  readonly deg: TargetPosition<number>;
+  readonly origin: TargetPosition<Coords>;
   private velocity = 0;
   private isFalling = true;
   private canForward = true;
@@ -19,10 +17,10 @@ export class Cube {
   get hitbox() {
     return cubeConf.getHitbox(this);
   }
-  center: coords;
+  center: Coords;
   jumpHeight = 0;
 
-  constructor(private readonly canvas: canvasConfig, private readonly graphics: graphicsConfig) {
+  constructor(private readonly canvas: CanvasConfig, private readonly graphics: DecorationsConfig) {
     this.origin = {
       content: graphics.cubeOrigin,
       target: [null, null],
@@ -35,15 +33,14 @@ export class Cube {
       target: null,
     };
 
-    this.ctx = canvas.ctx;
     this.floorHeight = graphics.floorHeight;
     this.size = this.graphics.blockSize;
     this.center = this.updateCenter();
   }
-  private updateCenter(): coords {
+  private updateCenter(): Coords {
     return [this.origin.content[0] + this.size / 2, this.origin.content[1] - this.jumpHeight + this.size / 2];
   }
-  private touchTheFloor() {
+  private isTouchingTheFloor() {
     return this.origin.content[1] - this.jumpHeight + this.size >= this.floorHeight;
   }
 
@@ -56,7 +53,7 @@ export class Cube {
 
     this.deg.content %= 360;
 
-    if (this.touchTheFloor() && this.isFalling) {
+    if (this.isTouchingTheFloor() && this.isFalling) {
       this.isFalling = false;
       this.jumpHeight = 0;
       this.velocity = 0;
@@ -64,6 +61,7 @@ export class Cube {
       this.deg.target %= 360;
       this.origin.content[1] = this.floorHeight - this.size;
     }
+
     updateTarget(
       this.deg,
       speedFrame,
@@ -81,30 +79,31 @@ export class Cube {
       }
     });
 
-    const originWithJump: coords = [this.origin.content[0], this.origin.content[1] - this.jumpHeight];
+    const originWithJump: Coords = [this.origin.content[0], this.origin.content[1] - this.jumpHeight];
     this.center = this.updateCenter();
 
-    this.ctx.save();
+    this.canvas.ctx.save();
 
-    this.ctx.translate(...this.center);
-    this.ctx.rotate(toDegrees(this.deg.content));
-    this.ctx.translate(-this.center[0], -this.center[1]);
+    this.canvas.ctx.translate(...this.center);
+    this.canvas.ctx.rotate(toDegrees(this.deg.content));
+    this.canvas.ctx.translate(-this.center[0], -this.center[1]);
 
-    this.ctx.fillStyle = this.color;
-    this.ctx.fillRect(...originWithJump, this.size, this.size);
+    this.canvas.ctx.fillStyle = this.color;
+    this.canvas.ctx.fillRect(...originWithJump, this.size, this.size);
 
-    this.ctx.restore();
+    this.canvas.ctx.restore();
+
     this.canForward = true;
   }
 
   jump() {
-    if (this.touchTheFloor()) {
+    if (this.isTouchingTheFloor()) {
       this.velocity = cubeConf.jumpVelocity;
       this.isFalling = true;
     }
   }
 
-  onSlabCollision(slabPosition: coords) {
+  onSlabCollision(slabPosition: Coords) {
     if (this.center[0] >= slabPosition[0]) {
       setTimeout(() => {
         this.isFalling = true;

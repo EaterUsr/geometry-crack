@@ -1,7 +1,7 @@
 import { squareHitbox, triangleHitbox, rectHitbox } from "@utils/collision";
 import { Cube } from "@components/cube";
-import { Spike } from "@components/blocks/spike";
-import { Slab } from "@components/blocks/slab";
+import { Spike } from "@components/block/spike";
+import { Slab } from "@components/block/slab";
 
 export const config: Config = {
   components: {
@@ -55,8 +55,6 @@ export const config: Config = {
       },
       originalSize: 110,
     },
-  },
-  graphics: {
     colors: {
       sky: "#00C2FF",
       dirt: "#A85100",
@@ -66,7 +64,7 @@ export const config: Config = {
     blockSize: 9,
     grassHeight: 20,
     floorHeight: 0.5,
-    width: 800,
-    height: 365,
   },
+  canvasWidth: 800,
+  canvasHeight: 365,
 };

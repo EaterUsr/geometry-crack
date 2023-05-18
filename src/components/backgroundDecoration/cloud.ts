@@ -1,4 +1,4 @@
-import { BackgroundDecoration } from "@components/backgroundDecorations";
+import { BackgroundDecoration } from "@components/backgroundDecoration";
 import { random, randomMinMax } from "@utils/math";
 import { trunc } from "@utils/decorators";
 import { config } from "@config";

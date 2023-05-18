@@ -7,7 +7,7 @@ export function trunc(decimals?: number) {
     Object.defineProperty(target, key, {
       get: () => value,
       set: (nbr: unknown): number => {
-        if (typeof nbr !== "number") throw new Error("Invalid property: Exepted number");
+        if (typeof nbr !== "number") throw new Error("Invalid property: Must receive a number");
 
         return truncNbr(nbr, decimals);
       },

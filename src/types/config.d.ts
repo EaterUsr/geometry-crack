@@ -1,49 +1,47 @@
-declare type canvasConfig = Readonly<{
+declare type CanvasConfig = Readonly<{
   ctx: CanvasRenderingContext2D;
   width: number;
   height: number;
   w: (size: number) => number;
 }>;
 
-declare type graphicsConfig = Readonly<{
+declare type DecorationsConfig = Readonly<{
   speed: number;
   blockSize: number;
-  cubeOrigin: coords;
+  cubeOrigin: Coords;
   floorHeight: number;
   grassHeight: number;
   timePerBlock: number;
 }>;
 
-declare type blockConfig = Readonly<{
-  getHitbox: (block: Block | Cube) => hitbox;
-  color: color;
+declare type BlockConfig = Readonly<{
+  getHitbox: (block: Block | Cube) => Hitbox;
+  color: Color;
 }>;
 
 declare type Config = import("ts-essentials").DeepReadonly<{
-  graphics: {
-    width: number;
-    height: number;
-    speed: number;
-    blockSize: number;
-    grassHeight: number;
-    floorHeight: number;
-    colors: {
-      sky: color;
-      dirt: color;
-      grass: color;
-    };
-  };
+  canvasWidth: number;
+  canvasHeight: number;
   components: {
-    cube: blockConfig & {
+    cube: BlockConfig & {
       speedDeg: number;
       jumpSpeed: number;
       gravity: number;
       jumpVelocity: number;
     };
-    spike: blockConfig;
-    slab: blockConfig;
+    spike: BlockConfig;
+    slab: BlockConfig;
   };
   decorations: {
+    speed: number;
+    blockSize: number;
+    grassHeight: number;
+    floorHeight: number;
+    colors: {
+      sky: Color;
+      dirt: Color;
+      grass: Color;
+    };
     dirts: {
       speed: number;
       urls: string[];
@@ -54,9 +52,9 @@ declare type Config = import("ts-essentials").DeepReadonly<{
     clouds: {
       depth: number;
       frequency: number;
-      color: color;
-      sizeY: minmax;
-      y: minmax;
+      color: Color;
+      sizeY: Minmax;
+      y: Minmax;
       originalSize: number;
     };
   };

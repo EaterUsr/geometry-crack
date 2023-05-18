@@ -15,7 +15,7 @@ export class DirtsController {
   @trunc(0)
   readonly scale: number;
 
-  constructor(private readonly canvas: canvasConfig, { speed, floorHeight }: graphicsConfig) {
+  constructor(private readonly canvas: CanvasConfig, { speed, floorHeight }: DecorationsConfig) {
     this.speed = speed * dirtConf.speed;
     this.floorHeight = floorHeight;
     this.scale = this.canvas.w(dirtConf.scale);

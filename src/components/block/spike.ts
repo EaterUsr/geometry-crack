@@ -4,10 +4,10 @@ import { config } from "@config";
 const spikeConf = config.components.spike;
 
 export class Spike extends Block {
-  get hitbox(): hitbox {
+  get hitbox(): Hitbox {
     return spikeConf.getHitbox(this);
   }
-  readonly color: color = spikeConf.color;
+  readonly color = spikeConf.color;
 
   onCollision() {
     console.log("game over");

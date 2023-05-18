@@ -1,25 +1,27 @@
-type minmax = { min: number; max: number };
+type Minmax = { min: number; max: number };
 
-declare type coords = [x: number, y: number];
-declare type hitbox = coords[];
+declare type Coords = [x: number, y: number];
+declare type Hitbox = Coords[];
 
-declare type targetPosition<T extends number[] | number> = {
-  content: T;
-  target: T extends number[] ? nullable<T> : null | T;
+declare type TargetPosition<TPosition extends number[] | number> = {
+  content: TPosition;
+  target: TPosition extends number[] ? Nullable<TPosition> : null | TPosition;
   speed: number;
 };
 
 declare type HTMLSelector = string;
 
-declare type color = `#${string}`;
-declare type colorScheme = {
-  readonly [index: string]: color;
+declare type Color = `#${string}`;
+declare type ColorScheme = {
+  readonly [index: string]: Color;
 };
 
-type nullable<T> = {
-  [P in keyof T]: T[P] | null;
+type Nullable<TArray> = {
+  [Key in keyof TArray]: TArray[Key] | null;
 };
 
-declare type areNull<T extends null | unknown | (null | unknown)> = T extends unknown[] ? boolean[] : boolean;
+declare type AreNull<TValue extends null | unknown | (null | unknown)[]> = TValue extends unknown[]
+  ? boolean[]
+  : boolean;
 
-declare type blockType = "Spike" | "Slab";
+declare type BlockType = "Spike" | "Slab";

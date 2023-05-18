@@ -20,10 +20,10 @@ function calcTarget(position: number, target: number, speed: number, resetNumber
   return target;
 }
 
-export function updateTarget<T extends number | number[]>(
-  targetPosition: targetPosition<T>,
+export function updateTarget<TPosition extends number | number[]>(
+  targetPosition: TargetPosition<TPosition>,
   speedFrame: number,
-  defaultUpdate: (areNull: areNull<T>, preventContent: T) => void,
+  defaultUpdate: (areNull: AreNull<TPosition>, preventContent: TPosition) => void,
   resetNumber?: number
 ) {
   const { content, target, speed } = targetPosition;
@@ -42,14 +42,14 @@ export function updateTarget<T extends number | number[]>(
     });
     if (target.some(nbr => nbr === null))
       defaultUpdate(
-        (targetPosition.target as (number | null)[]).map(value => value === null) as areNull<T>,
-        content as T
+        (targetPosition.target as (number | null)[]).map(value => value === null) as AreNull<TPosition>,
+        content as TPosition
       );
     return;
   }
-  if (typeof target === "number" && !(content instanceof Array)) {
-    (targetPosition.content as number) = calcTarget(content, target, speed * speedFrame, resetNumber);
+  if (typeof target === "number") {
+    (targetPosition.content as number) = calcTarget(content as number, target, speed * speedFrame, resetNumber);
     if (content === target) (targetPosition.target as number | null) = null;
   }
-  (defaultUpdate as (areNull: boolean, preventContent: T) => void)(false, content);
+  (defaultUpdate as (areNull: boolean, preventContent: TPosition) => void)(false, content);
 }
