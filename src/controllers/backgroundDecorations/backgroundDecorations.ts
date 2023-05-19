@@ -1,11 +1,13 @@
 import { BackgroundDecoration } from "@components/backgroundDecoration";
+import { trunc } from "@utils/decorators";
 import { List } from "@utils/list";
 
 export abstract class BackgroundDecorationsController<T extends BackgroundDecoration> {
   private readonly globalSpeed: number;
   abstract readonly frequency: number;
   abstract readonly depth: number;
-  private timeBetweenDecorations = 0;
+  @trunc()
+  timeBetweenDecorations = 0;
   private content = new List<T>();
   private count = 0;
   speed = 0;

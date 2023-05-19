@@ -1,14 +1,11 @@
 import { BackgroundDecoration } from "@components/backgroundDecoration";
 import { random, randomMinMax } from "@utils/math";
-import { trunc } from "@utils/decorators";
 import { config } from "@config";
 
 const cloudConf = config.decorations.clouds;
 
 export class Cloud extends BackgroundDecoration {
-  @trunc()
   readonly y = randomMinMax(cloudConf.y, this.canvas.height / 10);
-  @trunc()
   readonly isReturned = Boolean(Math.floor(random(0, 2)));
   readonly sizeY = randomMinMax(cloudConf.sizeY, this.canvas.width / 1000);
   readonly sizeX = this.isReturned ? -this.sizeY : this.sizeY;

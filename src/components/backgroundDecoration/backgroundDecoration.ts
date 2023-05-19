@@ -1,9 +1,13 @@
 import { forward } from "@utils/move";
+import { trunc } from "@utils/decorators";
 
 export abstract class BackgroundDecoration {
+  @trunc(0)
   abstract readonly y: number;
   abstract readonly color: Color;
+  @trunc(0)
   abstract readonly sizeX: number;
+  @trunc(0)
   abstract readonly sizeY: number;
   readonly path = new Path2D();
   position = 0;
