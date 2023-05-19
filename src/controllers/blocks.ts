@@ -10,7 +10,7 @@ export class BlocksController {
   constructor(
     private readonly cubeSize: number,
     private readonly canvas: CanvasConfig,
-    private readonly graphics: DecorationsConfig,
+    private readonly decorations: DecorationsConfig,
     private readonly onCubeSlabCollision: (position: Coords) => void
   ) {}
 
@@ -19,10 +19,10 @@ export class BlocksController {
       this.canvas,
       [
         this.canvas.width,
-        height ? this.graphics.cubeOrigin[1] - height * this.graphics.blockSize : this.graphics.cubeOrigin[1],
+        height ? this.decorations.cubeOrigin[1] - height * this.decorations.blockSize : this.decorations.cubeOrigin[1],
       ],
-      this.graphics.speed,
-      this.graphics.blockSize,
+      this.decorations.speed,
+      this.decorations.blockSize,
     ];
     let block: Block;
 

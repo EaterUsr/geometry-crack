@@ -20,11 +20,11 @@ export class Cube {
   center: Coords;
   jumpHeight = 0;
 
-  constructor(private readonly canvas: CanvasConfig, private readonly graphics: DecorationsConfig) {
+  constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
-      content: graphics.cubeOrigin,
+      content: decorations.cubeOrigin,
       target: [null, null],
-      speed: graphics.speed,
+      speed: decorations.speed,
     };
 
     this.deg = {
@@ -33,8 +33,8 @@ export class Cube {
       target: null,
     };
 
-    this.floorHeight = graphics.floorHeight;
-    this.size = this.graphics.blockSize;
+    this.floorHeight = decorations.floorHeight;
+    this.size = this.decorations.blockSize;
     this.center = this.updateCenter();
   }
   private updateCenter(): Coords {
@@ -57,7 +57,7 @@ export class Cube {
       this.isFalling = false;
       this.jumpHeight = 0;
       this.velocity = 0;
-      this.deg.target = closestDeg(this.deg.content) % 360;
+      this.deg.target = closestDeg(this.deg.content);
       this.origin.content[1] = this.floorHeight - this.size;
     }
 
@@ -74,7 +74,7 @@ export class Cube {
     updateTarget(this.origin, speedFrame, ([x, y]) => {
       if (this.isFalling && y) this.jumpHeight -= this.canvas.w(cubeConf.gravity * 10);
       if (!this.canForward && x) {
-        this.origin.content[0] = backward(this.origin.content[0], this.graphics.speed, speedFrame);
+        this.origin.content[0] = backward(this.origin.content[0], this.decorations.speed, speedFrame);
       }
     });
 
@@ -106,10 +106,9 @@ export class Cube {
     if (this.center[0] >= slabPosition[0]) {
       setTimeout(() => {
         this.isFalling = true;
-        this.floorHeight = this.graphics.floorHeight;
-      }, this.graphics.timePerBlock);
+        this.floorHeight = this.decorations.floorHeight;
+      }, this.decorations.timePerBlock);
       this.floorHeight = slabPosition[1];
-      this.origin.target = [null, slabPosition[1] - this.size];
       return;
     }
     this.isFalling = true;

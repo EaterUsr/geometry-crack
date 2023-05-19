@@ -13,7 +13,7 @@ export function diff(nbr1: number, nbr2: number) {
 }
 
 export function closestDeg(deg: number) {
-  return Math.floor((45 + deg) / 90) * 90;
+  return (Math.floor((45 + deg) / 90) * 90) % 360;
 }
 
 export function toDegrees(angle: number) {
