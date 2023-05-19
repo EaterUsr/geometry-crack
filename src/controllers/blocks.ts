@@ -27,10 +27,10 @@ export class BlocksController {
     let block: Block;
 
     switch (type) {
-      case "Spike":
+      case "spike":
         block = new Spike(...args);
         break;
-      case "Slab":
+      case "slab":
         block = new Slab(...args, this.onCubeSlabCollision);
         break;
     }

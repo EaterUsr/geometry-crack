@@ -1,12 +1,12 @@
-import { toRadians } from "@utils/math";
+import { toRadians, sqrt } from "@utils/math";
 
 export function squareHitbox(x: number, y: number, deg: number, size: number): Hitbox {
   const vertices: Hitbox = [...new Array(4)];
   const center: Coords = [x + size / 2, y + size / 2];
 
   for (let i in vertices) {
-    const pointX = Math.sin(toRadians(deg + Number(i) * 90 - 45)) * Math.sqrt((size / 2) ** 2 * 2) + center[0];
-    const pointY = Math.cos(toRadians(deg + Number(i) * 90 - 45)) * Math.sqrt((size / 2) ** 2 * 2) + center[1];
+    const pointX = Math.sin(toRadians(deg + Number(i) * 90 - 45)) * sqrt((size / 2) ** 2 * 2) + center[0];
+    const pointY = Math.cos(toRadians(deg + Number(i) * 90 - 45)) * sqrt((size / 2) ** 2 * 2) + center[1];
     vertices[i] = [pointX, pointY];
   }
 
@@ -17,8 +17,8 @@ export function rectHitbox(x: number, y: number, sizeX: number, sizeY: number): 
   const center: Coords = [x + sizeX / 2, y + sizeY / 2];
 
   for (let i in vertices) {
-    const pointX = Math.sin(toRadians(Number(i) * 90 - 45)) * Math.sqrt((sizeX / 2) ** 2 * 2) + center[0];
-    const pointY = Math.cos(toRadians(Number(i) * 90 - 45)) * Math.sqrt((sizeY / 2) ** 2 * 2) + center[1];
+    const pointX = Math.sin(toRadians(Number(i) * 90 - 45)) * sqrt((sizeX / 2) ** 2 * 2) + center[0];
+    const pointY = Math.cos(toRadians(Number(i) * 90 - 45)) * sqrt((sizeY / 2) ** 2 * 2) + center[1];
     vertices[i] = [pointX, pointY];
   }
 

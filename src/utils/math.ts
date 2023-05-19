@@ -41,3 +41,15 @@ export function truncNbr(nbr: number, decimals = 2) {
   const multiplier = 10 ** decimals;
   return Math.floor(nbr * multiplier) / multiplier;
 }
+
+const sqrtCache = new Map<number, number>();
+
+export function sqrt(nbr: number): number {
+  const keyNbr = truncNbr(nbr, 0);
+  if (sqrtCache.has(keyNbr)) return sqrtCache.get(keyNbr) as number;
+
+  const result = truncNbr(Math.sqrt(keyNbr));
+  sqrtCache.set(keyNbr, result);
+
+  return result;
+}

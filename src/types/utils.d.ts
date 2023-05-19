@@ -24,4 +24,4 @@ declare type AreNull<TValue extends null | unknown | (null | unknown)[]> = TValu
   ? boolean[]
   : boolean;
 
-declare type BlockType = "Spike" | "Slab";
+declare type BlockType = "spike" | "slab";
