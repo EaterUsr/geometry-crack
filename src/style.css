@@ -123,3 +123,7 @@ body {
   font-family: "Noto Sans";
   font-weight: 700;
 }
+#click-overlay {
+  width: 100vw;
+  height: 100vh;
+}

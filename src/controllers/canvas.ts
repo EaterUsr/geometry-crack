@@ -16,6 +16,7 @@ export class CanvasController {
   readonly cube: Cube;
   private jumpsLeft = cubeJumps;
   private lastRegen = Date.now();
+  readonly domElement: HTMLCanvasElement;
 
   constructor(
     canvasHTMLQuery: HTMLSelector,
@@ -24,6 +25,7 @@ export class CanvasController {
   ) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
     if (!canvas) throw new Error(`Invalid input: The query ${canvasHTMLQuery} does not match any HTML element`);
+    this.domElement = canvas;
 
     canvas.width = config.canvasWidth;
     canvas.height = config.canvasHeight;
