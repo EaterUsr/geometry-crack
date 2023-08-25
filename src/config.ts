@@ -30,7 +30,7 @@ export const config: Config = {
       jumps: 4,
       timeToRegen: 1300,
       speedDeg: 0.5,
-      jumpSpeed: 5,
+      jumpSpeed: 6,
       gravity: 5,
       jumpVelocity: 22,
       getHitbox(cube: Cube) {
@@ -82,7 +82,7 @@ export const config: Config = {
       dirt: "#A85100",
       grass: "#1CA600",
     },
-    speed: 1460,
+    speed: 1750,
     blockSize: 9,
     grassHeight: 20,
     floorHeight: 0.5,

@@ -33,6 +33,7 @@ body {
   z-index: var(--opacity);
 }
 .button {
+  z-index: 3;
   background: var(--clr-primary);
   padding: 0.2em 1.4em;
   font-size: 2.3em;
@@ -104,6 +105,14 @@ body {
   font-size: 2.5em;
   font-family: "Roboto";
   color: #A1A1A1;
+}
+.game-over__click-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
 }
 #menu {
   display: flex;
