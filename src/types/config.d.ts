@@ -33,7 +33,9 @@ declare type Config = import("ts-essentials").DeepReadonly<{
       timeToRegen: number;
     };
     spike: BlockConfig;
-    slab: BlockConfig;
+    slab: BlockConfig & {
+      url: string;
+    };
   };
   decorations: {
     speed: number;

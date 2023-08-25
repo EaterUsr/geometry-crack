@@ -22,7 +22,7 @@ export class BlocksController {
 
   update(cubeOrigin: Coords, speedFrame: number, cubeHitbox: Hitbox) {
     if ((this.content.getLast()?.value.position[0] ?? 0) < 100) {
-      setStructure(this.canvas, this.decorations, this, this.cubeOnSlabCollision);
+      setStructure(this.canvas, this.decorations, this);
     }
     this.content.forEach(block => {
       block.update(speedFrame);
@@ -31,7 +31,10 @@ export class BlocksController {
         block.position[0] >= cubeOrigin[0] - this.decorations.blockSize &&
         block.position[0] < cubeOrigin[0] + this.decorations.blockSize
       ) {
-        if (isCollision(block.hitbox, cubeHitbox)) this.onCollision(block.type);
+        if (isCollision(block.hitbox, cubeHitbox)) {
+          if (block.type === "slab") this.cubeOnSlabCollision(block.position);
+          this.onCollision(block.type);
+        }
       }
 
       if (block.position[0] + block.size < 0) {

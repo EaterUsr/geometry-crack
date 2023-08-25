@@ -5,12 +5,12 @@ import { Slab } from "@components/block/slab";
 
 export const config: Config = {
   structures: [
-    [["spike", [0, 0]]],
-    [
-      ["spike", [0, 0]],
-      ["spike", [4, 0]],
-      ["spike", [5, 0]],
-    ],
+    // [["spike", [0, 0]]],
+    // [
+    //   ["spike", [0, 0]],
+    //   ["spike", [4, 0]],
+    //   ["spike", [5, 0]],
+    // ],
     [
       ["slab", [0, 0]],
       ["spike", [1, 0]],
@@ -43,6 +43,7 @@ export const config: Config = {
       },
     },
     slab: {
+      url: "img/components/slab.svg",
       color: "#000",
       getHitbox(slab: Slab) {
         return rectHitbox(...slab.position, slab.size, slab.size / 2);
@@ -52,7 +53,7 @@ export const config: Config = {
   decorations: {
     dirts: {
       speed: 1,
-      urls: ["img/dirt/depth-1.svg", "img/dirt/depth-2.svg", "img/dirt/depth-3.svg"],
+      urls: ["img/components/dirt/depth-1.svg", "img/components/dirt/depth-2.svg", "img/components/dirt/depth-3.svg"],
       depths: [5, 10, 15],
       margins: [0, 1, 0],
       scale: 6,
