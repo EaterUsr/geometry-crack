@@ -84,7 +84,7 @@ export class CanvasController {
 
     this.decorations.updateBackground(speedFrame);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
-    this.cube.update(speedFrame);
+    this.cube.update(speedFrame, this.jumpsLeft);
     this.decorations.updateForeground(speedFrame);
   }
   private reset() {

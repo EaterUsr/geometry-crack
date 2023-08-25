@@ -20,9 +20,15 @@ export const config: Config = {
   ],
   components: {
     cube: {
+      urls: [
+        "img/components/cube/death.svg",
+        "img/components/cube/1_jump.svg",
+        "img/components/cube/half_energy.svg",
+        "img/components/cube/3_jumps.svg",
+        "img/components/cube/full_energy.svg",
+      ],
       jumps: 4,
       timeToRegen: 1300,
-      color: "#000",
       speedDeg: 0.5,
       jumpSpeed: 5,
       gravity: 5,
@@ -38,14 +44,12 @@ export const config: Config = {
     },
     spike: {
       url: "img/components/spike.svg",
-      color: "#f00",
       getHitbox(spike: Spike) {
         return triangleHitbox(...spike.position, spike.size);
       },
     },
     slab: {
       url: "img/components/slab.svg",
-      color: "#000",
       getHitbox(slab: Slab) {
         return rectHitbox(...slab.position, slab.size, slab.size / 2);
       },
