@@ -9,14 +9,16 @@
   <body>
     <canvas id="game"></canvas>
     <section class="page" id="gameOver">
-      <button data-button="RESTART" class="overlay"></button>
+      <button data-button="RESTART" class="game-over__overlay"></button>
       <button class="button button-back" data-button="BACK">
         <img src="/img/ui/back_button.svg" alt="back">
       </button>
-      <h3 class="game-over-title">Game over</h3>
-      <p class="game-over-info">Tap to retry</p>
+      <h3 class="game-over__title">Game over</h3>
+      <p class="game-over__info">Tap to retry</p>
    </section>
     <section class="page" id="paused">
+      <div class="paused__overlay"></div>
+      <h3 class="paused__title">Game is paused</h3>
       <button class="button button-pause" data-button="RESUME">
         <img src="/img/ui/resume_button.svg" alt="resume">
       </button>

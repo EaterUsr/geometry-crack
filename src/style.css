@@ -75,7 +75,7 @@ body {
   width: var(--btn-width);
   transform: translate(-50%, -50%);
 }
-.overlay {
+.game-over__overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -91,7 +91,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.game-over-title {
+.game-over__title {
   font-family: "Noto Sans";
   font-weight: 900;
   color: #C00000;
@@ -99,7 +99,7 @@ body {
   font-size: 4em;
   padding-bottom: 3em;
 }
-.game-over-info {
+.game-over__info {
   z-index: 1;
   font-size: 2.5em;
   font-family: "Roboto";
@@ -126,4 +126,27 @@ body {
 #click-overlay {
   width: 100vw;
   height: 100vh;
+}
+#paused {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.paused__title {
+  color: #cacaca;
+  font-family: "Noto Sans";
+  font-weight: 900;
+  font-size: 5em;
+  margin-bottom: 3em;
+}
+.paused__overlay {
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 26%);
+  backdrop-filter: blur(0.1rem);
 }
