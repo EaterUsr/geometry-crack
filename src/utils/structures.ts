@@ -7,12 +7,7 @@ import { config } from "@config";
 
 const structuresPatern = config.structures;
 
-export function setStructure(
-  canvas: CanvasConfig,
-  decorations: DecorationsConfig,
-  blocks: BlocksController,
-  cubeOnSlabCollision: (position: Coords) => void
-) {
+export function setStructure(canvas: CanvasConfig, decorations: DecorationsConfig, blocks: BlocksController) {
   structuresPatern[Math.floor(random(0, structuresPatern.length - 1) + 0.5)].forEach((patern: StructurePatren) => {
     const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
 
@@ -31,8 +26,7 @@ export function setStructure(
           canvas,
           parseCoords(patern[1], decorations.blockSize, origin),
           decorations.speed,
-          decorations.blockSize,
-          cubeOnSlabCollision
+          decorations.blockSize
         );
         break;
     }

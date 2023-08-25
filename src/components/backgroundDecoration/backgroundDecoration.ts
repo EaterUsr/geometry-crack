@@ -4,26 +4,21 @@ import { trunc } from "@utils/decorators";
 export abstract class BackgroundDecoration {
   @trunc(0)
   abstract readonly y: number;
-  abstract readonly color: Color;
   @trunc(0)
   abstract readonly sizeX: number;
   @trunc(0)
   abstract readonly sizeY: number;
-  readonly path = new Path2D();
+  protected abstract readonly image: HTMLImageElement;
   position = 0;
 
-  constructor(protected readonly canvas: CanvasConfig, private readonly speed: number) {
-    this.setPath();
-  }
+  constructor(protected readonly canvas: CanvasConfig, private readonly speed: number) {}
 
-  protected abstract setPath(): void;
   protected abstract draw(): void;
 
   update(speedFrame: number) {
     const distance = this.canvas.width - this.position;
 
     this.canvas.ctx.save();
-    this.canvas.ctx.fillStyle = this.color;
     this.canvas.ctx.translate(distance, this.y);
     this.canvas.ctx.scale(this.sizeX, this.sizeY);
 

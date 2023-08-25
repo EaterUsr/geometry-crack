@@ -16,7 +16,7 @@ declare type DecorationsConfig = Readonly<{
 
 declare type BlockConfig = Readonly<{
   getHitbox: (block: Block | Cube) => Hitbox;
-  color: Color;
+  url: string;
 }>;
 
 declare type Config = import("ts-essentials").DeepReadonly<{
@@ -24,7 +24,9 @@ declare type Config = import("ts-essentials").DeepReadonly<{
   canvasHeight: number;
   structures: structurePatern[][];
   components: {
-    cube: BlockConfig & {
+    cube: {
+      urls: string[];
+      getHitbox: (block: Block | Cube) => Hitbox;
       speedDeg: number;
       jumpSpeed: number;
       gravity: number;
@@ -33,7 +35,7 @@ declare type Config = import("ts-essentials").DeepReadonly<{
       timeToRegen: number;
     };
     spike: BlockConfig;
-    slab: BlockConfig;
+    slab: blockconfig;
   };
   decorations: {
     speed: number;
@@ -55,7 +57,7 @@ declare type Config = import("ts-essentials").DeepReadonly<{
     clouds: {
       depth: number;
       frequency: number;
-      color: Color;
+      url: string;
       sizeY: Minmax;
       y: Minmax;
       originalSize: number;

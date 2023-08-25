@@ -2,8 +2,10 @@ import { closestDeg, toDegrees } from "@utils/math";
 import { updateTarget } from "@utils/targetPosition";
 import { backward } from "@utils/move";
 import { config } from "@config";
+import { loadImage } from "@utils/image";
 
 const cubeConf = config.components.cube;
+
 export class Cube {
   private floorHeight: number;
   private speedFrame = 0;
@@ -13,7 +15,7 @@ export class Cube {
   private isFalling = true;
   private canForward = true;
   readonly size: number;
-  readonly color = cubeConf.color;
+  private readonly images = cubeConf.urls.map(loadImage);
   get hitbox() {
     return cubeConf.getHitbox(this);
   }
@@ -44,7 +46,7 @@ export class Cube {
     return this.origin.content[1] - this.jumpHeight + this.size >= this.floorHeight;
   }
 
-  update(speedFrame: number) {
+  update(speedFrame: number, jumpsLeft: number) {
     this.speedFrame = speedFrame;
 
     this.velocity -= this.velocity === 0 ? 0 : 1;
@@ -87,9 +89,7 @@ export class Cube {
     this.canvas.ctx.rotate(toDegrees(this.deg.content));
     this.canvas.ctx.translate(-this.center[0], -this.center[1]);
 
-    this.canvas.ctx.fillStyle = this.color;
-    this.canvas.ctx.fillRect(...originWithJump, this.size, this.size);
-
+    this.canvas.ctx.drawImage(this.images[jumpsLeft], ...originWithJump, this.size, this.size);
     this.canvas.ctx.restore();
 
     this.canForward = true;
