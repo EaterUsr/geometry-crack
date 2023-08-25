@@ -20,7 +20,7 @@ export class Cloud extends BackgroundDecoration {
       0,
       0,
       this.sizeX * cloudConf.originalSize,
-      (this.sizeY * cloudConf.originalSize) / 1.5
+      Math.floor(this.sizeY * cloudConf.originalSize * 0.62)
     );
   }
 }
