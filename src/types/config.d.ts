@@ -57,7 +57,7 @@ declare type Config = import("ts-essentials").DeepReadonly<{
     clouds: {
       depth: number;
       frequency: number;
-      color: Color;
+      url: string;
       sizeY: Minmax;
       y: Minmax;
       originalSize: number;

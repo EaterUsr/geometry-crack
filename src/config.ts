@@ -64,9 +64,9 @@ export const config: Config = {
       scale: 6,
     },
     clouds: {
+      url: "img/components/cloud.svg",
       frequency: 0.3,
       depth: 4,
-      color: "#fff",
       sizeY: {
         min: 1.1,
         max: 1.5,
