@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geometry crack</title>
+    <script type="module" src="/src/main.ts" defer></script>
+ </head>
+  <body>
+    <canvas id="game"></canvas>
+    <section class="page" id="gameOver">
+      <button data-button="RESTART" class="overlay"></button>
+      <button class="button button-back" data-button="BACK">
+        <img src="/img/ui/back_button.svg" alt="back">
+      </button>
+      <h3 class="game-over-title">Game over</h3>
+      <p class="game-over-info">Tap to retry</p>
+   </section>
+    <section class="page" id="paused">
+      <button class="button button-pause" data-button="RESUME">
+        <img src="/img/ui/resume_button.svg" alt="resume">
+      </button>
+    </section>
+    <section class="page" id="menu">
+      <img class="title" src="/img/ui/title.svg" alt="title">
+      <button class="button button-start" data-button="START">play</button> 
+    </section>
+    <section class="page" id="play">
+      <span id="jumps-left"></span>
+      <button class="button button-pause" data-button="PAUSE">
+        <img src="/img/ui/pause_button.svg" alt="pause">
+      </button>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "name": "geometry-crack",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix --ext=ts,cts,mts,js,cjs,mjs",
+    "release": "standard-version",
+    "deploy": "npm run build && gh-pages -d dist",
+    "prepare": "husky install"
+  },
+  "standard-version": {
+    "skip": {
+      "tag": true
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "gh-pages": "^5.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^2.7.1",
+    "ts-essentials": "^9.3.1",
+    "typescript": "^4.6.4",
+    "vite": "^4.3.5",
+    "vite-tsconfig-paths": "^3.5.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "json5@<1.0.2": ">=1.0.2",
+      "json5@>=2.0.0 <2.2.2": ">=2.2.2"
+    }
+  },
+  "dependencies": {
+    "xstate": "^4.38.2"
+  }
+}
