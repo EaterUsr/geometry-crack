@@ -32,8 +32,10 @@ declare type Config = import("ts-essentials").DeepReadonly<{
       jumps: number;
       timeToRegen: number;
     };
-    spike: BlockConfig;
-    slab: BlockConfig & {
+    spike: BlockConfig & {
+      url: string;
+    };
+    slab: blockconfig & {
       url: string;
     };
   };

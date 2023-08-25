@@ -5,12 +5,12 @@ import { Slab } from "@components/block/slab";
 
 export const config: Config = {
   structures: [
-    // [["spike", [0, 0]]],
-    // [
-    //   ["spike", [0, 0]],
-    //   ["spike", [4, 0]],
-    //   ["spike", [5, 0]],
-    // ],
+    [["spike", [0, 0]]],
+    [
+      ["spike", [0, 0]],
+      ["spike", [4, 0]],
+      ["spike", [5, 0]],
+    ],
     [
       ["slab", [0, 0]],
       ["spike", [1, 0]],
@@ -37,6 +37,7 @@ export const config: Config = {
       },
     },
     spike: {
+      url: "img/components/spike.svg",
       color: "#f00",
       getHitbox(spike: Spike) {
         return triangleHitbox(...spike.position, spike.size);

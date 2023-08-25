@@ -3,7 +3,7 @@ import { backward } from "@utils/move";
 export abstract class Block {
   protected readonly ctx: CanvasRenderingContext2D;
   abstract readonly hitbox: Hitbox;
-  abstract readonly color: Color;
+  protected abstract readonly image: HTMLImageElement;
   abstract readonly type: BlockType;
 
   constructor({ ctx }: CanvasConfig, public position: Coords, public speed: number, public size: number) {
@@ -17,7 +17,6 @@ export abstract class Block {
 
     this.ctx.save();
     this.ctx.translate(...this.position);
-    this.ctx.fillStyle = this.color;
     this.drawPatern();
     this.ctx.restore();
   }
