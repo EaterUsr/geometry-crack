@@ -152,7 +152,13 @@ export class UI {
   die() {
     this.handleEvent({ type: "DIE" });
   }
+  restart() {
+    this.handleEvent({ type: "RESTART" });
+  }
   displayJumpsLeft(jumpsLeft: number) {
     this.jumpsLeftContainer.textContent = `jumps left: ${jumpsLeft}`;
+  }
+  get state() {
+    return this.interpreter.getSnapshot().value;
   }
 }

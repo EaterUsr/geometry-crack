@@ -17,7 +17,6 @@ export class CanvasController {
   private jumpsLeft = cubeJumps;
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
-  private fps = 0;
 
   constructor(
     canvasHTMLQuery: HTMLSelector,
@@ -49,12 +48,6 @@ export class CanvasController {
       this.onCollision.bind(this)
     );
 
-    const fpsContainer = document.querySelector("#fps")!;
-    setInterval(() => {
-      fpsContainer.textContent = `${this.fps * 2}`;
-      this.fps = 0;
-    }, 500);
-
     this.animate();
   }
   jump() {
@@ -80,8 +73,6 @@ export class CanvasController {
 
   private animate() {
     window.requestAnimationFrame(this.animate.bind(this));
-
-    this.fps++;
 
     if (this.jumpsLeft === cubeJumps) this.lastRegen = Date.now();
     if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {

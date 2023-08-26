@@ -11,7 +11,13 @@ ui.onEvent(event => canvas.event(event));
 
 document.addEventListener("keydown", e => {
   const { key } = e;
-  if (key === " " || key === "ArrowUp") canvas.jump();
+  if (key === " " || key === "ArrowUp") {
+    if (ui.state === "gameOver") {
+      ui.restart();
+      return;
+    }
+    canvas.jump();
+  }
 });
 
 if (/Mobi|Android/i.test(navigator.userAgent)) {

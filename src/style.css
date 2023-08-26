@@ -159,12 +159,4 @@ body {
   background: rgba(0, 0, 0, 26%);
   backdrop-filter: blur(0.1rem);
 }
-#fps {
-  position: fixed;
-  top: 0;
-  left: 0;
-  color: #000;
-}
-#fps::before {
-  content: "fps: ";
-}
+
