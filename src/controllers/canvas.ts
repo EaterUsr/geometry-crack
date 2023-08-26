@@ -17,6 +17,7 @@ export class CanvasController {
   private jumpsLeft = cubeJumps;
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
+  private fps = 0;
 
   constructor(
     canvasHTMLQuery: HTMLSelector,
@@ -35,7 +36,7 @@ export class CanvasController {
       width: canvas.width,
       height: canvas.height,
       w(size: number) {
-        return truncNbr(size * (this.width / 10000));
+        return truncNbr(size * (canvas.width / 10000));
       },
     };
 
@@ -48,12 +49,23 @@ export class CanvasController {
       this.onCollision.bind(this)
     );
 
+    const fpsContainer = document.querySelector("#fps")!;
+    setInterval(() => {
+      fpsContainer.textContent = `${this.fps * 2}`;
+      this.fps = 0;
+    }, 500);
+
     this.animate();
   }
   jump() {
-    if (this.jumpsLeft === 0) return;
-    this.cube.jump();
-    this.jumpsLeft--;
+    this.startJump();
+    this.removeJump();
+  }
+  startJump() {
+    if (this.jumpsLeft !== 0) this.cube.jump();
+  }
+  removeJump() {
+    if (this.jumpsLeft !== 0) this.jumpsLeft--;
   }
   start() {
     this.lastFrame = Date.now();
@@ -63,15 +75,13 @@ export class CanvasController {
   onCollision(type: BlockType) {
     if (type === "spike") {
       this.onDie();
-      return;
     }
-    setTimeout(() => {
-      this.onDie();
-    }, 1000);
   }
 
   private animate() {
     window.requestAnimationFrame(this.animate.bind(this));
+
+    this.fps++;
 
     if (this.jumpsLeft === cubeJumps) this.lastRegen = Date.now();
     if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {

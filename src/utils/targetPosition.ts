@@ -23,7 +23,7 @@ function calcTarget(position: number, target: number, speed: number, resetNumber
 export function updateTarget<TPosition extends number | number[]>(
   targetPosition: TargetPosition<TPosition>,
   speedFrame: number,
-  defaultUpdate: (areNull: AreNull<TPosition>, preventContent: TPosition) => void,
+  defaultUpdate?: (areNull: AreNull<TPosition>, preventContent: TPosition) => void,
   resetNumber?: number
 ) {
   const { content, target, speed } = targetPosition;
@@ -41,15 +41,16 @@ export function updateTarget<TPosition extends number | number[]>(
       return position;
     });
     if (target.some(nbr => nbr === null))
-      defaultUpdate(
-        (targetPosition.target as (number | null)[]).map(value => value === null) as AreNull<TPosition>,
-        content as TPosition
-      );
+      if (defaultUpdate)
+        defaultUpdate(
+          (targetPosition.target as (number | null)[]).map(value => value === null) as AreNull<TPosition>,
+          content as TPosition
+        );
     return;
   }
   if (typeof target === "number") {
     (targetPosition.content as number) = calcTarget(content as number, target, speed * speedFrame, resetNumber);
     if (content === target) (targetPosition.target as number | null) = null;
   }
-  (defaultUpdate as (areNull: boolean, preventContent: TPosition) => void)(false, content);
+  if (defaultUpdate) (defaultUpdate as (areNull: boolean, preventContent: TPosition) => void)(false, content);
 }

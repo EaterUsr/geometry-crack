@@ -30,16 +30,11 @@ export const config: Config = {
       jumps: 4,
       timeToRegen: 1300,
       speedDeg: 0.5,
-      jumpSpeed: 6,
+      jumpSpeed: 0.5,
       gravity: 5,
-      jumpVelocity: 22,
+      jumpVelocity: 170,
       getHitbox(cube: Cube) {
-        return squareHitbox(
-          cube.origin.content[0],
-          cube.origin.content[1] - cube.jumpHeight,
-          360 - cube.deg.content,
-          cube.size
-        );
+        return squareHitbox(cube.origin.content[0], cube.origin.content[1], 360 - cube.deg.content, cube.size);
       },
     },
     spike: {

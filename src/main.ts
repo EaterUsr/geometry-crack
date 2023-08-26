@@ -13,4 +13,10 @@ document.addEventListener("keydown", e => {
   const { key } = e;
   if (key === " " || key === "ArrowUp") canvas.jump();
 });
-clickOverlay.addEventListener("click", () => canvas.jump());
+
+if (/Mobi|Android/i.test(navigator.userAgent)) {
+  clickOverlay.addEventListener("touchstart", () => canvas.startJump());
+  clickOverlay.addEventListener("touchend", () => canvas.removeJump());
+} else {
+  clickOverlay.addEventListener("click", () => canvas.jump());
+}
