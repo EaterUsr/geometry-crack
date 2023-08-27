@@ -13,8 +13,6 @@ export class Cloud extends BackgroundDecoration {
   protected image = loadImage(cloudConf.url);
 
   draw() {
-    if (this.isReturned) this.canvas.ctx.translate(this.sizeY * -cloudConf.originalSize, 0);
-
     this.canvas.ctx.drawImage(
       this.image,
       0,

@@ -70,7 +70,7 @@ export const config: Config = {
         min: 0.3,
         max: 1.5,
       },
-      originalSize: 110,
+      originalSize: 100,
     },
     colors: {
       sky: "#0386FF",
