@@ -2,22 +2,10 @@ import { squareHitbox, triangleHitbox, rectHitbox } from "@utils/collision";
 import { Cube } from "@components/cube";
 import { Spike } from "@components/block/spike";
 import { Slab } from "@components/block/slab";
+import { structures } from "./structures";
 
 export const config: Config = {
-  structures: [
-    [["spike", [0, 0]]],
-    [
-      ["spike", [0, 0]],
-      ["spike", [4, 0]],
-      ["spike", [5, 0]],
-    ],
-    [
-      ["slab", [0, 0]],
-      ["spike", [1, 0]],
-      ["spike", [2, 0]],
-      ["spike", [3, 0]],
-    ],
-  ],
+  structures,
   components: {
     cube: {
       timeToDie: 150,

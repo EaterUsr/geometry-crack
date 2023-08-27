@@ -22,7 +22,7 @@ declare type BlockConfig = Readonly<{
 declare type Config = import("ts-essentials").DeepReadonly<{
   canvasWidth: number;
   canvasHeight: number;
-  structures: structurePatern[][];
+  structures: Structures;
   components: {
     cube: {
       timeToDie: number;
