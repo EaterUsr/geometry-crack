@@ -5,12 +5,12 @@ import { Slab } from "@components/block/slab";
 
 export const config: Config = {
   structures: [
-    [["spike", [0, 0]]],
-    [
-      ["spike", [0, 0]],
-      ["spike", [4, 0]],
-      ["spike", [5, 0]],
-    ],
+    // [["spike", [0, 0]]],
+    // [
+    //   ["spike", [0, 0]],
+    //   ["spike", [4, 0]],
+    //   ["spike", [5, 0]],
+    // ],
     [
       ["slab", [0, 0]],
       ["spike", [1, 0]],
@@ -20,6 +20,7 @@ export const config: Config = {
   ],
   components: {
     cube: {
+      timeToDie: 150,
       urls: [
         "img/components/cube/death.svg",
         "img/components/cube/1_jump.svg",

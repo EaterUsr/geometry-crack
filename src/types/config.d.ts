@@ -25,6 +25,7 @@ declare type Config = import("ts-essentials").DeepReadonly<{
   structures: structurePatern[][];
   components: {
     cube: {
+      timeToDie: number;
       urls: string[];
       getHitbox: (block: Block | Cube) => Hitbox;
       speedDeg: number;

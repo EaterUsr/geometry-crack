@@ -5,7 +5,7 @@ import { truncNbr } from "@utils/math";
 import { config } from "@config";
 import { UIEvent } from "@controllers/ui";
 
-const cubeJumps = config.components.cube.jumps;
+const cube = config.components.cube;
 
 export class CanvasController {
   readonly config: CanvasConfig;
@@ -14,7 +14,7 @@ export class CanvasController {
   private readonly blocks: BlocksController;
   readonly decorations: DecorationsController;
   readonly cube: Cube;
-  private jumpsLeft = cubeJumps;
+  private jumpsLeft = cube.jumps;
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
 
@@ -74,7 +74,9 @@ export class CanvasController {
   private animate() {
     window.requestAnimationFrame(this.animate.bind(this));
 
-    if (this.jumpsLeft === cubeJumps) this.lastRegen = Date.now();
+    if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.onDie, cube.timeToDie);
+
+    if (this.jumpsLeft === cube.jumps) this.lastRegen = Date.now();
     if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {
       this.jumpsLeft++;
       this.lastRegen = Date.now();
@@ -94,7 +96,7 @@ export class CanvasController {
     this.decorations.reset();
     this.blocks.clear();
     this.cube.reset();
-    this.jumpsLeft = cubeJumps;
+    this.jumpsLeft = cube.jumps;
   }
   event(event: UIEvent) {
     switch (event.type) {
