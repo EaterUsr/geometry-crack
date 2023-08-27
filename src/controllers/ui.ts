@@ -128,6 +128,7 @@ export class UI {
       button.addEventListener("click", () => {
         const event = button.getAttribute("data-button") as UIEvent["type"];
         button.blur();
+        button.setAttribute("tabindex", "-1");
         this.handleEvent({ type: event });
       });
     });
@@ -139,6 +140,8 @@ export class UI {
     this.render(nextState);
   }
   private render(state: UIState) {
+    const button = document.querySelector(`#${state.value} [data-button]`)!;
+    button.setAttribute("tabindex", "0");
     (this.pages[state.value as UITypestate["value"]] as HTMLElement).style.setProperty("--opacity", "1");
     if (state.value !== this.prevState.value) {
       (this.pages[this.prevState.value as UITypestate["value"]] as HTMLElement).style.setProperty("--opacity", "0");
