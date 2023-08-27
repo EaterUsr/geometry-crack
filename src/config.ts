@@ -5,12 +5,12 @@ import { Slab } from "@components/block/slab";
 
 export const config: Config = {
   structures: [
-    // [["spike", [0, 0]]],
-    // [
-    //   ["spike", [0, 0]],
-    //   ["spike", [4, 0]],
-    //   ["spike", [5, 0]],
-    // ],
+    [["spike", [0, 0]]],
+    [
+      ["spike", [0, 0]],
+      ["spike", [4, 0]],
+      ["spike", [5, 0]],
+    ],
     [
       ["slab", [0, 0]],
       ["spike", [1, 0]],
@@ -73,9 +73,9 @@ export const config: Config = {
       originalSize: 110,
     },
     colors: {
-      sky: "#00C2FF",
+      sky: "#0386FF",
       dirt: "#A85100",
-      grass: "#1CA600",
+      grass: "#149000",
     },
     speed: 1900,
     blockSize: 9,
