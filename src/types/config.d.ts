@@ -30,7 +30,6 @@ declare type Config = import("ts-essentials").DeepReadonly<{
       getHitbox: (block: Block | Cube) => Hitbox;
       speedDeg: number;
       jumpSpeed: number;
-      gravity: number;
       jumpVelocity: number;
       jumps: number;
       timeToRegen: number;

@@ -29,11 +29,10 @@ export const config: Config = {
         "img/components/cube/full_energy.svg",
       ],
       jumps: 4,
-      timeToRegen: 1300,
+      timeToRegen: 1100,
       speedDeg: 0.5,
       jumpSpeed: 0.5,
-      gravity: 5,
-      jumpVelocity: 170,
+      jumpVelocity: 175,
       getHitbox(cube: Cube) {
         return squareHitbox(cube.origin.content[0], cube.origin.content[1], 360 - cube.deg.content, cube.size);
       },
@@ -78,7 +77,7 @@ export const config: Config = {
       dirt: "#A85100",
       grass: "#1CA600",
     },
-    speed: 1750,
+    speed: 1900,
     blockSize: 9,
     grassHeight: 20,
     floorHeight: 0.5,
