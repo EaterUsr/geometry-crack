@@ -1,6 +1,7 @@
 import { config } from "@config";
 import { CloudsController } from "@controllers/backgroundDecorations/clouds";
 import { DirtsController } from "@controllers/backgroundDecorations/dirts";
+import { GrassController } from "./backgroundDecorations/grass";
 
 const decorationsConf = config.decorations;
 
@@ -9,6 +10,7 @@ export class DecorationsController {
   readonly config: DecorationsConfig;
   readonly clouds: CloudsController;
   readonly dirts: DirtsController;
+  readonly grass: GrassController;
 
   constructor(private readonly canvas: CanvasConfig) {
     const speed = canvas.width / decorationsConf.speed;
@@ -32,6 +34,7 @@ export class DecorationsController {
 
     this.clouds = new CloudsController(this.canvas, this.config);
     this.dirts = new DirtsController(this.canvas, this.config);
+    this.grass = new GrassController(this.canvas, this.config);
   }
 
   updateBackground(speedFrame: number) {
@@ -42,6 +45,7 @@ export class DecorationsController {
     this.setDirt();
     this.setGrass();
     this.dirts.update(speedFrame);
+    this.grass.update(speedFrame);
   }
   private setSky() {
     this.canvas.ctx.fillStyle = this.colors.sky;

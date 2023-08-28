@@ -54,6 +54,11 @@ declare type Config = import("ts-essentials").DeepReadonly<{
       margins: number[];
       scale: number;
     };
+    grass: {
+      scale: number;
+      url: string;
+      speed: number;
+    };
     clouds: {
       depth: number;
       frequency: number;

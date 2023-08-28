@@ -39,6 +39,11 @@ export const config: Config = {
     },
   },
   decorations: {
+    grass: {
+      url: "img/components/grass.svg",
+      scale: 3,
+      speed: 1,
+    },
     dirts: {
       speed: 1,
       urls: ["img/components/dirt/depth-1.svg", "img/components/dirt/depth-2.svg", "img/components/dirt/depth-3.svg"],
