@@ -7,15 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --fix --ext=ts,cts,mts,js,cjs,mjs",
+    "lint": "eslint . --cache --fix --ext=ts,cts,mts,js,cjs,mjs",
     "release": "standard-version",
     "deploy": "npm run build && gh-pages -d dist",
     "prepare": "husky install"
-  },
-  "standard-version": {
-    "skip": {
-      "tag": true
-    }
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
