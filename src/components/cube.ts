@@ -18,6 +18,7 @@ export class Cube {
     return cubeConf.getHitbox(this);
   }
   center: Coords;
+  private lastSlabCollision: null | number = null;
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -49,6 +50,12 @@ export class Cube {
     this.velocity -= speedFrame;
 
     this.origin.content[1] -= this.velocity * this.canvas.w((cubeConf.jumpSpeed / 10) * speedFrame);
+
+    if (Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock) {
+      this.isFalling = true;
+      this.floorHeight = this.decorations.floorHeight;
+      this.lastSlabCollision = null;
+    }
 
     if (this.isTouchingTheFloor()) {
       this.origin.content[1] = this.floorHeight - this.size;
@@ -97,13 +104,16 @@ export class Cube {
 
   onSlabCollision(slabPosition: Coords) {
     if (this.center[0] >= slabPosition[0]) {
-      setTimeout(() => {
-        this.isFalling = true;
-        this.floorHeight = this.decorations.floorHeight;
-      }, this.decorations.timePerBlock);
+      if (
+        Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock ||
+        this.lastSlabCollision === null
+      ) {
+        this.lastSlabCollision = Date.now();
+      }
       this.floorHeight = slabPosition[1];
       return;
     }
+    if (this.floorHeight <= slabPosition[1]) return;
     this.isFalling = true;
     this.origin.target[0] = slabPosition[0] - this.size;
   }

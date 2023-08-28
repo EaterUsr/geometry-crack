@@ -9,8 +9,7 @@ export class BlocksController {
   constructor(
     private readonly canvas: CanvasConfig,
     private readonly decorations: DecorationsConfig,
-    private readonly cubeOnSlabCollision: (position: Coords) => void,
-    private readonly onCollision: (type: BlockType) => void
+    private readonly onCollision: (block: Block) => void
   ) {}
 
   add(block: Block) {
@@ -32,9 +31,9 @@ export class BlocksController {
         block.position[0] < cubeOrigin[0] + this.decorations.blockSize
       ) {
         if (isCollision(block.hitbox, cubeHitbox)) {
-          if (block.type === "slab") this.cubeOnSlabCollision(block.position);
-          this.onCollision(block.type);
+          this.onCollision(block);
         }
+        if (block.type === "slab" && block.position[0] <= cubeOrigin[0]) this.onCollision(block);
       }
 
       if (block.position[0] + block.size < 0) {

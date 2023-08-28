@@ -4,6 +4,7 @@ import { BlocksController } from "@controllers/blocks";
 import { truncNbr } from "@utils/math";
 import { config } from "@config";
 import { UIEvent } from "@controllers/ui";
+import { Block } from "@components/block";
 
 const cube = config.components.cube;
 
@@ -41,12 +42,7 @@ export class CanvasController {
 
     this.decorations = new DecorationsController(this.config);
     this.cube = new Cube(this.config, this.decorations.config);
-    this.blocks = new BlocksController(
-      this.config,
-      this.decorations.config,
-      this.cube.onSlabCollision.bind(this.cube),
-      this.onCollision.bind(this)
-    );
+    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision.bind(this));
 
     this.animate();
   }
@@ -65,9 +61,14 @@ export class CanvasController {
     this.isActive = true;
   }
 
-  onCollision(type: BlockType) {
-    if (type === "spike") {
-      this.onDie();
+  onCollision(block: Block) {
+    switch (block.type) {
+      case "spike":
+        this.onDie();
+        break;
+      case "slab":
+        this.cube.onSlabCollision.bind(this.cube)(block.position);
+        break;
     }
   }
 
