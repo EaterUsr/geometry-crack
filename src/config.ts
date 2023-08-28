@@ -2,29 +2,10 @@ import { squareHitbox, triangleHitbox, rectHitbox } from "@utils/collision";
 import { Cube } from "@components/cube";
 import { Spike } from "@components/block/spike";
 import { Slab } from "@components/block/slab";
+import { structures } from "./structures";
 
 export const config: Config = {
-  structures: [
-    // [["spike", [0, 0]]],
-    // [
-    //   ["spike", [0, 0]],
-    //   ["spike", [4, 0]],
-    //   ["spike", [5, 0]],
-    // ],
-    // [
-    //   ["slab", [0, 0]],
-    //   ["spike", [1, 0]],
-    //   ["spike", [2, 0]],
-    //   ["spike", [3, 0]],
-    // ],
-    [
-      ["slab", [0, 0]],
-      ["slab", [1, 0]],
-      ["slab", [2, 0]],
-      ["slab", [3, 0]],
-      ["slab", [4, 0]],
-    ],
-  ],
+  structures,
   components: {
     cube: {
       timeToDie: 150,
@@ -38,8 +19,8 @@ export const config: Config = {
       jumps: 4,
       timeToRegen: 1100,
       speedDeg: 0.5,
-      jumpSpeed: 0.5,
-      jumpVelocity: 175,
+      jumpSpeed: 0.4,
+      jumpVelocity: 190,
       getHitbox(cube: Cube) {
         return squareHitbox(cube.origin.content[0], cube.origin.content[1], 360 - cube.deg.content, cube.size);
       },
