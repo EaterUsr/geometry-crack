@@ -17,7 +17,7 @@ export class GrassController {
   constructor(private readonly canvas: CanvasConfig, { speed, floorHeight }: DecorationsConfig) {
     this.floorHeight = floorHeight;
     this.scale = this.canvas.w(grassConf.scale);
-    this.speed = speed * grassConf.speed;
+    this.speed = speed;
   }
 
   private draw(position: number, img: HTMLImageElement) {

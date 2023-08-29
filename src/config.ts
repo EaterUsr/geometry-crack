@@ -43,10 +43,8 @@ export const config: Config = {
     grass: {
       url: "img/components/grass.svg",
       scale: 3,
-      speed: 1,
     },
     dirts: {
-      speed: 1,
       urls: ["img/components/dirt/depth-1.svg", "img/components/dirt/depth-2.svg", "img/components/dirt/depth-3.svg"],
       depths: [5, 10, 15],
       margins: [0, 1, 0],

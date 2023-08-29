@@ -2,6 +2,7 @@ import { calcCarousel } from "@utils/carousel";
 import { trunc } from "@utils/decorators";
 import { loadImage } from "@utils/image";
 import { config } from "@config";
+import { forward } from "@utils/move";
 
 const dirtConf = config.decorations.dirts;
 
@@ -16,7 +17,7 @@ export class DirtsController {
   readonly scale: number;
 
   constructor(private readonly canvas: CanvasConfig, { speed, floorHeight }: DecorationsConfig) {
-    this.speed = speed * dirtConf.speed;
+    this.speed = speed;
     this.floorHeight = floorHeight;
     this.scale = this.canvas.w(dirtConf.scale);
   }
@@ -30,8 +31,8 @@ export class DirtsController {
   }
 
   update(speedFrame: number) {
-    this.position += speedFrame * this.speed;
-    if (this.images[0].width !== 0) this.position %= this.images[0].width * this.scale;
+    this.position = forward(this.position, speedFrame, this.speed);
+    if (this.images[0].width !== 0) this.position %= Math.floor(this.images[0].width * this.scale);
 
     this.images.forEach((img, index) => {
       calcCarousel(img.width * this.scale, this.canvas.width).forEach(position => {

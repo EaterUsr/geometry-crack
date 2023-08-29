@@ -49,7 +49,6 @@ declare type Config = import("ts-essentials").DeepReadonly<{
       grass: Color;
     };
     dirts: {
-      speed: number;
       urls: string[];
       depths: number[];
       margins: number[];
@@ -58,7 +57,6 @@ declare type Config = import("ts-essentials").DeepReadonly<{
     grass: {
       scale: number;
       url: string;
-      speed: number;
     };
     clouds: {
       depth: number;
