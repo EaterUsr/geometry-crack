@@ -3,7 +3,7 @@ import { Cube } from "@components/cube";
 import { BlocksController } from "@controllers/blocks";
 import { truncNbr } from "@utils/math";
 import { config } from "@config";
-import { UIEvent } from "@controllers/ui";
+import { UI, UIEvent } from "@controllers/ui";
 import { Block } from "@components/block";
 
 const cube = config.components.cube;
@@ -19,11 +19,7 @@ export class CanvasController {
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
 
-  constructor(
-    canvasHTMLQuery: HTMLSelector,
-    private readonly onDie: () => void,
-    private readonly displayJumpsLeft: (jumpsLeft: number) => void
-  ) {
+  constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
     if (!canvas) throw new Error(`Invalid input: The query ${canvasHTMLQuery} does not match any HTML element`);
     this.domElement = canvas;
@@ -43,6 +39,10 @@ export class CanvasController {
     this.decorations = new DecorationsController(this.config);
     this.cube = new Cube(this.config, this.decorations.config);
     this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision.bind(this));
+
+    this.ui.onStartJump = this.startJump.bind(this);
+    this.ui.onRemoveJump = this.removeJump.bind(this);
+    this.ui.onEvent(this.event.bind(this));
 
     this.animate();
   }
@@ -64,7 +64,7 @@ export class CanvasController {
   onCollision(block: Block) {
     switch (block.type) {
       case "spike":
-        this.onDie();
+        this.ui.die.bind(this.ui)();
         break;
       case "slab":
         this.cube.onSlabCollision.bind(this.cube)(block.position);
@@ -75,7 +75,7 @@ export class CanvasController {
   private animate() {
     window.requestAnimationFrame(this.animate.bind(this));
 
-    if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.onDie, cube.timeToDie);
+    if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.ui.die.bind(this.ui), cube.timeToDie);
 
     if (this.jumpsLeft === cube.jumps) this.lastRegen = Date.now();
     if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {
@@ -83,7 +83,7 @@ export class CanvasController {
       this.lastRegen = Date.now();
     }
 
-    this.displayJumpsLeft(this.jumpsLeft);
+    this.ui.displayJumpsLeft.bind(this.ui)(this.jumpsLeft);
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
