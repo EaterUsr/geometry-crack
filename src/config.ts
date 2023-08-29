@@ -4,6 +4,7 @@ import { Spike } from "@components/block/spike";
 import { Slab } from "@components/block/slab";
 
 export const config: Config = {
+  delayBeforeRestart: 150,
   structures: [
     [["spike", [0, 0]]],
     [

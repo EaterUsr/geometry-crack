@@ -8,6 +8,7 @@ import {
   ServiceMap,
 } from "xstate";
 import { EventList } from "./events";
+import { config } from "@config";
 
 export type UIEvent =
   | { type: "START" }
@@ -105,7 +106,7 @@ export class UI {
   private prevState: UIState;
   private pages: Record<UITypestate["value"], HTMLElement | null>;
   private readonly jumpsLeftContainer = document.querySelector("#jumps-left")!;
-  private events = new EventList();
+  private events = new EventList<"state buttons" | "jump" | "restart">();
   onStartJump = () => {};
   onRemoveJump = () => {};
 
@@ -198,7 +199,9 @@ export class UI {
         this.events.enable("jump");
         break;
       case "gameOver":
-        this.events.enable("restart");
+        setTimeout(() => {
+          this.events.enable("restart");
+        }, config.delayBeforeRestart);
         break;
     }
     this.render(nextState);
@@ -215,7 +218,7 @@ export class UI {
     });
   }
   die() {
-    this.handleEvent({ type: "DIE" });
+    if (this.interpreter.getSnapshot().value !== "gameOver") this.handleEvent({ type: "DIE" });
   }
   displayJumpsLeft(jumpsLeft: number) {
     this.jumpsLeftContainer.textContent = `jumps left: ${jumpsLeft}`;
