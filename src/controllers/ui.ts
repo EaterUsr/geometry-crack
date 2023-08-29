@@ -129,6 +129,7 @@ export class UI {
 
     const buttons = document.querySelectorAll<HTMLElement>("[data-button]");
     const clickOverlay = document.querySelector("#click-overlay") as HTMLElement;
+    const gameOverClickOverlay = document.querySelector(".game-over__click-overlay") as HTMLElement;
 
     buttons.forEach(button => {
       this.events.add(
@@ -172,7 +173,6 @@ export class UI {
       );
     }
 
-    this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), clickOverlay);
     this.events.add(
       "restart",
       "keydown",
@@ -182,9 +182,14 @@ export class UI {
       },
       document.body
     );
+    this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
   }
   private handleEvent(event: UIEvent) {
     this.prevState = this.interpreter.getSnapshot();
+    this.interpreter.send(event);
+    const nextState = this.interpreter.getSnapshot();
+    this.render(nextState);
+    if (nextState.value === this.prevState.value) return;
     switch (this.prevState.value) {
       case "play":
         this.events.disable("jump");
@@ -193,8 +198,6 @@ export class UI {
         this.events.disable("restart");
         break;
     }
-    this.interpreter.send(event);
-    const nextState = this.interpreter.getSnapshot();
     switch (nextState.value) {
       case "play":
         this.events.enable("jump");
@@ -205,7 +208,6 @@ export class UI {
         }, config.delayBeforeRestart);
         break;
     }
-    this.render(nextState);
   }
   private render(state: UIState) {
     const button = document.querySelector(`#${state.value} [data-button]`)!;
