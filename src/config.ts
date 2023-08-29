@@ -6,6 +6,7 @@ import { structures } from "./structures";
 
 export const config: Config = {
   structures,
+  delayBeforeRestart: 150,
   components: {
     cube: {
       timeToDie: 150,

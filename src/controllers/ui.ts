@@ -7,6 +7,8 @@ import {
   BaseActionObject,
   ServiceMap,
 } from "xstate";
+import { EventList } from "./events";
+import { config } from "@config";
 
 export type UIEvent =
   | { type: "START" }
@@ -104,6 +106,9 @@ export class UI {
   private prevState: UIState;
   private pages: Record<UITypestate["value"], HTMLElement | null>;
   private readonly jumpsLeftContainer = document.querySelector("#jumps-left")!;
+  private events = new EventList<"state buttons" | "jump" | "restart">();
+  onStartJump = () => {};
+  onRemoveJump = () => {};
 
   constructor() {
     const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play"];
@@ -123,20 +128,83 @@ export class UI {
     this.render(this.interpreter.getSnapshot());
 
     const buttons = document.querySelectorAll<HTMLElement>("[data-button]");
+    const clickOverlay = document.querySelector("#click-overlay") as HTMLElement;
 
     buttons.forEach(button => {
-      button.addEventListener("click", () => {
-        const event = button.getAttribute("data-button") as UIEvent["type"];
-        button.blur();
-        button.setAttribute("tabindex", "-1");
-        this.handleEvent({ type: event });
-      });
+      this.events.add(
+        "state buttons",
+        "click",
+        () => {
+          const event = button.getAttribute("data-button") as UIEvent["type"];
+          button.blur();
+          button.setAttribute("tabindex", "-1");
+          this.handleEvent({ type: event });
+        },
+        button
+      );
     });
+    this.events.enable("state buttons");
+    this.events.add(
+      "jump",
+      "keydown",
+      e => {
+        const { key } = e as KeyboardEvent;
+        if (key === " " || key === "ArrowUp") {
+          this.onStartJump();
+          this.onRemoveJump();
+        }
+      },
+      document.body
+    );
+
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      this.events.add("jump", "touchstart", () => this.onStartJump(), clickOverlay);
+      this.events.add("jump", "touchend", () => this.onRemoveJump(), clickOverlay);
+    } else {
+      this.events.add(
+        "jump",
+        "click",
+        () => {
+          this.onStartJump();
+          this.onRemoveJump();
+        },
+        clickOverlay
+      );
+    }
+
+    this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), clickOverlay);
+    this.events.add(
+      "restart",
+      "keydown",
+      e => {
+        const { key } = e as KeyboardEvent;
+        if (key === " " || key === "ArrowUp") this.handleEvent({ type: "RESTART" });
+      },
+      document.body
+    );
   }
   private handleEvent(event: UIEvent) {
     this.prevState = this.interpreter.getSnapshot();
+    switch (this.prevState.value) {
+      case "play":
+        this.events.disable("jump");
+        break;
+      case "gameOver":
+        this.events.disable("restart");
+        break;
+    }
     this.interpreter.send(event);
     const nextState = this.interpreter.getSnapshot();
+    switch (nextState.value) {
+      case "play":
+        this.events.enable("jump");
+        break;
+      case "gameOver":
+        setTimeout(() => {
+          this.events.enable("restart");
+        }, config.delayBeforeRestart);
+        break;
+    }
     this.render(nextState);
   }
   private render(state: UIState) {
@@ -153,15 +221,9 @@ export class UI {
     });
   }
   die() {
-    this.handleEvent({ type: "DIE" });
-  }
-  restart() {
-    this.handleEvent({ type: "RESTART" });
+    if (this.interpreter.getSnapshot().value !== "gameOver") this.handleEvent({ type: "DIE" });
   }
   displayJumpsLeft(jumpsLeft: number) {
     this.jumpsLeftContainer.textContent = `jumps left: ${jumpsLeft}`;
-  }
-  get state() {
-    return this.interpreter.getSnapshot().value;
   }
 }

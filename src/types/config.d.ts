@@ -23,6 +23,7 @@ declare type Config = import("ts-essentials").DeepReadonly<{
   canvasWidth: number;
   canvasHeight: number;
   structures: Structures;
+  delayBeforeRestart: number;
   components: {
     cube: {
       timeToDie: number;
