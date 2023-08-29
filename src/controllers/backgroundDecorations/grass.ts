@@ -2,6 +2,7 @@ import { calcCarousel } from "@utils/carousel";
 import { trunc } from "@utils/decorators";
 import { loadImage } from "@utils/image";
 import { config } from "@config";
+import { forward } from "@utils/move";
 
 const grassConf = config.decorations.grass;
 
@@ -28,8 +29,8 @@ export class GrassController {
   }
 
   update(speedFrame: number) {
-    this.position += speedFrame * this.speed;
-    if (this.image.width !== 0) this.position %= this.image.width * this.scale;
+    this.position = forward(this.position, this.speed, speedFrame);
+    if (this.image.width !== 0) this.position %= Math.floor(this.image.width * this.scale);
 
     calcCarousel(this.image.width * this.scale, this.canvas.width).forEach(position => {
       this.draw(position - this.position, this.image);

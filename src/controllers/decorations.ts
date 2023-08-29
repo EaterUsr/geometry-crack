@@ -1,6 +1,7 @@
 import { config } from "@config";
 import { CloudsController } from "@controllers/backgroundDecorations/clouds";
 import { DirtsController } from "@controllers/backgroundDecorations/dirts";
+import { truncNbr } from "@utils/math";
 import { GrassController } from "./backgroundDecorations/grass";
 
 const decorationsConf = config.decorations;
@@ -13,7 +14,7 @@ export class DecorationsController {
   readonly grass: GrassController;
 
   constructor(private readonly canvas: CanvasConfig) {
-    const speed = canvas.width / decorationsConf.speed;
+    const speed = truncNbr(canvas.width / decorationsConf.speed);
     const blockSize = Math.floor(canvas.height / decorationsConf.blockSize);
     const cubeOrigin: Coords = [
       Math.floor(canvas.width / 2 - blockSize / 2),

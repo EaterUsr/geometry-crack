@@ -38,8 +38,11 @@ export function smallest<T extends unknown[]>(cb: (...args: T) => number, ...arg
 }
 
 export function truncNbr(nbr: number, decimals = 2) {
-  const multiplier = 10 ** decimals;
-  return Math.floor(nbr * multiplier) / multiplier;
+  const multiplier = Math.pow(10, decimals);
+  const adjustedNum = nbr * multiplier;
+  const truncatedNum = Math.floor(adjustedNum);
+
+  return truncatedNum / multiplier;
 }
 
 const sqrtCache = new Map<number, number>();
