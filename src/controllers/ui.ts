@@ -123,10 +123,6 @@ export class UI {
       this.pages[pageName] = document.querySelector(`#${pageName}`) as HTMLElement;
     });
 
-    this.interpreter.start();
-    this.prevState = this.interpreter.getSnapshot();
-    this.render(this.interpreter.getSnapshot());
-
     const buttons = document.querySelectorAll<HTMLElement>("[data-button]");
     const clickOverlay = document.querySelector("#click-overlay") as HTMLElement;
     const gameOverClickOverlay = document.querySelector(".game-over__click-overlay") as HTMLElement;
@@ -143,6 +139,7 @@ export class UI {
         },
         button
       );
+      button.setAttribute("tabindex", "-1");
     });
     this.events.enable("state buttons");
     this.events.add(
@@ -183,6 +180,10 @@ export class UI {
       document.body
     );
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
+
+    this.interpreter.start();
+    this.prevState = this.interpreter.getSnapshot();
+    this.render(this.interpreter.getSnapshot());
   }
   private handleEvent(event: UIEvent) {
     this.prevState = this.interpreter.getSnapshot();
