@@ -19,6 +19,7 @@ export class Cube {
   }
   center: Coords;
   private lastSlabCollision: null | number = null;
+  private jumpVelovity = cubeConf.jumpVelocity;
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -97,9 +98,12 @@ export class Cube {
 
   jump() {
     if (this.isTouchingTheFloor()) {
-      this.velocity = cubeConf.jumpVelocity;
+      this.velocity = this.jumpVelovity;
       this.isFalling = true;
     }
+  }
+  private freeze() {
+    this.jumpVelovity = 0;
   }
 
   onSlabCollision(slabPosition: Coords) {
@@ -116,9 +120,11 @@ export class Cube {
     if (this.floorHeight <= slabPosition[1]) return;
     this.isFalling = true;
     this.origin.target[0] = slabPosition[0] - this.size;
+    this.freeze();
   }
   reset() {
     this.velocity = 0;
+    this.jumpVelovity = cubeConf.jumpVelocity;
     this.origin.target = [null, null];
     this.origin.content = [Math.floor(this.canvas.width / 2 - this.size / 2), this.floorHeight - this.size];
 
