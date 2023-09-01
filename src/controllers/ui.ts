@@ -106,6 +106,7 @@ export class UI {
   private prevState: UIState;
   private pages: Record<UITypestate["value"], HTMLElement | null>;
   private readonly jumpsLeftContainer = document.querySelector("#jumps-left")!;
+  private readonly scoreContainer = document.querySelector("#score")!;
   private events = new EventList<"state buttons" | "jump" | "restart">();
   onStartJump = () => {};
   onRemoveJump = () => {};
@@ -228,5 +229,8 @@ export class UI {
   }
   displayJumpsLeft(jumpsLeft: number) {
     this.jumpsLeftContainer.textContent = `jumps left: ${jumpsLeft}`;
+  }
+  displayScore(score: number) {
+    this.scoreContainer.textContent = `score: ${score}`;
   }
 }

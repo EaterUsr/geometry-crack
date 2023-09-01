@@ -98,7 +98,7 @@ body {
   color: #C00000;
   z-index: 2;
   font-size: 4em;
-  padding-bottom: 3em;
+  padding-bottom: 1.5em;
 }
 .game-over__info {
   z-index: 1;
@@ -159,4 +159,13 @@ body {
   background: rgba(0, 0, 0, 26%);
   backdrop-filter: blur(0.1rem);
 }
-
+.game-over__score {
+  font-size: 2.5em;
+  font-weight: 600;
+  z-index: 1;
+  margin-bottom: 2em;
+  color: transparent;
+  background-image: var(--clr-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+}

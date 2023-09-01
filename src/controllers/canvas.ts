@@ -18,6 +18,7 @@ export class CanvasController {
   private jumpsLeft = cube.jumps;
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
+  private score = 0;
 
   constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
@@ -64,18 +65,22 @@ export class CanvasController {
   onCollision(block: Block) {
     switch (block.type) {
       case "spike":
-        this.ui.die.bind(this.ui)();
+        this.die();
         break;
       case "slab":
         this.cube.onSlabCollision.bind(this.cube)(block.position);
         break;
     }
   }
+  die() {
+    this.ui.displayScore(Math.floor(this.score));
+    this.ui.die();
+  }
 
   private animate() {
     window.requestAnimationFrame(this.animate.bind(this));
 
-    if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.ui.die.bind(this.ui), cube.timeToDie);
+    if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.die.bind(this), cube.timeToDie);
 
     if (this.jumpsLeft === cube.jumps) this.lastRegen = Date.now();
     if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {
@@ -88,12 +93,15 @@ export class CanvasController {
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
 
+    this.score += (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize;
+
     this.decorations.updateBackground(speedFrame);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.cube.update(speedFrame, this.jumpsLeft);
     this.decorations.updateForeground(speedFrame);
   }
   private reset() {
+    this.score = 0;
     this.decorations.reset();
     this.blocks.clear();
     this.cube.reset();
