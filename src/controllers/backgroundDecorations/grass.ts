@@ -1,6 +1,5 @@
 import { calcCarousel } from "@utils/carousel";
 import { trunc } from "@utils/decorators";
-import { loadImage } from "@utils/image";
 import { config } from "@config";
 import { forward } from "@utils/move";
 
@@ -10,7 +9,7 @@ export class GrassController {
   private readonly speed: number;
   private readonly floorHeight: number;
   private position = 0;
-  private readonly image = loadImage(grassConf.url);
+  private readonly image: HTMLImageElement = grassConf.img;
   @trunc(0)
   readonly scale: number;
 

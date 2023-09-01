@@ -1,7 +1,6 @@
 import { closestDeg, toDegrees } from "@utils/math";
 import { updateTarget } from "@utils/targetPosition";
 import { config } from "@config";
-import { loadImage } from "@utils/image";
 
 const cubeConf = config.components.cube;
 
@@ -13,7 +12,7 @@ export class Cube {
   private velocity = 0;
   private isFalling = true;
   readonly size: number;
-  private readonly images = cubeConf.urls.map(loadImage);
+  private readonly images: HTMLImageElement[] = cubeConf.imgs;
   get hitbox() {
     return cubeConf.getHitbox(this);
   }

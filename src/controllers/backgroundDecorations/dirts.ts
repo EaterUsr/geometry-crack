@@ -1,6 +1,5 @@
 import { calcCarousel } from "@utils/carousel";
 import { trunc } from "@utils/decorators";
-import { loadImage } from "@utils/image";
 import { config } from "@config";
 import { forward } from "@utils/move";
 
@@ -10,7 +9,7 @@ export class DirtsController {
   private readonly speed: number;
   private readonly floorHeight: number;
   private position = 0;
-  private readonly images = dirtConf.urls.map(loadImage);
+  private readonly images: HTMLImageElement[] = dirtConf.imgs;
   private readonly depths = dirtConf.depths;
   private readonly margins = dirtConf.margins;
   @trunc(0)

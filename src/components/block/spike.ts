@@ -1,6 +1,5 @@
 import { Block } from "./index";
 import { config } from "@config";
-import { loadImage } from "@utils/image";
 
 const spikeConf = config.components.spike;
 
@@ -8,7 +7,7 @@ export class Spike extends Block {
   get hitbox(): Hitbox {
     return spikeConf.getHitbox(this);
   }
-  protected readonly image = loadImage(spikeConf.url);
+  protected readonly image: HTMLImageElement = spikeConf.img;
   readonly type = "spike";
 
   protected drawPatern() {

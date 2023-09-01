@@ -3,6 +3,7 @@ import { Cube } from "@components/cube";
 import { Spike } from "@components/block/spike";
 import { Slab } from "@components/block/slab";
 import { structures } from "./structures";
+import { loadImage } from "@utils/image";
 
 export const config: Config = {
   structures,
@@ -10,13 +11,13 @@ export const config: Config = {
   components: {
     cube: {
       timeToDie: 150,
-      urls: [
+      imgs: [
         "img/components/cube/death.svg",
         "img/components/cube/1_jump.svg",
         "img/components/cube/half_energy.svg",
         "img/components/cube/3_jumps.svg",
         "img/components/cube/full_energy.svg",
-      ],
+      ].map(loadImage),
       jumps: 4,
       timeToRegen: 1100,
       speedDeg: 0.5,
@@ -27,13 +28,13 @@ export const config: Config = {
       },
     },
     spike: {
-      url: "img/components/spike.svg",
+      img: loadImage("img/components/spike.svg"),
       getHitbox(spike: Spike) {
         return triangleHitbox(...spike.position, spike.size);
       },
     },
     slab: {
-      url: "img/components/slab.svg",
+      img: loadImage("img/components/slab.svg"),
       getHitbox(slab: Slab) {
         return rectHitbox(...slab.position, slab.size, slab.size / 2);
       },
@@ -41,17 +42,21 @@ export const config: Config = {
   },
   decorations: {
     grass: {
-      url: "img/components/grass.svg",
+      img: loadImage("img/components/grass.svg"),
       scale: 3,
     },
     dirts: {
-      urls: ["img/components/dirt/depth-1.svg", "img/components/dirt/depth-2.svg", "img/components/dirt/depth-3.svg"],
+      imgs: [
+        "img/components/dirt/depth-1.svg",
+        "img/components/dirt/depth-2.svg",
+        "img/components/dirt/depth-3.svg",
+      ].map(loadImage),
       depths: [5, 10, 15],
       margins: [0, 1, 0],
       scale: 6,
     },
     clouds: {
-      url: "img/components/cloud.svg",
+      img: loadImage("img/components/cloud.svg") as HTMLImageElement,
       frequency: 0.3,
       depth: 4,
       sizeY: {

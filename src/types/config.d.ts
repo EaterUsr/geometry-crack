@@ -16,55 +16,55 @@ declare type DecorationsConfig = Readonly<{
 
 declare type BlockConfig = Readonly<{
   getHitbox: (block: Block | Cube) => Hitbox;
-  url: string;
+  img: HTMLImageElement;
 }>;
 
-declare type Config = import("ts-essentials").DeepReadonly<{
+declare type Config = Readonly<{
   canvasWidth: number;
   canvasHeight: number;
   structures: Structures;
   delayBeforeRestart: number;
-  components: {
-    cube: {
+  components: Readonly<{
+    cube: Readonly<{
       timeToDie: number;
-      urls: string[];
+      imgs: HTMLImageElement[];
       getHitbox: (block: Block | Cube) => Hitbox;
       speedDeg: number;
       jumpSpeed: number;
       jumpVelocity: number;
       jumps: number;
       timeToRegen: number;
-    };
+    }>;
     spike: BlockConfig;
     slab: blockconfig;
-  };
-  decorations: {
+  }>;
+  decorations: Readonly<{
     speed: number;
     blockSize: number;
     grassHeight: number;
     floorHeight: number;
-    colors: {
+    colors: Readonly<{
       sky: Color;
       dirt: Color;
       grass: Color;
-    };
-    dirts: {
-      urls: string[];
+    }>;
+    dirts: Readonly<{
+      imgs: HTMLImageElement[];
       depths: number[];
       margins: number[];
       scale: number;
-    };
-    grass: {
+    }>;
+    grass: Readonly<{
       scale: number;
-      url: string;
-    };
-    clouds: {
+      img: HTMLImageElement;
+    }>;
+    clouds: Readonly<{
       depth: number;
       frequency: number;
-      url: string;
+      img: HTMLImageElement;
       sizeY: Minmax;
       y: Minmax;
       originalSize: number;
-    };
-  };
+    }>;
+  }>;
 }>;

@@ -1,6 +1,5 @@
 import { Block } from ".";
 import { config } from "@config";
-import { loadImage } from "@utils/image";
 
 const slabConf = config.components.slab;
 
@@ -9,7 +8,7 @@ export class Slab extends Block {
     return slabConf.getHitbox(this);
   }
   readonly type = "slab";
-  protected readonly image = loadImage(slabConf.url);
+  protected readonly image = slabConf.img;
 
   protected drawPatern() {
     this.ctx.drawImage(this.image, 0, 0, this.size, this.size / 2);

@@ -1,7 +1,6 @@
 import { BackgroundDecoration } from "@components/backgroundDecoration";
 import { random, randomMinMax } from "@utils/math";
 import { config } from "@config";
-import { loadImage } from "@utils/image";
 
 const cloudConf = config.decorations.clouds;
 
@@ -10,7 +9,7 @@ export class Cloud extends BackgroundDecoration {
   readonly isReturned = Boolean(Math.floor(random(0, 2)));
   readonly sizeY = randomMinMax(cloudConf.sizeY, this.canvas.width / 1000);
   readonly sizeX = this.isReturned ? -this.sizeY : this.sizeY;
-  protected image = loadImage(cloudConf.url);
+  protected image: HTMLImageElement = cloudConf.img;
 
   draw() {
     this.canvas.ctx.drawImage(
