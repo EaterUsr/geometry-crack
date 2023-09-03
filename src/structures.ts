@@ -48,7 +48,7 @@ export const structures: Structures = [
     ["slab", [0, -1]],
     ["slab", [1, -1]],
     ["slab", [2, -1]],
-    ["spike", [4, 0]],
+    ["spike", [5, 0]],
   ],
   [
     ["spike", [0, 0]],

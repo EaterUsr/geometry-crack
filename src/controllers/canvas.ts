@@ -68,7 +68,7 @@ export class CanvasController {
         this.die();
         break;
       case "slab":
-        this.cube.onSlabCollision.bind(this.cube)(block.position);
+        this.cube.onSlabCollision.bind(this.cube)(block.position, block.hitbox);
         break;
     }
   }

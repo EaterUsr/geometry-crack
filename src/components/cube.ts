@@ -1,6 +1,7 @@
 import { closestDeg, toDegrees } from "@utils/math";
 import { updateTarget } from "@utils/targetPosition";
 import { config } from "@config";
+import { isCollision } from "@utils/collision";
 
 const cubeConf = config.components.cube;
 
@@ -18,7 +19,7 @@ export class Cube {
   }
   center: Coords;
   private lastSlabCollision: null | number = null;
-  private jumpVelovity = cubeConf.jumpVelocity;
+  private jumpVelocity = cubeConf.jumpVelocity;
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -97,16 +98,22 @@ export class Cube {
 
   jump() {
     if (this.isTouchingTheFloor()) {
-      this.velocity = this.jumpVelovity;
+      this.velocity = this.jumpVelocity;
       this.isFalling = true;
     }
   }
   private freeze() {
-    this.jumpVelovity = 0;
+    this.jumpVelocity = 0;
   }
 
-  onSlabCollision(slabPosition: Coords) {
+  onSlabCollision(slabPosition: Coords, slabHitbox: Hitbox) {
     if (this.center[0] >= slabPosition[0]) {
+      if (this.center[1] > slabPosition[1]) {
+        if (isCollision(this.hitbox, slabHitbox)) {
+          this.velocity = 0;
+        }
+        return;
+      }
       if (
         Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock ||
         this.lastSlabCollision === null
@@ -117,13 +124,14 @@ export class Cube {
       return;
     }
     if (this.floorHeight <= slabPosition[1]) return;
+    if (this.center[1] > slabPosition[1] + this.decorations.blockSize / 2) return;
     this.isFalling = true;
     this.origin.target[0] = slabPosition[0] - this.size;
     this.freeze();
   }
   reset() {
     this.velocity = 0;
-    this.jumpVelovity = cubeConf.jumpVelocity;
+    this.jumpVelocity = cubeConf.jumpVelocity;
     this.origin.target = [null, null];
     this.origin.content = [Math.floor(this.canvas.width / 2 - this.size / 2), this.floorHeight - this.size];
 
