@@ -108,8 +108,7 @@ export class UI {
   private readonly jumpsLeftContainer = document.querySelector("#jumps-left")!;
   private readonly scoreContainer = document.querySelector("#score")!;
   private events = new EventList<"state buttons" | "jump" | "restart">();
-  onStartJump = () => {};
-  onRemoveJump = () => {};
+  onJump = () => {};
 
   constructor() {
     const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play"];
@@ -149,23 +148,20 @@ export class UI {
       e => {
         const { key } = e as KeyboardEvent;
         if (key === " " || key === "ArrowUp") {
-          this.onStartJump();
-          this.onRemoveJump();
+          this.onJump();
         }
       },
       document.body
     );
 
     if (/Mobi|Android/i.test(navigator.userAgent)) {
-      this.events.add("jump", "touchstart", () => this.onStartJump(), clickOverlay);
-      this.events.add("jump", "touchend", () => this.onRemoveJump(), clickOverlay);
+      this.events.add("jump", "touchstart", () => this.onJump(), clickOverlay);
     } else {
       this.events.add(
         "jump",
         "click",
         () => {
-          this.onStartJump();
-          this.onRemoveJump();
+          this.onJump();
         },
         clickOverlay
       );

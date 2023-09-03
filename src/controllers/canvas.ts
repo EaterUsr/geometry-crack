@@ -41,21 +41,13 @@ export class CanvasController {
     this.cube = new Cube(this.config, this.decorations.config);
     this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision.bind(this));
 
-    this.ui.onStartJump = this.startJump.bind(this);
-    this.ui.onRemoveJump = this.removeJump.bind(this);
+    this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
 
     this.animate();
   }
   jump() {
-    this.startJump();
-    this.removeJump();
-  }
-  startJump() {
-    if (this.jumpsLeft !== 0) this.cube.jump();
-  }
-  removeJump() {
-    if (this.jumpsLeft !== 0) this.jumpsLeft--;
+    if (this.jumpsLeft !== 0) this.cube.jump(() => this.jumpsLeft--);
   }
   start() {
     this.lastFrame = Date.now();

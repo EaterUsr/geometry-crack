@@ -96,10 +96,11 @@ export class Cube {
     this.canvas.ctx.restore();
   }
 
-  jump() {
+  jump(cb: () => void) {
     if (this.isTouchingTheFloor()) {
       this.velocity = this.jumpVelocity;
       this.isFalling = true;
+      cb();
     }
   }
   private freeze() {
