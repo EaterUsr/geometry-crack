@@ -5,6 +5,7 @@ import { truncNbr } from "@utils/math";
 import { config } from "@config";
 import { UI, UIEvent } from "@controllers/ui";
 import { Block } from "@components/block";
+import { LocalStorage } from "./localStorage";
 
 const cube = config.components.cube;
 
@@ -20,7 +21,7 @@ export class CanvasController {
   readonly domElement: HTMLCanvasElement;
   private score = 0;
 
-  constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI) {
+  constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI, private readonly storage: LocalStorage) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
     if (!canvas) throw new Error(`Invalid input: The query ${canvasHTMLQuery} does not match any HTML element`);
     this.domElement = canvas;
@@ -65,6 +66,11 @@ export class CanvasController {
     }
   }
   die() {
+    if (this.score > this.storage.content.HS) {
+      this.ui.displayNewRecord();
+      this.storage.save();
+      this.storage.content.HS = Math.floor(this.score);
+    }
     this.ui.displayScore(Math.floor(this.score));
     this.ui.die();
   }
@@ -81,6 +87,7 @@ export class CanvasController {
     }
 
     this.ui.displayJumpsLeft.bind(this.ui)(this.jumpsLeft);
+    this.ui.displayHighestScore.bind(this.ui)(Math.floor(Math.max(this.storage.content.HS, this.score)));
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
