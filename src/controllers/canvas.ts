@@ -19,6 +19,7 @@ export class CanvasController {
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
   private score = 0;
+  private highestScore = 0;
 
   constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
@@ -65,6 +66,8 @@ export class CanvasController {
     }
   }
   die() {
+    if (this.score > this.highestScore) this.ui.displayNewRecord();
+    this.highestScore = Math.floor(Math.max(this.score, this.highestScore));
     this.ui.displayScore(Math.floor(this.score));
     this.ui.die();
   }
@@ -81,6 +84,7 @@ export class CanvasController {
     }
 
     this.ui.displayJumpsLeft.bind(this.ui)(this.jumpsLeft);
+    this.ui.displayHighestScore.bind(this.ui)(Math.floor(Math.max(this.highestScore, this.score)));
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();

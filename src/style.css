@@ -19,6 +19,8 @@ body {
 :root {
   --clr-primary: linear-gradient(#FA2D11, #FA6511);
   --clr-stroke: rgba(0, 0, 0, 55%);
+  --clr-HS: linear-gradient(to top, #FF8A00, #FFE500);
+  --stroke-HS: 0.03em rgba(0, 0, 0, 70%);
   --stroke: inset var(--clr-stroke) 0 0 0 0.08em;
   --shadow: rgba(0, 0, 0, 25%) 0.4rem 0.4rem;
 }
@@ -168,4 +170,43 @@ body {
   background-image: var(--clr-primary);
   background-clip: text;
   -webkit-background-clip: text;
+}
+#highest-score {
+  position: fixed;
+  top: 1.7em;
+  left: 1rem;
+  font-size: 1.6em;
+  font-weight: 800;
+  font-family: "Noto Sans";
+  background-image: var(--clr-HS);
+  -webkit-text-stroke: var(--stroke-HS);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+#new-record {
+  top: 7rem;
+  right: 19rem;
+  position: fixed;
+  background: var(--clr-HS);
+  -webkit-text-stroke: var(--stroke-HS);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-size: 2.5em;
+  font-weight: 800;
+  animation: new-record 1s alternate infinite ease-in-out;
+  opacity: 0;
+  z-index: 1;
+}
+#new-record.show {
+  opacity: 1;
+}
+@keyframes new-record {
+  from {
+    transform: scale(0.7) rotate(20deg);
+  }
+  to {
+    transform: scale(1) rotate(20deg);
+  }
 }

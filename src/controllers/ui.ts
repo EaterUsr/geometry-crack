@@ -107,6 +107,8 @@ export class UI {
   private pages: Record<UITypestate["value"], HTMLElement | null>;
   private readonly jumpsLeftContainer = document.querySelector("#jumps-left")!;
   private readonly scoreContainer = document.querySelector("#score")!;
+  private readonly highestScoreContainer = document.querySelector("#highest-score")!;
+  private readonly newRecord = document.querySelector("#new-record")!;
   private events = new EventList<"state buttons" | "jump" | "restart">();
   onJump = () => {};
 
@@ -194,6 +196,7 @@ export class UI {
         break;
       case "gameOver":
         this.events.disable("restart");
+        this.newRecord.classList.remove("show");
         break;
     }
     switch (nextState.value) {
@@ -228,5 +231,11 @@ export class UI {
   }
   displayScore(score: number) {
     this.scoreContainer.textContent = `score: ${score}`;
+  }
+  displayHighestScore(score: number) {
+    this.highestScoreContainer.textContent = `HS: ${score}`;
+  }
+  displayNewRecord() {
+    this.newRecord.classList.add("show");
   }
 }
