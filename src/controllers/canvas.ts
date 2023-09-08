@@ -19,7 +19,6 @@ export class CanvasController {
   private jumpsLeft = cube.jumps;
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
-  private score = 0;
 
   constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI, private readonly storage: LocalStorage) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
@@ -36,6 +35,7 @@ export class CanvasController {
       w(size: number) {
         return truncNbr(size * (canvas.width / 10000));
       },
+      score: 0,
     };
 
     this.decorations = new DecorationsController(this.config);
@@ -66,12 +66,12 @@ export class CanvasController {
     }
   }
   die() {
-    if (this.score > this.storage.content.HS) {
+    if (this.config.score > this.storage.content.HS) {
       this.ui.displayNewRecord();
       this.storage.save();
-      this.storage.content.HS = Math.floor(this.score);
+      this.storage.content.HS = Math.floor(this.config.score);
     }
-    this.ui.displayScore(Math.floor(this.score));
+    this.ui.displayScore(Math.floor(this.config.score));
     this.ui.die();
   }
 
@@ -87,12 +87,12 @@ export class CanvasController {
     }
 
     this.ui.displayJumpsLeft.bind(this.ui)(this.jumpsLeft);
-    this.ui.displayHighestScore.bind(this.ui)(Math.floor(Math.max(this.storage.content.HS, this.score)));
+    this.ui.displayHighestScore.bind(this.ui)(Math.floor(Math.max(this.storage.content.HS, this.config.score)));
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
 
-    this.score += (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize;
+    this.config.score += (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize;
 
     this.decorations.updateBackground(speedFrame);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
@@ -100,7 +100,7 @@ export class CanvasController {
     this.decorations.updateForeground(speedFrame);
   }
   private reset() {
-    this.score = 0;
+    this.config.score = 0;
     this.decorations.reset();
     this.blocks.clear();
     this.cube.reset();

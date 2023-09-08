@@ -1,9 +1,10 @@
-declare type CanvasConfig = Readonly<{
-  ctx: CanvasRenderingContext2D;
-  width: number;
-  height: number;
-  w: (size: number) => number;
-}>;
+declare type CanvasConfig = {
+  readonly ctx: CanvasRenderingContext2D;
+  readonly width: number;
+  readonly height: number;
+  readonly w: (size: number) => number;
+  score: number;
+};
 
 declare type DecorationsConfig = Readonly<{
   speed: number;

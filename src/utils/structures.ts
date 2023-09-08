@@ -8,7 +8,12 @@ import { config } from "@config";
 const structuresPatern = config.structures;
 
 export function setStructure(canvas: CanvasConfig, decorations: DecorationsConfig, blocks: BlocksController) {
-  structuresPatern[Math.floor(random(0, structuresPatern.length - 1) + 0.5)].forEach((patern: StructurePatren) => {
+  const filtred = structuresPatern.filter(
+    structure => structure[0].min < canvas.score && structure[0].max > canvas.score
+  );
+  if (filtred.length === 0) return;
+  const structure = filtred[Math.floor(random(0, filtred.length - 1) + 0.5)];
+  structure[1].forEach((patern: StructurePatren) => {
     const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
 
     let block: Block;
