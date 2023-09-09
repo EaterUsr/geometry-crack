@@ -17,11 +17,11 @@ body {
   width: 100%;
 }
 :root {
-  --clr-primary: linear-gradient(#FA2D11, #FA6511);
+  --clr-primary: linear-gradient(#FA1F11, #FA6511);
   --clr-stroke: rgba(0, 0, 0, 55%);
   --clr-HS: linear-gradient(to top, #FF8A00, #FFE500);
   --stroke-HS: 0.03em rgba(0, 0, 0, 70%);
-  --stroke: inset var(--clr-stroke) 0 0 0 0.08em;
+  --stroke: solid 0.1em var(--clr-stroke);
   --shadow: rgba(0, 0, 0, 25%) 0.4rem 0.4rem;
 }
 .page {
@@ -36,16 +36,34 @@ body {
 }
 .button {
   z-index: 3;
-  background: var(--clr-primary);
+  background: transparent;
   padding: 0.2em 1.4em;
   font-size: 2.3em;
   border-radius: 0.4em;
+  box-shadow: var(--shadow);
   border: none;
-  box-shadow: var(--stroke), var(--shadow);
+  outline: var(--stroke);
+  outline-offset: -0.1em;
   color: var(--clr-stroke);
   font-weight: 500;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background: var(--clr-primary);
+  transition: transform .1s ease-out;
+  z-index: -1;
+}
+.button:hover::before, .button:focus::before {
+  transform: translateY(-16%);
 }
 .button-start {
   font-size: 3.5em;
