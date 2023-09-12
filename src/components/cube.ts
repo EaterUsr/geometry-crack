@@ -97,7 +97,7 @@ export class Cube {
   }
 
   jump(cb: () => void) {
-    if (this.isTouchingTheFloor()) {
+    if (this.isTouchingTheFloor() && this.jumpVelocity !== 0) {
       this.velocity = this.jumpVelocity;
       this.isFalling = true;
       cb();
