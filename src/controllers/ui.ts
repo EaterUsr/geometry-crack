@@ -110,6 +110,7 @@ export class UI {
   private readonly highestScoreContainer = document.querySelector("#highest-score")!;
   private readonly newRecord = document.querySelector("#new-record")!;
   private events = new EventList<"state buttons" | "jump" | "restart">();
+  private isSpaceKeyDisabled = false;
   onJump = () => {};
 
   constructor() {
@@ -141,6 +142,8 @@ export class UI {
         },
         button
       );
+      this.events.add("state buttons", "focus", () => (this.isSpaceKeyDisabled = true), button);
+      this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), button);
       button.setAttribute("tabindex", "-1");
     });
     this.events.enable("state buttons");
@@ -149,6 +152,7 @@ export class UI {
       "keydown",
       e => {
         const { key } = e as KeyboardEvent;
+        if (key === " " && this.isSpaceKeyDisabled) return;
         if (key === " " || key === "ArrowUp") {
           this.onJump();
         }
@@ -174,6 +178,7 @@ export class UI {
       "keydown",
       e => {
         const { key } = e as KeyboardEvent;
+        if (key === " " && this.isSpaceKeyDisabled) return;
         if (key === " " || key === "ArrowUp") this.handleEvent({ type: "RESTART" });
       },
       document.body
