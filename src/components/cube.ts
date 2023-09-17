@@ -111,7 +111,9 @@ export class Cube {
     if (this.center[0] >= slabPosition[0]) {
       if (this.center[1] > slabPosition[1]) {
         if (isCollision(this.hitbox, slabHitbox)) {
-          this.velocity = 0;
+          if (this.velocity > 0) this.velocity = 0;
+          if (this.origin.content[1] < slabPosition[1] + this.size / 2)
+            this.origin.content[1] = slabPosition[1] + this.size / 2;
         }
         return;
       }
