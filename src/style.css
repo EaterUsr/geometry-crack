@@ -181,6 +181,7 @@ body {
   flex-direction: column;
 }
 .paused__title {
+  text-align: center;
   color: #cacaca;
   font-family: "Noto Sans";
   font-weight: 900;

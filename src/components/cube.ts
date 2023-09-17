@@ -2,6 +2,7 @@ import { closestDeg, toDegrees } from "@utils/math";
 import { updateTarget } from "@utils/targetPosition";
 import { config } from "@config";
 import { isCollision } from "@utils/collision";
+import { backward } from "@utils/move";
 
 const cubeConf = config.components.cube;
 
@@ -20,6 +21,7 @@ export class Cube {
   center: Coords;
   private lastSlabCollision: null | number = null;
   private jumpVelocity = cubeConf.jumpVelocity;
+  private isFrozen = false;
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -82,7 +84,11 @@ export class Cube {
       },
       360
     );
-    updateTarget(this.origin, speedFrame);
+    updateTarget(this.origin, speedFrame, () => {
+      if (this.isFrozen) {
+        this.origin.content[0] = backward(this.origin.content[0], this.decorations.speed, speedFrame);
+      }
+    });
 
     this.center = this.updateCenter();
 
@@ -97,21 +103,24 @@ export class Cube {
   }
 
   jump(cb: () => void) {
-    if (this.isTouchingTheFloor() && this.jumpVelocity !== 0) {
+    if (this.isFrozen) return;
+    if (this.isTouchingTheFloor()) {
       this.velocity = this.jumpVelocity;
       this.isFalling = true;
       cb();
     }
   }
   private freeze() {
-    this.jumpVelocity = 0;
+    this.isFrozen = true;
   }
 
   onSlabCollision(slabPosition: Coords, slabHitbox: Hitbox) {
     if (this.center[0] >= slabPosition[0]) {
       if (this.center[1] > slabPosition[1]) {
         if (isCollision(this.hitbox, slabHitbox)) {
-          this.velocity = 0;
+          if (this.velocity > 0) this.velocity = 0;
+          if (this.origin.content[1] < slabPosition[1] + this.size / 2)
+            this.origin.content[1] = slabPosition[1] + this.size / 2;
         }
         return;
       }
@@ -127,11 +136,11 @@ export class Cube {
     if (this.floorHeight <= slabPosition[1]) return;
     if (this.center[1] > slabPosition[1] + this.decorations.blockSize / 2) return;
     this.isFalling = true;
-    this.origin.target[0] = slabPosition[0] - this.size;
     this.freeze();
   }
   reset() {
     this.velocity = 0;
+    this.isFrozen = false;
     this.jumpVelocity = cubeConf.jumpVelocity;
     this.origin.target = [null, null];
     this.origin.content = [Math.floor(this.canvas.width / 2 - this.size / 2), this.floorHeight - this.size];
