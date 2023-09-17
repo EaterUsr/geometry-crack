@@ -223,7 +223,7 @@ body {
 }
 #new-record {
   top: 7rem;
-  right: 19rem;
+  left: calc(50% + 2em);
   position: fixed;
   background: var(--clr-HS);
   -webkit-text-stroke: var(--stroke-HS);
