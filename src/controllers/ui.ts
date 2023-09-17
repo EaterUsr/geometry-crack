@@ -105,7 +105,7 @@ export class UI {
   );
   private prevState: UIState;
   private pages: Record<UITypestate["value"], HTMLElement | null>;
-  private readonly jumpsLeftContainer = document.querySelector("#jumps-left")!;
+  private readonly jumpsLeftContainer = document.querySelector<HTMLDivElement>("#jumps-left")!;
   private readonly scoreContainer = document.querySelector("#score")!;
   private readonly highestScoreContainer = document.querySelector("#highest-score")!;
   private readonly newRecord = document.querySelector("#new-record")!;
@@ -232,7 +232,10 @@ export class UI {
     if (this.interpreter.getSnapshot().value !== "gameOver") this.handleEvent({ type: "DIE" });
   }
   displayJumpsLeft(jumpsLeft: number) {
-    this.jumpsLeftContainer.textContent = `jumps left: ${jumpsLeft}`;
+    this.jumpsLeftContainer.textContent = `${jumpsLeft}`;
+  }
+  displayTimeToRegen(timeToRegen: number) {
+    this.jumpsLeftContainer.style.setProperty("--time-to-regen", `${timeToRegen}`);
   }
   displayScore(score: number) {
     this.scoreContainer.textContent = `score: ${score}`;

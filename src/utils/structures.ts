@@ -11,7 +11,6 @@ let minJumps = config.components.cube.jumps;
 let lastStructureGeneration = Date.now();
 
 export function setStructure(canvas: CanvasConfig, decorations: DecorationsConfig, blocks: BlocksController) {
-  console.log(canvas.score);
   let filtred = structuresPatern.filter(
     structure => structure[0].min < canvas.score && structure[0].max > canvas.score && structure[2] <= minJumps
   );

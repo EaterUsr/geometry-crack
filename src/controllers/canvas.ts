@@ -87,6 +87,9 @@ export class CanvasController {
     }
 
     this.ui.displayJumpsLeft.bind(this.ui)(this.jumpsLeft);
+    this.ui.displayTimeToRegen.bind(this.ui)(
+      this.jumpsLeft === cube.jumps ? 1 : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
+    );
     this.ui.displayHighestScore.bind(this.ui)(Math.floor(Math.max(this.storage.content.HS, this.config.score)));
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
