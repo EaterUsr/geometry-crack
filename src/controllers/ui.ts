@@ -151,7 +151,7 @@ export class UI {
       "jump",
       "keydown",
       e => {
-        const { key } = e as KeyboardEvent;
+        const { key } = e;
         if (key === " " && this.isSpaceKeyDisabled) return;
         if (key === " " || key === "ArrowUp") {
           this.onJump();
@@ -177,7 +177,7 @@ export class UI {
       "restart",
       "keydown",
       e => {
-        const { key } = e as KeyboardEvent;
+        const { key } = e;
         if (key === " " && this.isSpaceKeyDisabled) return;
         if (key === " " || key === "ArrowUp") this.handleEvent({ type: "RESTART" });
       },
