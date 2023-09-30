@@ -5,29 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Geometry crack</title>
     
-    <style>
-      *, ::before, ::after {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-      }
-      body {
-        background: #f1f1f1;
-        height: 100vh;
-      }
-      #game {
-        width: 100%;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        body {
-          background: #333;
-        }
-      }
-    </style>
-    <script type="module" crossorigin src="./assets/index-db49530b.js"></script>
-  </head>
+   <script type="module" crossorigin src="./assets/index-90634992.js"></script>
+   <link rel="stylesheet" href="./assets/index-d6fddd56.css">
+ </head>
   <body>
-    <canvas width="800" height="365" id="game"></canvas>
+    <canvas id="game"></canvas>
+    <section class="page" id="gameOver">
+      <span id="new-record">New record</span>
+      <div class="game-over__overlay"></div>
+      <h3 class="game-over__title">Game over</h3>
+      <p class="game-over__score" id="score"></p>
+      <p class="game-over__info">Tap to retry</p>
+      <div class="game-over__click-overlay"></div>
+      <button class="button button-back" data-button="BACK">
+        <img src="./img/ui/back_button.svg" alt="back">
+      </button>
+  </section>
+    <section class="page" id="paused">
+      <div class="paused__overlay"></div>
+      <h3 class="paused__title">Game is paused</h3>
+      <button class="button button-pause" data-button="RESUME">
+        <img src="./img/ui/resume_button.svg" alt="resume">
+      </button>
+    </section>
+    <section class="page" id="menu">
+      <img class="title" src="./img/ui/title.svg" alt="title">
+      <button class="button button-start" data-button="START">play</button> 
+    </section>
+    <section class="page" id="play">
+      <div id="click-overlay"></div>
+      <div class="play__jumps-left-container">
+        jumps left: 
+        <span class="play__jumps-left" id="jumps-left"></span>
+      </div>
+      <span id="highest-score"></span>
+      <button class="button button-pause" data-button="PAUSE">
+        <img src="./img/ui/pause_button.svg" alt="pause">
+      </button>
+    </section>
   </body>
 </html>
