@@ -160,7 +160,7 @@ export class UI {
       document.body
     );
 
-    if (/Mobi|Android/i.test(navigator.userAgent)) {
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
       this.events.add("jump", "touchstart", () => this.onJump(), clickOverlay);
     } else {
       this.events.add(
