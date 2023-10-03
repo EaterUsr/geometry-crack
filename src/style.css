@@ -168,7 +168,9 @@ body {
   transform: translate(-50%, -50%);
   width: var(--size);
   height: var(--size);
-  background: conic-gradient(from 0deg at 50% 50%, var(--clr-time-to-regen-indicator) 0%, var(--clr-time-to-regen-indicator) calc(var(--time-to-regen) * 100%), transparent calc(var(--time-to-regen) * 100%), transparent 100%);
+  background: conic-gradient(from 0deg at 50% 50%, var(--clr-time-to-regen-indicator) 0%,
+                             var(--clr-time-to-regen-indicator) calc(var(--time-to-regen) * 100%),
+                             transparent calc(var(--time-to-regen) * 100%), transparent 100%);
 }
 #click-overlay {
   width: 100vw;
