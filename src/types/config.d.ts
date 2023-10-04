@@ -35,6 +35,7 @@ declare type Config = Readonly<{
       jumpVelocity: number;
       jumps: number;
       timeToRegen: number;
+      positionX: number;
     }>;
     spike: BlockConfig;
     slab: blockconfig;

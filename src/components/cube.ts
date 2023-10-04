@@ -143,7 +143,7 @@ export class Cube {
     this.isFrozen = false;
     this.jumpVelocity = cubeConf.jumpVelocity;
     this.origin.target = [null, null];
-    this.origin.content = [Math.floor(this.canvas.width / 2 - this.size / 2), this.floorHeight - this.size];
+    this.origin.content = [Math.floor(cubeConf.positionX * this.canvas.width), this.floorHeight - this.size];
 
     this.deg.target = null;
     this.deg.content = 0;

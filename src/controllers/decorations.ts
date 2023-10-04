@@ -17,7 +17,7 @@ export class DecorationsController {
     const speed = truncNbr(canvas.width / decorationsConf.speed);
     const blockSize = Math.floor(canvas.height / decorationsConf.blockSize);
     const cubeOrigin: Coords = [
-      Math.floor(canvas.width / 2 - blockSize / 2),
+      Math.floor(config.components.cube.positionX * canvas.width),
       Math.floor(canvas.height * decorationsConf.floorHeight - blockSize),
     ];
     const timePerBlock = Math.floor(blockSize / speed);

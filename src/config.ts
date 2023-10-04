@@ -26,6 +26,7 @@ export const config: Config = {
       getHitbox(cube: Cube) {
         return squareHitbox(cube.origin.content[0], cube.origin.content[1], 360 - cube.deg.content, cube.size);
       },
+      positionX: 0.2,
     },
     spike: {
       img: loadImage("img/components/spike.svg"),
