@@ -60,12 +60,9 @@ declare type Config = Readonly<{
       img: HTMLImageElement;
     }>;
     clouds: Readonly<{
-      depth: number;
-      frequency: number;
       img: HTMLImageElement;
-      sizeY: Minmax;
-      y: Minmax;
-      originalSize: number;
+      depth: number;
+      scale: number;
     }>;
   }>;
 }>;
