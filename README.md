@@ -8,8 +8,10 @@ Click [here](https://eaterusr.github.io/geometry-crack) to see.
 Clone the repository, install the dependencies and run the project:
 
 ```bash
-pnpm i 
-pnpm dev
+npm i 
+```
+```bash
+npm run dev
 ```
 
 Click on the link to see the project running.
