@@ -22,7 +22,7 @@ export const config: Config = {
       timeToRegen: 1100,
       speedDeg: 0.5,
       jumpSpeed: 0.7,
-      jumpVelocity: 175,
+      jumpVelocity: 225,
       getHitbox(cube: Cube) {
         return squareHitbox(cube.origin.content[0], cube.origin.content[1], 360 - cube.deg.content, cube.size);
       },
