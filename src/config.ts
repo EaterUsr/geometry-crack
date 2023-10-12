@@ -42,6 +42,15 @@ export const config: Config = {
     },
   },
   decorations: {
+    particules: {
+      grass: {
+        delay: 200,
+        vx: { max: -1, min: -4 },
+        vy: { min: -1, max: -0.5 },
+        vdeg: { min: -1, max: 3 },
+        img: loadImage("img/particules/grass.svg"),
+      },
+    },
     grass: {
       img: loadImage("img/components/grass.svg"),
       scale: 3,

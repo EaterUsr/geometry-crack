@@ -98,8 +98,8 @@ export class CanvasController {
     this.config.score += (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize;
 
     this.decorations.updateBackground(speedFrame);
-    this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.cube.update(speedFrame, this.jumpsLeft);
+    this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.decorations.updateForeground(speedFrame);
   }
   private reset() {

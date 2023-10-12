@@ -65,5 +65,14 @@ declare type Config = Readonly<{
       depth: number;
       scale: number;
     }>;
+    particules: Readonly<{
+      grass: Readonly<{
+        delay: number;
+        vx: Minmax;
+        vy: Minmax;
+        vdeg: Minmax;
+        img: HTMLImageElement;
+      }>;
+    }>;
   }>;
 }>;

@@ -3,8 +3,10 @@ import { updateTarget } from "@utils/targetPosition";
 import { config } from "@config";
 import { isCollision } from "@utils/collision";
 import { backward } from "@utils/move";
+import { ParticulesController } from "@controllers/particules";
 
 const cubeConf = config.components.cube;
+const particulesConf = config.decorations.particules.grass;
 
 export class Cube {
   private floorHeight: number;
@@ -22,6 +24,7 @@ export class Cube {
   private lastSlabCollision: null | number = null;
   private jumpVelocity = cubeConf.jumpVelocity;
   private isFrozen = false;
+  private particules: ParticulesController;
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -39,6 +42,15 @@ export class Cube {
     this.floorHeight = decorations.floorHeight;
     this.size = this.decorations.blockSize;
     this.center = this.updateCenter();
+    this.particules = new ParticulesController(
+      canvas,
+      [this.center[0] - this.size / 2, this.center[1] + this.size / 2],
+      particulesConf.delay,
+      particulesConf.vx,
+      particulesConf.vy,
+      particulesConf.vdeg,
+      particulesConf.img
+    );
   }
   private updateCenter(): Coords {
     return [this.origin.content[0] + this.size / 2, this.origin.content[1] + this.size / 2];
@@ -49,6 +61,8 @@ export class Cube {
 
   update(speedFrame: number, jumpsLeft: number) {
     this.speedFrame = speedFrame;
+
+    this.particules.update(speedFrame);
 
     this.velocity -= speedFrame;
 
@@ -67,6 +81,7 @@ export class Cube {
     this.deg.content %= 360;
 
     if (this.isTouchingTheFloor() && this.isFalling) {
+      this.particules.isActive = true;
       this.isFalling = false;
       this.velocity = 0;
       this.origin.content[1] = this.floorHeight - this.size;
@@ -105,6 +120,7 @@ export class Cube {
   jump(cb: () => void) {
     if (this.isFrozen) return;
     if (this.isTouchingTheFloor()) {
+      this.particules.isActive = false;
       this.velocity = this.jumpVelocity;
       this.isFalling = true;
       cb();
@@ -139,6 +155,7 @@ export class Cube {
     this.freeze();
   }
   reset() {
+    this.particules.reset();
     this.velocity = 0;
     this.isFrozen = false;
     this.jumpVelocity = cubeConf.jumpVelocity;
