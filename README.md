@@ -1,6 +1,6 @@
 # geometry-crack
 
-It's a game inspired by geometry dash
+It's a game inspired by geometry dash made by RobTop.
 Click [here](https://eaterusr.github.io/geometry-crack) to see.
 
 ## Run the project locally
