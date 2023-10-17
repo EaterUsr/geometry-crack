@@ -25,7 +25,6 @@ export class Particule {
     this.ctx.translate(...this.position);
     this.ctx.rotate(this.deg);
 
-    console.log(this.opacity);
     this.ctx.globalAlpha = this.opacity;
     this.ctx.drawImage(this.img, 0, 0);
 
