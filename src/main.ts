@@ -1,4 +1,5 @@
 import "./style.css";
+import "./fonts.ts";
 import { CanvasController } from "@controllers/canvas";
 import { UI } from "@controllers/ui";
 import { LocalStorage } from "@controllers/localStorage";

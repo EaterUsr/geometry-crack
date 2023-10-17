@@ -34,6 +34,8 @@
     }
   },
   "dependencies": {
+    "@fontsource/noto-sans": "^5.0.15",
+    "@fontsource/roboto": "^5.0.8",
     "xstate": "^4.38.2"
   }
 }
