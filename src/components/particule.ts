@@ -1,10 +1,12 @@
 import { trunc } from "@utils/decorators";
+import { truncNbr } from "@utils/math";
 
 export class Particule {
   @trunc(0)
   deg = 0;
 
-  private opacity = 1;
+  @trunc(1)
+  opacity = 1;
   private readonly ctx: CanvasRenderingContext2D;
 
   constructor(
@@ -30,12 +32,11 @@ export class Particule {
 
     this.ctx.restore();
 
-    this.position[0] += (this.vx * speedFrame) / 40;
-    this.position[1] += (this.vy * speedFrame) / 40;
-    this.deg += (this.vdeg * speedFrame) / 500;
+    this.position[0] += truncNbr((this.vx * speedFrame) / 40, 0);
+    this.position[1] += truncNbr((this.vy * speedFrame) / 40, 0);
+    this.deg += truncNbr((this.vdeg * speedFrame) / 500);
     this.opacity -= speedFrame / 2000;
-    console.log(this.opacity);
-
+    this.opacity = Math.abs(this.opacity);
     if (this.opacity < 0) this.onDispawn();
   }
 }
