@@ -1,5 +1,5 @@
-import { Block } from ".";
-import { config } from "@config";
+import { Block } from "./block";
+import { config } from "@/config";
 
 const slabConf = config.components.slab;
 

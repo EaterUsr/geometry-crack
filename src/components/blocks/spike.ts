@@ -1,5 +1,5 @@
-import { Block } from "./index";
-import { config } from "@config";
+import { Block } from "./block";
+import { config } from "@/config";
 
 const spikeConf = config.components.spike;
 

@@ -1,11 +1,11 @@
-import { DecorationsController } from "@controllers/decorations";
-import { Cube } from "@components/cube";
-import { BlocksController } from "@controllers/blocks";
-import { truncNbr } from "@utils/math";
-import { config } from "@config";
-import { UI, UIEvent } from "@controllers/ui";
-import { Block } from "@components/block";
-import { LocalStorage } from "./localStorage";
+import { DecorationsController } from "@/decorations";
+import { Cube } from "@/components/cube";
+import { BlocksController } from "@/components/blocks/controller";
+import { truncNbr } from "@/utils/math";
+import { config } from "@/config";
+import { UI, UIEvent } from "@/ui";
+import { Block } from "@/components/blocks/block";
+import { LocalStorage } from "@/utils/localStorage";
 
 const cube = config.components.cube;
 

@@ -1,8 +1,8 @@
-import { config } from "@config";
-import { CloudsController } from "@controllers/backgroundDecorations/clouds";
-import { DirtsController } from "@controllers/backgroundDecorations/dirts";
-import { truncNbr } from "@utils/math";
-import { GrassController } from "./backgroundDecorations/grass";
+import { config } from "@/config";
+import { CloudsController } from "@/decorations/background/clouds";
+import { DirtsController } from "./background/dirts";
+import { truncNbr } from "@/utils/math";
+import { GrassController } from "./background/grass";
 
 const decorationsConf = config.decorations;
 

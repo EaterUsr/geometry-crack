@@ -1,7 +1,7 @@
-import { calcCarousel } from "@utils/carousel";
-import { trunc } from "@utils/decorators";
-import { config } from "@config";
-import { forward } from "@utils/move";
+import { calcCarousel } from "@/utils/carousel";
+import { trunc } from "@/utils/decorators";
+import { config } from "@/config";
+import { forward } from "@/utils/move";
 
 const cloudsConf = config.decorations.clouds;
 

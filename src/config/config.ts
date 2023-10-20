@@ -1,9 +1,9 @@
-import { squareHitbox, triangleHitbox, rectHitbox } from "@utils/collision";
-import { Cube } from "@components/cube";
-import { Spike } from "@components/block/spike";
-import { Slab } from "@components/block/slab";
+import { squareHitbox, triangleHitbox, rectHitbox } from "@/utils/collision";
+import { Cube } from "@/components/cube";
+import { Spike } from "@/components/blocks/spike";
+import { Slab } from "@/components/blocks/slab";
 import { structures } from "./structures";
-import { loadImage } from "@utils/image";
+import { loadImage } from "@/utils/image";
 
 export const config: Config = {
   structures,

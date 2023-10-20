@@ -1,4 +1,4 @@
-import { smallest } from "@utils/math";
+import { smallest } from "@/utils/math";
 
 function calcTarget(position: number, target: number, speed: number, resetNumber?: number) {
   const value = resetNumber

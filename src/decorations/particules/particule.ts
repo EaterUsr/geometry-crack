@@ -1,4 +1,4 @@
-import { trunc } from "@utils/decorators";
+import { trunc } from "@/utils/decorators";
 
 export class Particule {
   @trunc(0)
@@ -34,7 +34,6 @@ export class Particule {
     this.position[1] += (this.vy * speedFrame) / 40;
     this.deg += (this.vdeg * speedFrame) / 500;
     this.opacity -= speedFrame / 2000;
-    console.log(this.opacity);
 
     if (this.opacity < 0) this.onDispawn();
   }

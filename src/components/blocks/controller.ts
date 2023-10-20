@@ -1,7 +1,7 @@
-import { Block } from "@components/block";
-import { List } from "@utils/list";
-import { isCollision } from "@utils/collision";
-import { setStructure } from "@utils/structures";
+import { Block } from "./block";
+import { List } from "@/utils/list";
+import { isCollision } from "@/utils/collision";
+import { setStructure } from "@/utils/structures";
 
 export class BlocksController {
   private readonly content = new List<Block>();

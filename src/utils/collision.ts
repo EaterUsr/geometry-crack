@@ -1,4 +1,4 @@
-import { toRadians, sqrt } from "@utils/math";
+import { toRadians, sqrt } from "@/utils/math";
 
 export function squareHitbox(x: number, y: number, deg: number, size: number): Hitbox {
   const vertices: Hitbox = [...new Array(4)];

@@ -7,8 +7,8 @@ import {
   BaseActionObject,
   ServiceMap,
 } from "xstate";
-import { EventList } from "./events";
-import { config } from "@config";
+import { EventList } from "@/utils/events";
+import { config } from "@/config";
 
 export type UIEvent =
   | { type: "START" }

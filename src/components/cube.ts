@@ -1,9 +1,9 @@
-import { closestDeg, toDegrees } from "@utils/math";
-import { updateTarget } from "@utils/targetPosition";
-import { config } from "@config";
-import { isCollision } from "@utils/collision";
-import { backward } from "@utils/move";
-import { ParticulesController } from "@controllers/particules";
+import { closestDeg, toDegrees } from "@/utils/math";
+import { updateTarget } from "@/utils/targetPosition";
+import { config } from "@/config";
+import { isCollision } from "@/utils/collision";
+import { backward } from "@/utils/move";
+import { ParticulesController } from "@/decorations/particules";
 
 const cubeConf = config.components.cube;
 const particulesConf = config.decorations.particules.grass;

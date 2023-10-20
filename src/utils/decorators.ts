@@ -1,4 +1,4 @@
-import { truncNbr } from "@utils/math";
+import { truncNbr } from "@/utils/math";
 
 export function trunc(decimals?: number) {
   return function <T extends Object, U extends keyof T>(target: T, key: U) {

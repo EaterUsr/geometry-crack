@@ -1,4 +1,4 @@
-import { backward } from "@utils/move";
+import { backward } from "@/utils/move";
 
 export abstract class Block {
   protected readonly ctx: CanvasRenderingContext2D;

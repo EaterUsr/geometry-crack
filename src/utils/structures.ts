@@ -1,9 +1,9 @@
-import { Block } from "@components/block";
-import { random, truncNbr } from "@utils/math";
-import { Spike } from "@components/block/spike";
-import { Slab } from "@components/block/slab";
-import { BlocksController } from "@controllers/blocks";
-import { config } from "@config";
+import { Block } from "@/components/blocks/block";
+import { random, truncNbr } from "@/utils/math";
+import { Spike } from "@/components/blocks/spike";
+import { Slab } from "@/components/blocks/slab";
+import { BlocksController } from "@/components/blocks";
+import { config } from "@/config";
 
 const structuresPatern = config.structures;
 let lastStructure: null | Structure = null;

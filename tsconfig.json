@@ -19,10 +19,7 @@
     "emitDecoratorMetadata": true,
     "baseUrl": "./src",
     "paths": {
-      "@utils/*": ["utils/*"],
-      "@components/*": ["components/*"],
-      "@controllers/*": ["controllers/*"],
-      "@config": ["config.ts"]
+      "@/*": ["./*"],
     }
   },
   "include": ["src"],

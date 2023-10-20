@@ -1,6 +1,6 @@
-import { Particule } from "@components/particule";
-import { List } from "@utils/list";
-import { randomMinMax } from "@utils/math";
+import { Particule } from "./particule";
+import { List } from "@/utils/list";
+import { randomMinMax } from "@/utils/math";
 
 export class ParticulesController {
   private readonly content = new List<Particule>();
