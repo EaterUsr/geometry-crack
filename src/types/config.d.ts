@@ -20,6 +20,16 @@ declare type BlockConfig = Readonly<{
   img: HTMLImageElement;
 }>;
 
+type ParticuleName = "grass";
+
+declare type ParticuleConfig = Readonly<{
+  delay: number;
+  vx: Minmax;
+  vy: Minmax;
+  vdeg: Minmax;
+  img: HTMLImageElement;
+}>;
+
 declare type Config = Readonly<{
   canvasWidth: number;
   canvasHeight: number;
@@ -65,14 +75,6 @@ declare type Config = Readonly<{
       depth: number;
       scale: number;
     }>;
-    particules: Readonly<{
-      grass: Readonly<{
-        delay: number;
-        vx: Minmax;
-        vy: Minmax;
-        vdeg: Minmax;
-        img: HTMLImageElement;
-      }>;
-    }>;
+    particules: Record<ParticuleName, particuleConfig>;
   }>;
 }>;

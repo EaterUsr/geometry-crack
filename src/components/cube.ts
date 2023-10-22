@@ -45,11 +45,7 @@ export class Cube {
     this.particules = new ParticulesController(
       canvas,
       [this.center[0] - this.size / 2, this.center[1] + this.size / 2],
-      particulesConf.delay,
-      particulesConf.vx,
-      particulesConf.vy,
-      particulesConf.vdeg,
-      particulesConf.img
+      particulesConf
     );
   }
   private updateCenter(): Coords {

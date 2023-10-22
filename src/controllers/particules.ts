@@ -10,11 +10,7 @@ export class ParticulesController {
   constructor(
     private readonly canvas: CanvasConfig,
     private readonly position: Coords,
-    private readonly delay: number,
-    private readonly vx: Minmax,
-    private readonly vy: Minmax,
-    private readonly vdeg: Minmax,
-    private readonly img: HTMLImageElement
+    private readonly config: ParticuleConfig
   ) {
     this.content.append(this.newParticule());
   }
@@ -22,10 +18,10 @@ export class ParticulesController {
   private newParticule() {
     return new Particule(
       [...this.position],
-      this.img,
-      randomMinMax(this.vx),
-      randomMinMax(this.vy),
-      randomMinMax(this.vdeg),
+      this.config.img,
+      randomMinMax(this.config.vx),
+      randomMinMax(this.config.vy),
+      randomMinMax(this.config.vdeg),
       () => this.content.removeFirst(),
       this.canvas
     );
@@ -33,7 +29,7 @@ export class ParticulesController {
 
   update(speedFrame: number) {
     this.content.forEach(particule => particule.update(speedFrame));
-    if (Date.now() - this.lastParticule > this.delay) {
+    if (Date.now() - this.lastParticule > this.config.delay) {
       this.lastParticule = Date.now();
       if (this.isActive) this.content.append(this.newParticule());
     }
