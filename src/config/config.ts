@@ -82,4 +82,20 @@ export const config: Config = {
   },
   canvasWidth: 800,
   canvasHeight: 365,
+  localStorage: {
+    default: {
+      HS: 0,
+      crackcoins: 0,
+    },
+    parser: storage => {
+      storage.crackcoins = Math.floor(storage.crackcoins);
+      storage.HS = Math.floor(storage.HS);
+
+      return storage;
+    },
+  },
+  crackcoins: {
+    scoreDivider: 60,
+    scoreDividerIfHS: 50,
+  },
 };

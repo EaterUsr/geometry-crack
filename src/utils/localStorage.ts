@@ -1,9 +1,7 @@
-interface Storage {
-  HS: number;
-}
+import { config } from "@/config";
 
-export class LocalStorage {
-  content: Storage;
+export class StorageManager {
+  content: LocalStorage;
 
   constructor() {
     const str = localStorage.getItem("geometry crack");
@@ -13,12 +11,11 @@ export class LocalStorage {
     }
     this.content = this.initStorage();
   }
-  private initStorage(): Storage {
-    return {
-      HS: 0,
-    };
+  private initStorage(): LocalStorage {
+    return config.localStorage.default;
   }
   save() {
-    localStorage.setItem("geometry crack", JSON.stringify(this.content));
+    const parsed = config.localStorage.parser(this.content);
+    localStorage.setItem("geometry crack", JSON.stringify(parsed));
   }
 }

@@ -5,7 +5,7 @@ import { truncNbr } from "@/utils/math";
 import { config } from "@/config";
 import { UI, UIEvent } from "@/ui";
 import { Block } from "@/components/blocks/block";
-import { LocalStorage } from "@/utils/localStorage";
+import { StorageManager } from "@/utils/localStorage";
 
 const cube = config.components.cube;
 
@@ -20,7 +20,7 @@ export class CanvasController {
   private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
 
-  constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI, private readonly storage: LocalStorage) {
+  constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI, private readonly storage: StorageManager) {
     const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
     if (!canvas) throw new Error(`Invalid input: The query ${canvasHTMLQuery} does not match any HTML element`);
     this.domElement = canvas;
@@ -66,19 +66,25 @@ export class CanvasController {
     }
   }
   die() {
-    if (this.config.score > this.storage.content.HS) {
+    if (!this.isActive) return;
+    const isHighestScore = this.config.score > this.storage.content.HS + 1;
+    this.storage.content.crackcoins += isHighestScore
+      ? this.config.score / config.crackcoins.scoreDividerIfHS
+      : this.config.score / config.crackcoins.scoreDivider;
+    if (isHighestScore) {
       this.ui.displayNewRecord();
-      this.storage.save();
       this.storage.content.HS = Math.floor(this.config.score);
     }
+    this.storage.save();
     this.ui.displayScore(Math.floor(this.config.score));
     this.ui.die();
+    this.isActive = false;
   }
 
   private animate() {
     window.requestAnimationFrame(this.animate.bind(this));
 
-    if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.die.bind(this), cube.timeToDie);
+    if (this.cube.origin.content[0] < 0) setTimeout(this.die.bind(this), cube.timeToDie);
 
     if (this.jumpsLeft === cube.jumps) this.lastRegen = Date.now();
     if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {

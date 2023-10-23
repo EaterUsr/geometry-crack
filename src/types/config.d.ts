@@ -30,6 +30,11 @@ declare type ParticuleConfig = Readonly<{
   img: HTMLImageElement;
 }>;
 
+declare type LocalStorage = {
+  HS: number;
+  crackcoins: number;
+};
+
 declare type Config = Readonly<{
   canvasWidth: number;
   canvasHeight: number;
@@ -76,5 +81,13 @@ declare type Config = Readonly<{
       scale: number;
     }>;
     particules: Record<ParticuleName, particuleConfig>;
+  }>;
+  crackcoins: {
+    scoreDivider: number;
+    scoreDividerIfHS: number;
+  };
+  localStorage: Readonly<{
+    default: LocalStorage;
+    parser: (storage: LocalStorage) => LocalStorage;
   }>;
 }>;
