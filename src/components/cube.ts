@@ -127,12 +127,13 @@ export class Cube {
   }
 
   onSlabCollision(slabPosition: Coords, slabHitbox: Hitbox) {
-    if (this.center[0] >= slabPosition[0]) {
-      if (this.center[1] > slabPosition[1]) {
+    if (this.center[0] > slabPosition[0]) {
+      if (this.center[1] >= slabPosition[1]) {
         if (isCollision(this.hitbox, slabHitbox)) {
           if (this.velocity > 0) this.velocity = 0;
           if (this.origin.content[1] < slabPosition[1] + this.size / 2)
             this.origin.content[1] = slabPosition[1] + this.size / 2;
+          this.origin.content[0] = slabPosition[0] - this.size / 2;
         }
         return;
       }
@@ -148,6 +149,7 @@ export class Cube {
     if (this.floorHeight <= slabPosition[1]) return;
     if (this.center[1] > slabPosition[1] + this.decorations.blockSize / 2) return;
     this.isFalling = true;
+    this.origin.content[0] = slabPosition[0] - this.size;
     this.freeze();
   }
   reset() {
