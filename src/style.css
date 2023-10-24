@@ -248,3 +248,21 @@ body {
     transform: scale(1) rotate(20deg);
   }
 }
+.crackcoin-counter {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  font-size: 2.3rem;
+  padding: .7rem 1.5rem;
+  font-family: "Roboto", Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .7rem;
+  text-shadow: 0 0 .5rem rgb(0 0 0 / 80%),
+              0 0 1.5rem rgb(0 0 0 / 30%);
+}
+.crackcoin-counter__icon {
+  height: 3.2rem;
+  filter: drop-shadow(0 0 .5rem rgb(0 0 0 / 40%)) ;
+}
