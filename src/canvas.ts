@@ -77,6 +77,7 @@ export class CanvasController {
     }
     this.storage.save();
     this.ui.displayScore(Math.floor(this.config.score));
+    this.ui.displayCrackcoins(this.storage.content.crackcoins);
     this.ui.die();
     this.isActive = false;
   }

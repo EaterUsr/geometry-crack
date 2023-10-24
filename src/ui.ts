@@ -109,6 +109,7 @@ export class UI {
   private readonly scoreContainer = document.querySelector("#score")!;
   private readonly highestScoreContainer = document.querySelector("#highest-score")!;
   private readonly newRecord = document.querySelector("#new-record")!;
+  private readonly crackcoinsCounters = document.querySelectorAll("[data-crackcoins-counter]");
   private events = new EventList<"state buttons" | "jump" | "restart">();
   private isSpaceKeyDisabled = false;
   onJump = () => {};
@@ -245,5 +246,10 @@ export class UI {
   }
   displayNewRecord() {
     this.newRecord.classList.add("show");
+  }
+  displayCrackcoins(crackcoins: number) {
+    this.crackcoinsCounters.forEach(crackcoinsCounter => {
+      crackcoinsCounter.textContent = `${crackcoins}`;
+    });
   }
 }
