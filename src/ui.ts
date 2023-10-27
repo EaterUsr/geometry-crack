@@ -16,7 +16,8 @@ export type UIEvent =
   | { type: "RESUME" }
   | { type: "DIE" }
   | { type: "RESTART" }
-  | { type: "BACK" };
+  | { type: "BACK" }
+  | { type: "SHOP" };
 
 interface UIContext {}
 
@@ -35,6 +36,10 @@ type UITypestate =
     }
   | {
       value: "play";
+      context: UIContext;
+    }
+  | {
+      value: "shop";
       context: UIContext;
     };
 
@@ -58,6 +63,9 @@ export class UI {
             on: {
               START: {
                 target: "play",
+              },
+              SHOP: {
+                target: "shop",
               },
             },
           },
@@ -83,6 +91,13 @@ export class UI {
               RESTART: {
                 target: "play",
               },
+              BACK: {
+                target: "menu",
+              },
+            },
+          },
+          shop: {
+            on: {
               BACK: {
                 target: "menu",
               },
@@ -115,12 +130,13 @@ export class UI {
   onJump = () => {};
 
   constructor() {
-    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play"];
+    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop"];
     this.pages = {
       menu: null,
       gameOver: null,
       paused: null,
       play: null,
+      shop: null,
     };
 
     pagesName.forEach((pageName: UITypestate["value"]) => {

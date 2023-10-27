@@ -44,6 +44,7 @@ export class CanvasController {
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
+    this.ui.displayCrackcoins(this.storage.content.crackcoins);
 
     this.animate();
   }

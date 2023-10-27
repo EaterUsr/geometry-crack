@@ -66,10 +66,17 @@ body {
 .button:hover::before, .button:focus::before {
   transform: translateY(-16%);
 }
-.button-start {
+.btn-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
   transform: translateY(-100vh);
   animation: var(--anim-show);
   animation-delay: .2s;
+}
+.button-start {
   font-size: 3.5em;
 }
 .button-pause {
