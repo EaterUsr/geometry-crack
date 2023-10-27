@@ -10,7 +10,31 @@ html {
   text-wrap: balance;
 }
 body {
-  background: #f1f1f1
+  background: #f1f1f1;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  background: #0386FF;
+  height: 50%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  background: #743100;
+  height: 50%;
+  width: 100%;
+  bottom: 0;
+  left: 0;
 }
 #game {
   width: 100%;
