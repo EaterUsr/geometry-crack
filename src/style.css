@@ -23,6 +23,7 @@ body {
   --stroke-HS: 0.03em rgba(0, 0, 0, 70%);
   --stroke: solid 0.1em var(--clr-stroke);
   --shadow: rgba(0, 0, 0, 25%) 0.4rem 0.4rem;
+  --anim-show: show 0.7s cubic-bezier(0.01, 0.67, 0.49, 1.37) both;
 }
 .page {
   --opacity: 0;
@@ -66,6 +67,9 @@ body {
   transform: translateY(-16%);
 }
 .button-start {
+  transform: translateY(-100vh);
+  animation: var(--anim-show);
+  animation-delay: .2s;
   font-size: 3.5em;
 }
 .button-pause {
@@ -142,6 +146,15 @@ body {
 }
 .title {
   width: 70%;
+  animation: var(--anim-show);
+}
+@keyframes show {
+  from {
+    transform: translateY(-100vh);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 .play__jumps-left-container {
   --time-to-regen: 1;
