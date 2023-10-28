@@ -44,8 +44,9 @@ body::after {
   --clr-stroke: rgba(0, 0, 0, 55%);
   --clr-HS: linear-gradient(to top, #FF8A00, #FFE500);
   --clr-time-to-regen-indicator: rgb(255 255 255 / 27%);
-  --stroke-HS: 0.03em rgba(0, 0, 0, 70%);
-  --stroke: solid 0.1em var(--clr-stroke);
+  --stroke-HS: 0.03rem rgba(0, 0, 0, 70%);
+  --stroke: solid 0.25rem var(--clr-stroke);
+  --stroke-xl: solid 0.35rem var(--clr-stroke);
   --shadow: rgba(0, 0, 0, 25%) 0.4rem 0.4rem;
   --anim-show: show 0.7s cubic-bezier(0.01, 0.67, 0.49, 1.37) both;
 }
@@ -62,13 +63,13 @@ body::after {
 .button {
   z-index: 3;
   background: transparent;
-  padding: 0.2em 1.4em;
-  font-size: 2.3em;
-  border-radius: 0.4em;
+  padding: 0.6rem 5rem;
+  font-size: 2.3rem;
+  border-radius: 1.5rem;
   box-shadow: var(--shadow);
   border: none;
   outline: var(--stroke);
-  outline-offset: -0.1em;
+  outline-offset: -0.25rem;
   color: var(--clr-stroke);
   font-weight: 500;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
@@ -94,11 +95,13 @@ body::after {
   transform: translateY(-100vh);
   animation: var(--anim-show);
   animation-delay: .2s;
-  font-size: 3.5em;
+  font-size: 3rem;
+  outline: var(--stroke-xl);
+  outline-offset: -0.35rem;
 }
 .button-pause {
-  --btn-width: 0.8em;
-  --btn-gap: 0.3em;
+  --btn-width: 1.7rem;
+  --btn-gap: 0.8rem;
   border-radius: 50%;
   padding: var(--btn-width);
   position: fixed;
@@ -107,21 +110,21 @@ body::after {
 }
 .button-pause > img {
   position: absolute;
-  width: calc(var(--btn-width) - 0.1em);
+  width: calc(var(--btn-width) - 0.2rem);
   transform: translate(-50%, -50%);
 }
 .button-back {
-  --btn-width: 0.8em;
-  --btn-gap: 0.3em;
-  border-radius: 0.3em;
-  padding: calc(var(--btn-width) - 0.1em);
+  --btn-width: 1.9rem;
+  --btn-gap: 0.7rem;
+  border-radius: 1rem;
+  padding: calc(var(--btn-width) - 0.2rem);
   position: fixed;
   left: var(--btn-gap);
   top: var(--btn-gap);
 }
 .button-back > img {
   position: absolute;
-  width: var(--btn-width);
+  width: 70%;
   transform: translate(-50%, -50%);
 }
 .game-over__overlay {
@@ -145,12 +148,12 @@ body::after {
   font-weight: 900;
   color: #C00000;
   z-index: 2;
-  font-size: 4em;
-  padding-bottom: 1.5em;
+  font-size: 5rem;
+  padding-bottom: 2rem;
 }
 .game-over__info {
   z-index: 1;
-  font-size: 2.5em;
+  font-size: 2.5rem;
   font-family: "Roboto";
   color: #A1A1A1;
 }
@@ -183,9 +186,9 @@ body::after {
 .play__jumps-left-container {
   --time-to-regen: 1;
   position: fixed;
-  top: 0.7rem;
+  top: 0.5rem;
   left: 1rem;
-  font-size: 1.6em;
+  font-size: 1.6rem;
   color: #f1f1f1;
   font-family: "Noto Sans";
   font-weight: 700;
@@ -194,7 +197,7 @@ body::after {
   position: relative;
 }
 .play__jumps-left::before {
-  --size: 1.1em;
+  --size: 1.7rem;
   content: "";
   border-radius: 50%;
   overflow: hidden;
@@ -223,8 +226,8 @@ body::after {
   color: #cacaca;
   font-family: "Noto Sans";
   font-weight: 900;
-  font-size: 5em;
-  margin-bottom: 3em;
+  font-size: 5rem;
+  margin-bottom: 12rem;
 }
 .paused__overlay {
   position: fixed;
@@ -237,10 +240,10 @@ body::after {
   backdrop-filter: blur(0.1rem);
 }
 .game-over__score {
-  font-size: 2.5em;
+  font-size: 2.5rem;
   font-weight: 600;
   z-index: 1;
-  margin-bottom: 2em;
+  margin-bottom: 7rem;
   color: transparent;
   background-image: var(--clr-primary);
   background-clip: text;
@@ -248,9 +251,9 @@ body::after {
 }
 #highest-score {
   position: fixed;
-  top: 1.7em;
+  top: 2.4rem;
   left: 1rem;
-  font-size: 1.6em;
+  font-size: 1.6rem;
   font-weight: 800;
   font-family: "Noto Sans";
   background-image: var(--clr-HS);
@@ -261,14 +264,14 @@ body::after {
 }
 #new-record {
   top: 7rem;
-  left: calc(50% + 2em);
+  left: calc(50% + 12rem);
   position: fixed;
   background: var(--clr-HS);
   -webkit-text-stroke: var(--stroke-HS);
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
-  font-size: 2.5em;
+  font-size: 3rem;
   font-weight: 800;
   animation: new-record 1s alternate infinite ease-in-out;
   opacity: 0;
