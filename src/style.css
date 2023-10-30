@@ -328,3 +328,42 @@ body::after {
 .button-settings:hover > img, .button-settings:focus > img {
   transform: translate(-50%, -50%) rotate(180deg);
 }
+#settings {
+  display: none;
+}
+#settings:checked ~ .settings {
+  opacity: 1;
+  transform: translateX(0);
+}
+.settings {
+  opacity: 0;
+  transform: translateX(10%);
+  position: fixed;
+  bottom: 5rem;
+  right: 0.7rem;
+  width: 12rem;
+  border-radius: .5rem;
+  border: 0.2rem solid #bdbdbd;
+  background: #ececec;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  padding: 0.2rem;
+  transition: opacity .2s ease-out,
+              transform .2s ease-out;
+}
+.settings > button {
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: #333;
+  font-size: 1.1rem;
+  transition: background-color .2s ease-out;
+  padding: 0.3rem 0.2rem;
+  border-radius: .3rem;
+}
+.settings > button:hover {
+  background: #3333;
+}

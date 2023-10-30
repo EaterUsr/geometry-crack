@@ -18,4 +18,7 @@ export class StorageManager {
     const parsed = config.localStorage.parser(this.content);
     localStorage.setItem("geometry crack", JSON.stringify(parsed));
   }
+  clear() {
+    localStorage.setItem("geometry crack", "");
+  }
 }

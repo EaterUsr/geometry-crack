@@ -8,6 +8,7 @@ import {
   ServiceMap,
 } from "xstate";
 import { EventList } from "@/utils/events";
+import { StorageManager } from "./utils/localStorage";
 import { config } from "@/config";
 
 export type UIEvent =
@@ -110,7 +111,8 @@ export class UI {
   private readonly highestScoreContainer = document.querySelector("#highest-score")!;
   private readonly newRecord = document.querySelector("#new-record")!;
   private readonly crackcoinsCounters = document.querySelectorAll("[data-crackcoins-counter]");
-  private events = new EventList<"state buttons" | "jump" | "restart">();
+  private readonly btnResetProgress = document.querySelector<HTMLElement>("#reset-progress")!;
+  private events = new EventList<"state buttons" | "jump" | "restart" | "menu">();
   private isSpaceKeyDisabled = false;
   onJump = () => {};
 
@@ -185,6 +187,8 @@ export class UI {
       document.body
     );
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
+    const store = new StorageManager();
+    this.events.add("menu", "click", () => store.clear(), this.btnResetProgress);
 
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
@@ -197,6 +201,8 @@ export class UI {
     this.render(nextState);
     if (nextState.value === this.prevState.value) return;
     switch (this.prevState.value) {
+      case "menu":
+        this.events.disable("menu");
       case "play":
         this.events.disable("jump");
         break;
@@ -206,6 +212,8 @@ export class UI {
         break;
     }
     switch (nextState.value) {
+      case "menu":
+        this.events.enable("menu");
       case "play":
         this.events.enable("jump");
         break;

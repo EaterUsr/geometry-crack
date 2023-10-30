@@ -33,9 +33,13 @@
     <section class="page" id="menu">
       <img class="title" src="/img/ui/title.svg" alt="title">
       <button class="button button-start" data-button="START">play</button>
-      <button class="button button-settings">
+      <input id="settings" type="checkbox" aria-hidden>
+      <section class="settings">
+        <button id="reset-progress">reset progress</button>
+      </section>
+      <label for="settings" class="button button-settings">
         <img src="/img/ui/settings.svg" alt="settings">
-      </button>
+      </label>
     </section>
     <section class="page" id="play">
       <div id="click-overlay"></div>
