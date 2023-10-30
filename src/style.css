@@ -306,3 +306,25 @@ body::after {
   height: 3.2rem;
   filter: drop-shadow(0 0 .5rem rgb(0 0 0 / 40%)) ;
 }
+.button-settings {
+  --gap: 0.7rem;
+  --width: 4rem;
+  position: fixed;
+  bottom: var(--gap);
+  right: var(--gap);
+  border-radius: 50%;
+  width: var(--width);
+  height: var(--width);
+  padding: 0;
+}
+.button-settings > img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, -50%);
+  transition: transform .5s ease-out;
+}
+.button-settings:hover > img, .button-settings:focus > img {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
