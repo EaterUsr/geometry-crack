@@ -10,6 +10,7 @@ import {
 import { EventList } from "@/utils/events";
 import { StorageManager } from "./utils/localStorage";
 import { config } from "@/config";
+import { createPopup } from "./utils/popup";
 
 export type UIEvent =
   | { type: "START" }
@@ -188,7 +189,14 @@ export class UI {
     );
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
     const store = new StorageManager();
-    this.events.add("menu", "click", () => store.clear(), this.btnResetProgress);
+    this.events.add(
+      "menu",
+      "click",
+      async () => {
+        if (await createPopup("Are you sure you want to reset your progress?")) store.clear();
+      },
+      this.btnResetProgress
+    );
 
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
@@ -198,8 +206,10 @@ export class UI {
     this.prevState = this.interpreter.getSnapshot();
     this.interpreter.send(event);
     const nextState = this.interpreter.getSnapshot();
-    this.render(nextState);
     if (nextState.value === this.prevState.value) return;
+    this.render(nextState);
+  }
+  private render(state: UIState) {
     switch (this.prevState.value) {
       case "menu":
         this.events.disable("menu");
@@ -211,7 +221,7 @@ export class UI {
         this.newRecord.classList.remove("show");
         break;
     }
-    switch (nextState.value) {
+    switch (state.value) {
       case "menu":
         this.events.enable("menu");
       case "play":
@@ -223,8 +233,6 @@ export class UI {
         }, config.delayBeforeRestart);
         break;
     }
-  }
-  private render(state: UIState) {
     const button = document.querySelector(`#${state.value} [data-button]`)!;
     button.setAttribute("tabindex", "0");
     (this.pages[state.value as UITypestate["value"]] as HTMLElement).style.setProperty("--opacity", "1");

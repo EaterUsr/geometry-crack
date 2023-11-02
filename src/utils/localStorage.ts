@@ -19,6 +19,6 @@ export class StorageManager {
     localStorage.setItem("geometry crack", JSON.stringify(parsed));
   }
   clear() {
-    localStorage.setItem("geometry crack", "");
+    localStorage.removeItem("geometry crack");
   }
 }
