@@ -4,11 +4,13 @@
   box-sizing: border-box;
   user-select: none;
 }
+
 html {
   font-family: system-ui, sans-serif;
   color-scheme: light dark;
   text-wrap: balance;
 }
+
 body {
   background: #f1f1f1;
   height: 100vh;
@@ -16,43 +18,49 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 body::before {
+  width: 100%;
+  height: 50%;
   content: "";
   position: fixed;
   z-index: -1;
   background: #0386FF;
-  height: 50%;
-  width: 100%;
   top: 0;
   left: 0;
 }
+
 body::after {
+  width: 100%;
+  height: 50%;
   content: "";
   position: fixed;
   z-index: -1;
   background: #743100;
-  height: 50%;
-  width: 100%;
   bottom: 0;
   left: 0;
 }
+
 #game {
   width: 100%;
 }
+
 :root {
   --clr-primary: linear-gradient(#FA1F11, #FA6511);
-  --clr-stroke: rgba(0, 0, 0, 55%);
-  --clr-HS: linear-gradient(to top, #FF8A00, #FFE500);
+  --clr-stroke: rgb(0 0 0 / 55%);
+  --clr-hs: linear-gradient(to top, #FF8A00, #FFE500);
   --clr-time-to-regen-indicator: rgb(255 255 255 / 27%);
-  --stroke-HS: 0.03rem rgba(0, 0, 0, 70%);
+  --stroke-hs: 0.03rem rgb(0 0 0 / 70%);
   --stroke-xs: solid 0.15rem var(--clr-stroke);
   --stroke: solid 0.25rem var(--clr-stroke);
   --stroke-xl: solid 0.35rem var(--clr-stroke);
-  --shadow: rgba(0, 0, 0, 25%) 0.4rem 0.4rem;
+  --shadow: rgb(0 0 0 / 25%) 0.4rem 0.4rem;
   --anim-show: show 0.7s cubic-bezier(0.01, 0.67, 0.49, 1.37) both;
 }
+
 .page {
   --opacity: 0;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -61,6 +69,7 @@ body::after {
   opacity: var(--opacity);
   z-index: var(--opacity);
 }
+
 .button {
   z-index: 3;
   background: transparent;
@@ -73,11 +82,12 @@ body::after {
   outline-offset: -0.25rem;
   color: var(--clr-stroke);
   font-weight: 500;
-  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
   cursor: pointer;
   position: relative;
   overflow: hidden;
 }
+
 .button::before {
   content: "";
   position: absolute;
@@ -89,9 +99,11 @@ body::after {
   transition: transform .1s ease-out;
   z-index: -1;
 }
+
 .button:hover::before, .button:focus::before {
   transform: translateY(-16%);
 }
+
 .button-start {
   transform: translateY(-100vh);
   animation: var(--anim-show);
@@ -100,64 +112,75 @@ body::after {
   outline: var(--stroke-xl);
   outline-offset: -0.35rem;
 }
+
 .button-pause {
   --btn-width: 1.7rem;
   --btn-gap: 0.8rem;
+
   border-radius: 50%;
   padding: var(--btn-width);
   position: fixed;
   right: var(--btn-gap);
   top: var(--btn-gap);
 }
+
 .button-pause > img {
   position: absolute;
   width: calc(var(--btn-width) - 0.2rem);
   transform: translate(-50%, -50%);
 }
+
 .button-back {
   --btn-width: 1.9rem;
   --btn-gap: 0.7rem;
+
   border-radius: 1rem;
   padding: calc(var(--btn-width) - 0.2rem);
   position: fixed;
   left: var(--btn-gap);
   top: var(--btn-gap);
 }
+
 .button-back > img {
   position: absolute;
   width: 70%;
   transform: translate(-50%, -50%);
 }
+
 .game-over__overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(62, 0, 0, 45%);
+  background: rgb(62 0 0 / 45%);
   backdrop-filter: blur(0.1rem);
   border: none;
 }
-#gameOver {
+
+.game-over {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 .game-over__title {
-  font-family: "Noto Sans";
+  font-family: "Noto Sans", sans-serif;
   font-weight: 900;
   color: #C00000;
   z-index: 2;
   font-size: 5rem;
   padding-bottom: 2rem;
 }
+
 .game-over__info {
   z-index: 1;
   font-size: 2.5rem;
-  font-family: "Roboto";
+  font-family: Roboto, sans-serif;
   color: #A1A1A1;
 }
+
 .game-over__click-overlay {
   position: fixed;
   top: 0;
@@ -166,39 +189,48 @@ body::after {
   height: 100%;
   z-index: 2;
 }
+
 #menu {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
 }
+
 .title {
   width: 70%;
   animation: var(--anim-show);
 }
+
 @keyframes show {
   from {
     transform: translateY(-100vh);
   }
+
   to {
     transform: translateY(0);
   }
 }
+
 .play__jumps-left-container {
   --time-to-regen: 1;
+
   position: fixed;
   top: 0.5rem;
   left: 1rem;
   font-size: 1.6rem;
   color: #f1f1f1;
-  font-family: "Noto Sans";
+  font-family: "Noto Sans", sans-serif;
   font-weight: 700;
 }
+
 .play__jumps-left {
   position: relative;
 }
+
 .play__jumps-left::before {
   --size: 1.7rem;
+
   content: "";
   border-radius: 50%;
   overflow: hidden;
@@ -208,28 +240,36 @@ body::after {
   transform: translate(-50%, -50%);
   width: var(--size);
   height: var(--size);
-  background: conic-gradient(from 0deg at 50% 50%, var(--clr-time-to-regen-indicator) 0%,
-                             var(--clr-time-to-regen-indicator) calc(var(--time-to-regen) * 100%),
-                             transparent calc(var(--time-to-regen) * 100%), transparent 100%);
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    var(--clr-time-to-regen-indicator) 0%,
+    var(--clr-time-to-regen-indicator) calc(var(--time-to-regen) * 100%),
+    transparent calc(var(--time-to-regen) * 100%),
+    transparent 100%
+  );
 }
+
 #click-overlay {
   width: 100vw;
   height: 100vh;
 }
+
 #paused {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
+
 .paused__title {
   text-align: center;
   color: #cacaca;
-  font-family: "Noto Sans";
+  font-family: "Noto Sans", sans-serif;
   font-weight: 900;
   font-size: 5rem;
   margin-bottom: 12rem;
 }
+
 .paused__overlay {
   position: fixed;
   z-index: -1;
@@ -237,9 +277,10 @@ body::after {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 26%);
+  background: rgb(0 0 0 / 26%);
   backdrop-filter: blur(0.1rem);
 }
+
 .game-over__score {
   font-size: 2.5rem;
   font-weight: 600;
@@ -248,54 +289,57 @@ body::after {
   color: transparent;
   background-image: var(--clr-primary);
   background-clip: text;
-  -webkit-background-clip: text;
 }
+
 #highest-score {
   position: fixed;
   top: 2.4rem;
   left: 1rem;
   font-size: 1.6rem;
   font-weight: 800;
-  font-family: "Noto Sans";
-  background-image: var(--clr-HS);
-  -webkit-text-stroke: var(--stroke-HS);
+  font-family: "Noto Sans", sans-serif;
+  background-image: var(--clr-hs);
+  -webkit-text-stroke: var(--stroke-hs);
   background-clip: text;
-  -webkit-background-clip: text;
   color: transparent;
 }
+
 #new-record {
   top: 7rem;
   left: calc(50% + 12rem);
   position: fixed;
-  background: var(--clr-HS);
-  -webkit-text-stroke: var(--stroke-HS);
+  background: var(--clr-hs);
+  -webkit-text-stroke: var(--stroke-hs);
   color: transparent;
   background-clip: text;
-  -webkit-background-clip: text;
   font-size: 3rem;
   font-weight: 800;
   animation: new-record 1s alternate infinite ease-in-out;
   opacity: 0;
   z-index: 1;
 }
+
 #new-record.show {
   opacity: 1;
 }
+
 @keyframes new-record {
   from {
     transform: scale(0.7) rotate(20deg);
   }
+
   to {
     transform: scale(1) rotate(20deg);
   }
 }
+
 .crackcoin-counter {
   position: fixed;
   bottom: 0;
   right: 0;
   font-size: 2.3rem;
   padding: .7rem 1.5rem;
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: Roboto, Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -303,13 +347,16 @@ body::after {
   text-shadow: 0 0 .5rem rgb(0 0 0 / 80%),
               0 0 1.5rem rgb(0 0 0 / 30%);
 }
+
 .crackcoin-counter__icon {
   height: 3.2rem;
   filter: drop-shadow(0 0 .5rem rgb(0 0 0 / 40%)) ;
 }
+
 .button-settings {
   --gap: 0.7rem;
   --width: 4rem;
+
   position: fixed;
   bottom: var(--gap);
   right: var(--gap);
@@ -321,17 +368,16 @@ body::after {
   justify-content: center;
   align-items: center;
 }
+
 .button-settings > img {
   width: 80%;
   transition: transform .5s ease-out;
 }
+
 .button-settings:focus > img {
   transform: translate(0, 0) rotate(180deg);
 }
-.button-settings:focus ~ .settings, .settings:focus-within {
-  opacity: 1;
-  transform: translateX(0);
-}
+
 .settings {
   opacity: 0;
   transform: translateX(10%);
@@ -348,8 +394,14 @@ body::after {
   align-items: stretch;
   padding: 0.2rem;
   transition: opacity .2s ease-out,
-              transform .2s ease-out;
+  transform .2s ease-out;
 }
+
+.settings:focus-within, .button-settings:focus ~ .settings {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .settings > button {
   text-align: left;
   cursor: pointer;
@@ -361,30 +413,35 @@ body::after {
   padding: 0.3rem 0.2rem;
   border-radius: .3rem;
 }
+
 .settings > button:hover {
   background: #3333;
 }
+
 #popup {
   --border-size: .6rem;
   --radius: 1.3rem;
+
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   border: none;
-  background: hsl(280 0% 0% / 0.5);
+  background: hsl(280deg 0% 0% / 50%);
   padding: 1.3rem 2rem;
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
   max-width: 25rem;
 }
+
 #popup-title {
-  color: rgb(18 18 18 / 0.9);
-  font-family: "Roboto", arial;
+  color: rgb(18 18 18 / 90%);
+  font-family: Roboto, sans-serif;
   font-weight: bold;
   font-size: 1.5rem;
   text-align: center;
 }
+
 #popup::before {
   content: "";
   position: absolute;
@@ -396,6 +453,7 @@ body::after {
   border-radius: var(--radius);
   z-index: -1;
 }
+
 #popup::after {
   content: "";
   position: absolute;
@@ -408,10 +466,12 @@ body::after {
   border-radius: calc(var(--radius) - var(--border-size));
   z-index: -1;
 }
+
 #popup::backdrop {
   background: rgb(0 0 0 / 20%);
   backdrop-filter: blur(.1rem);
 }
+
 #btn-wrapper {
   gap: 3rem;
   display: flex;
@@ -419,6 +479,7 @@ body::after {
   align-items: center;
   padding-top: 1.7rem;
 }
+
 .button-yes, .button-no {
   font-size: 1.5rem;
   padding: .2rem 2rem;
@@ -427,15 +488,19 @@ body::after {
   outline-offset: -0.15rem;
   transition: filter .2 ease-out;
 }
-.button-yes::before, .button-no::before {
-  display: none;
-}
-.button-yes:hover, .button-no:hover {
-  filter: brightness(130%);
-}
+
 .button-yes {
   background: #36FF3E;
 }
+
 .button-no {
   background: #FA3B11;
+}
+
+.button-yes::before, .button-no::before {
+  display: none;
+}
+
+.button-yes:hover, .button-no:hover {
+  filter: brightness(130%);
 }
