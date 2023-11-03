@@ -326,13 +326,10 @@ body::after {
   transform: translate(-50%, -50%);
   transition: transform .5s ease-out;
 }
-.button-settings:hover > img, .button-settings:focus > img {
+.button-settings:focus > img {
   transform: translate(-50%, -50%) rotate(180deg);
 }
-#settings {
-  display: none;
-}
-#settings:checked ~ .settings {
+.button-settings:focus ~ .settings, .settings:focus-within {
   opacity: 1;
   transform: translateX(0);
 }
