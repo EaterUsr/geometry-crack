@@ -5,7 +5,7 @@ import { truncNbr } from "@/utils/math";
 import { config } from "@/config";
 import { UI, UIEvent } from "@/ui";
 import { Block } from "@/components/blocks/block";
-import { StorageManager } from "@/utils/localStorage";
+import { StorageManager } from "@/utils/storageManager";
 
 const cube = config.components.cube;
 

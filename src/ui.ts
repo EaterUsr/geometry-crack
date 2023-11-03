@@ -8,7 +8,7 @@ import {
   ServiceMap,
 } from "xstate";
 import { EventList } from "@/utils/events";
-import { StorageManager } from "./utils/localStorage";
+import { StorageManager } from "./utils/storageManager";
 import { config } from "@/config";
 import { createPopup } from "./utils/popup";
 
@@ -188,7 +188,7 @@ export class UI {
       document.body
     );
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
-    const store = new StorageManager();
+    const store = StorageManager.new();
     this.events.add(
       "menu",
       "click",
