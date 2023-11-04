@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Geometry crack 💥</title>
     
-   <script type="module" crossorigin src="./assets/index-c526830b.js"></script>
-   <link rel="stylesheet" href="./assets/index-e411a9d0.css">
+   <script type="module" crossorigin src="./assets/index-c6c13608.js"></script>
+   <link rel="stylesheet" href="./assets/index-303c2ca4.css">
  </head>
   <body>
     <canvas id="game"></canvas>
@@ -34,7 +34,13 @@
     </section>
     <section class="page" id="menu">
       <img class="title" src="./img/ui/title.svg" alt="title">
-      <button class="button button-start" data-button="START">play</button> 
+      <button class="button button-start" data-button="START">play</button>
+      <button class="button button-settings">
+        <img src="./img/ui/settings.svg" alt="settings">
+      </button>
+      <section class="settings">
+        <button id="reset-progress">reset progress</button>
+      </section>
     </section>
     <section class="page" id="play">
       <div id="click-overlay"></div>
@@ -47,5 +53,12 @@
         <img src="./img/ui/pause_button.svg" alt="pause">
       </button>
     </section>
+    <dialog id="popup">
+      <h4 id="popup-title"></h4>
+      <div id="btn-wrapper">
+        <button class="button button-yes" id="btn-yes">yes</button>
+        <button class="button button-no" id="btn-no">no</button>
+      </div>
+    </dialog>
   </body>
 </html>
