@@ -9,13 +9,14 @@
     "preview": "vite preview",
     "lint": "npm run lint:es && npm run lint:style",
     "lint:es": "eslint . --ext=ts,cts,mts,js,cjs,mjs",
-    "lint:style": "stylelint 'src/**/*.css' --cache --fix",
+    "lint:style": "stylelint 'src/**/*.css'",
     "deploy": "npm run build && gh-pages -d dist",
     "prepare": "husky install"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.6.1",
+    "@namics/stylelint-bem": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.33.1",
     "eslint-config-prettier": "^8.5.0",

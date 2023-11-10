@@ -131,8 +131,8 @@ export class UI {
     });
 
     const buttons = document.querySelectorAll<HTMLElement>("[data-button]");
-    const clickOverlay = document.querySelector("#click-overlay") as HTMLElement;
-    const gameOverClickOverlay = document.querySelector(".game-over__click-overlay") as HTMLElement;
+    const clickOverlay = document.querySelector("#play__click-overlay") as HTMLElement;
+    const gameOverClickOverlay = document.querySelector("#game-over__click-overlay") as HTMLElement;
 
     buttons.forEach(button => {
       this.events.add(
