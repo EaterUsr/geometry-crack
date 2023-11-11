@@ -46,6 +46,7 @@
     "@fontsource/noto-sans": "^5.0.15",
     "@fontsource/roboto": "^5.0.8",
     "eslint": "^8.52.0",
+    "postcss-import": "^15.1.0",
     "xstate": "^4.38.2"
   }
 }

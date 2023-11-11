@@ -1,0 +1,51 @@
+:root, ::backdrop {
+  --img-gradient-primary: linear-gradient(hsl(4, 96%, 52%), hsl(22, 96%, 52%));
+  --img-gradient-hs: linear-gradient(to top, hsl(32, 100%, 50%), hsl(54, 100%, 50%));
+
+  --clr-stroke: hsla(0, 0%, 0%, 0.55);
+  --clr-time-to-regen-indicator: hsla(0, 0%, 100%, 0.27);
+  --clr-yes: hsl(115, 63%, 49%);
+  --clr-no: hsl(11, 96%, 52%);
+  --clr-sky: hsl(209, 100%, 51%);
+  --clr-floor: hsl(25, 100%, 23%);
+
+  --clr-paused-overlay: hsla(0, 0%, 0%, 0.26);
+  --clr-paused-title: hsl(0, 0%, 79%);
+
+  --clr-game-over-overlay: hsla(0, 56%, 14%, 0.45);
+  --clr-game-over-title: hsl(0, 100%, 38%);
+  --clr-game-over-info: hsl(0, 0%, 63%);
+
+  --clr-popup-title: hsla(0, 0%, 7%, 0.9);
+  --clr-popup-bg: hsla(0, 0%, 85%, 0.4);
+  --clr-popup-backdrop: hsla(0, 0%, 0%, 20%);
+  --clr-jumps-left: hsl(0, 0%, 95%);
+
+  --clr-settings-container-border: hsl(0, 0%, 74%);
+  --clr-settings-container-bg: hsl(0, 0%, 93%);
+  --clr-settings-btn: hsl(0, 0%, 20%);
+  --clr-settings-btn-bg-hover: hsla(0, 0%, 20%, 0.2);
+
+  --stroke-hs: 0.03rem hsla(0, 0%, 0%, 0.7);
+
+  --shadow-stroke-xs: solid 0.15rem var(--clr-stroke);
+  --shadow-stroke: solid 0.25rem var(--clr-stroke);
+  --shadow-stroke-xl: solid 0.35rem var(--clr-stroke);
+  --shadow-block: hsla(0, 0%, 0%, 0.25) 0.4rem 0.4rem;
+  --shadow-text: 0 0 .5rem hsla(0, 0%, 0%, 0.8), 0 0 1.5rem hsla(0, 0%, 0%, 0.3);
+  --shadow-icon: drop-shadow(0 0 .5rem hsla(0, 0%, 0%, 0.4));
+
+  --anim-show: show 0.7s cubic-bezier(0.01, 0.67, 0.49, 1.37) both;
+
+  --font-roboto: "Roboto", arial, helvetica, sans-serif;
+  --font-noto: "Noto Sans", arial, helvetica, sans-serif;
+
+  --tra-btn-bg: transform .1s ease-out;
+  --tra-icon-settings: transform .5s ease-out;
+  --tra-container-settings: opacity .2s ease-out, transform .2s ease-out;
+  --tra-settings-btn-bg: background-color .2s ease-out;
+  --tra-btn-brightness: filter .2 ease-out;
+
+  --wght-medium: 500;
+  --wght-black: 900;
+}

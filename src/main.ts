@@ -1,4 +1,4 @@
-import "./style.css";
+import "./main.css";
 import "./fonts.ts";
 import { CanvasController } from "./canvas";
 import { UI } from "./ui";
