@@ -238,7 +238,7 @@ body {
     opacity: 0;
     z-index: 1;
 
-    .show {
+    &.show {
       opacity: 1;
     }
   }
