@@ -5,59 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Geometry crack 💥</title>
     
-   <script type="module" crossorigin src="./assets/index-c6c13608.js"></script>
-   <link rel="stylesheet" href="./assets/index-303c2ca4.css">
+   <script type="module" crossorigin src="./assets/index-37ada028.js"></script>
+   <link rel="stylesheet" href="./assets/index-a6fc70bd.css">
  </head>
   <body>
-    <canvas id="game"></canvas>
-    <section class="page" id="gameOver">
-      <span id="new-record">New record</span>
-      <div class="game-over__overlay"></div>
+    <canvas id="game" class="game"></canvas>
+    <section class="page game-over" id="gameOver">
+      <span id="new-record" class="game-over__new-record">New record</span>
+      <div class="game-over__overlay overlay"></div>
       <h3 class="game-over__title">⚡Game over⚡</h3>
       <p class="game-over__score" id="score"></p>
       <p class="game-over__info">Tap to retry</p>
-      <div class="game-over__click-overlay"></div>
-      <button class="button button-back" data-button="BACK">
-        <img src="./img/ui/back_button.svg" alt="back">
+      <div id="game-over__click-overlay" class="game-over__click-overlay overlay"></div>
+      <button class="btn btn--back btn--icon" data-button="BACK">
+        <img class="btn__img--back" src="./img/ui/back_button.svg" alt="back">
       </button>
       <div class="crackcoin-counter">
-        <img class="crackcoin-counter__icon" src="./img/ui/crackcoin_icon.svg" alt="crackcoin">
+        <img class="crackcoin-counter__img" src="./img/ui/crackcoin_icon.svg" alt="crackcoin">
         <span data-crackcoins-counter></span>
       </div>
   </section>
-    <section class="page" id="paused">
-      <div class="paused__overlay"></div>
+    <section class="page paused" id="paused">
+      <div class="paused__overlay overlay"></div>
       <h3 class="paused__title">Game is paused</h3>
-      <button class="button button-pause" data-button="RESUME">
-        <img src="./img/ui/resume_button.svg" alt="resume">
+      <button class="btn btn--pause btn--icon" data-button="RESUME">
+        <img class="btn__img--pause" src="./img/ui/resume_button.svg" alt="resume">
       </button>
     </section>
-    <section class="page" id="menu">
-      <img class="title" src="./img/ui/title.svg" alt="title">
-      <button class="button button-start" data-button="START">play</button>
-      <button class="button button-settings">
-        <img src="./img/ui/settings.svg" alt="settings">
+    <section class="page menu" id="menu">
+      <img class="menu__title" src="./img/ui/title.svg" alt="title">
+      <button class="btn menu__btn--start" data-button="START">play</button>
+      <button class="btn btn--settings btn--icon">
+        <img class="btn__img--settings" src="./img/ui/settings.svg" alt="settings">
       </button>
-      <section class="settings">
-        <button id="reset-progress">reset progress</button>
+      <section class="menu__settings">
+        <button class="menu__settings__btn" id="reset-progress">reset progress</button>
       </section>
     </section>
     <section class="page" id="play">
-      <div id="click-overlay"></div>
-      <div class="play__jumps-left-container">
-        jumps left: 
-        <span class="play__jumps-left" id="jumps-left"></span>
+      <div id="play__click-overlay" class="play__click-overlay overlay"></div>
+      <div class="play__top-left-container">
+        <div class="play__jumps-left-container">
+           jumps left: 
+          <span class="play__jumps-left" id="jumps-left"></span>
+        </div>
+        <span id="highest-score" class="play__highest-score"></span>
       </div>
-      <span id="highest-score"></span>
-      <button class="button button-pause" data-button="PAUSE">
-        <img src="./img/ui/pause_button.svg" alt="pause">
+      <button class="btn btn--icon btn--pause" data-button="PAUSE">
+        <img class="btn__img--pause" src="./img/ui/pause_button.svg" alt="pause">
       </button>
     </section>
-    <dialog id="popup">
-      <h4 id="popup-title"></h4>
-      <div id="btn-wrapper">
-        <button class="button button-yes" id="btn-yes">yes</button>
-        <button class="button button-no" id="btn-no">no</button>
+    <dialog id="popup" class="popup window">
+      <h4 id="popup-title" class="window__title"></h4>
+      <div class="popup__btn-wrapper">
+        <button class="btn btn--yes" id="btn-yes">yes</button>
+        <button class="btn btn--no" id="btn-no">no</button>
       </div>
     </dialog>
   </body>
