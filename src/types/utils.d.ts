@@ -6,7 +6,7 @@ declare type Hitbox = Coords[];
 declare type TargetPosition<TPosition extends number[] | number> = {
   content: TPosition;
   target: TPosition extends number[] ? Nullable<TPosition> : null | TPosition;
-  speed: number;
+  speed: TPosition extends number[] ? number[] : number;
 };
 
 declare type HTMLSelector = string;

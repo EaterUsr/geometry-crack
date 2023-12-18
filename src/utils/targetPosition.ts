@@ -35,7 +35,7 @@ export function updateTarget<TPosition extends number | number[]>(
     (targetPosition.content as number[]) = content.map((position, index) => {
       const targetNbr = target[index];
       if (targetNbr !== null && targetNbr !== position) {
-        return calcTarget(position, targetNbr, speed * speedFrame, resetNumber);
+        return calcTarget(position, targetNbr, (speed as number[])[index] * speedFrame, resetNumber);
       }
       if (target !== null) (targetPosition.target as (number | null)[])[index] = null;
       return position;
@@ -49,7 +49,12 @@ export function updateTarget<TPosition extends number | number[]>(
     return;
   }
   if (typeof target === "number") {
-    (targetPosition.content as number) = calcTarget(content as number, target, speed * speedFrame, resetNumber);
+    (targetPosition.content as number) = calcTarget(
+      content as number,
+      target,
+      (speed as number) * speedFrame,
+      resetNumber
+    );
     if (content === target) (targetPosition.target as number | null) = null;
   }
   if (defaultUpdate) (defaultUpdate as (areNull: boolean, preventContent: TPosition) => void)(false, content);
