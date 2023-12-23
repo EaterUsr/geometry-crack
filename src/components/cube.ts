@@ -127,7 +127,7 @@ export class Cube {
   }
 
   onSlabCollision(slabPosition: Coords) {
-    if (this.center[0] < slabPosition[0]) {
+    if (this.center[0] < slabPosition[0] && this.floorHeight > slabPosition[1]) {
       this.freeze();
       this.deg.target = closestDeg(this.deg.content);
 

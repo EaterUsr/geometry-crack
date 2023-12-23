@@ -83,8 +83,8 @@ export const structures: Structures = [
     { min: 0, max: Infinity },
     [
       ["slab", [0, 0]],
-      // ["slab", [1, 0]],
-      // ["slab", [2, 0]],
+      ["slab", [1, 0]],
+      ["slab", [2, 0]],
       // ["spike", [5, 0]],
     ],
     1,
