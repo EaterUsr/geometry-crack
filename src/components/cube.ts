@@ -24,6 +24,7 @@ export class Cube {
   private jumpVelocity = cubeConf.jumpVelocity;
   private isFrozen = false;
   private particules: ParticulesController;
+  private ignoreCollisionHeight = new Set<number>();
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -102,6 +103,7 @@ export class Cube {
     });
 
     this.center = this.updateCenter();
+    this.ignoreCollisionHeight.clear();
 
     this.canvas.ctx.save();
 
@@ -127,6 +129,15 @@ export class Cube {
   }
 
   onSlabCollision(slabPosition: Coords) {
+    if (this.ignoreCollisionHeight.has(slabPosition[1] + this.size / 2)) return;
+    if (this.center[1] > slabPosition[1] + this.size / 2 && this.center[0] > slabPosition[0]) {
+      console.log("works");
+      this.origin.target = [null, null];
+      this.velocity = 0;
+      this.isFrozen = false;
+      this.ignoreCollisionHeight.add(slabPosition[1] + this.size / 2);
+      return;
+    }
     if (this.center[0] < slabPosition[0] && this.floorHeight > slabPosition[1]) {
       this.freeze();
       this.deg.target = closestDeg(this.deg.content);
