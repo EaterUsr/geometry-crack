@@ -46,6 +46,7 @@ declare type Config = Readonly<{
       imgs: HTMLImageElement[];
       getHitbox: (block: Block | Cube) => Hitbox;
       speedDeg: number;
+      speedDegCollision: number;
       jumpSpeed: number;
       jumpVelocity: number;
       jumps: number;

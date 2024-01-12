@@ -33,7 +33,6 @@ export class BlocksController {
         if (isCollision(block.hitbox, cubeHitbox)) {
           this.onCollision(block);
         }
-        if (block.type === "slab" && block.position[0] <= cubeOrigin[0]) this.onCollision(block);
       }
 
       if (block.position[0] + block.size < 0) {

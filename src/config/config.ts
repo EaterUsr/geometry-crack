@@ -21,6 +21,7 @@ export const config: Config = {
       jumps: 4,
       timeToRegen: 1100,
       speedDeg: 0.5,
+      speedDegCollision: 1.6,
       jumpSpeed: 0.7,
       jumpVelocity: 225,
       getHitbox(cube: Cube) {

@@ -1,7 +1,6 @@
 import { closestDeg, toDegrees } from "@/utils/math";
 import { updateTarget } from "@/utils/targetPosition";
 import { config } from "@/config";
-import { isCollision } from "@/utils/collision";
 import { backward } from "@/utils/move";
 import { ParticulesController } from "@/decorations/particules";
 
@@ -25,17 +24,18 @@ export class Cube {
   private jumpVelocity = cubeConf.jumpVelocity;
   private isFrozen = false;
   private particules: ParticulesController;
+  private ignoreCollisionHeight = new Set<number>();
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
       content: decorations.cubeOrigin,
       target: [null, null],
-      speed: decorations.speed,
+      speed: [decorations.speed * 2, decorations.speed],
     };
 
     this.deg = {
       content: 0,
-      speed: cubeConf.speedDeg,
+      speed: cubeConf.speedDegCollision,
       target: null,
     };
 
@@ -74,7 +74,8 @@ export class Cube {
       this.origin.content[1] = this.floorHeight - this.size;
       this.velocity = 0;
     }
-    this.deg.content %= 360;
+
+    this.deg.content = (this.deg.content + 360) % 360;
 
     if (this.isTouchingTheFloor() && this.isFalling) {
       this.particules.isActive = true;
@@ -90,18 +91,19 @@ export class Cube {
       speedFrame,
       (_, preventContent) => {
         if (this.isFalling) {
-          this.deg.content = preventContent + this.deg.speed * this.speedFrame;
+          this.deg.content = preventContent + cubeConf.speedDeg * this.speedFrame;
         }
       },
       360
     );
-    updateTarget(this.origin, speedFrame, () => {
-      if (this.isFrozen) {
+    updateTarget(this.origin, speedFrame, areNull => {
+      if (this.isFrozen && areNull[0] === true) {
         this.origin.content[0] = backward(this.origin.content[0], this.decorations.speed, speedFrame);
       }
     });
 
     this.center = this.updateCenter();
+    this.ignoreCollisionHeight.clear();
 
     this.canvas.ctx.save();
 
@@ -126,31 +128,45 @@ export class Cube {
     this.isFrozen = true;
   }
 
-  onSlabCollision(slabPosition: Coords, slabHitbox: Hitbox) {
-    if (this.center[0] > slabPosition[0]) {
-      if (this.center[1] >= slabPosition[1]) {
-        if (isCollision(this.hitbox, slabHitbox)) {
-          if (this.velocity > 0) this.velocity = 0;
-          if (this.origin.content[1] < slabPosition[1] + this.size / 2)
-            this.origin.content[1] = slabPosition[1] + this.size / 2;
-          this.origin.content[0] = slabPosition[0] - this.size / 2;
-        }
-        return;
-      }
-      if (
-        Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock ||
-        this.lastSlabCollision === null
-      ) {
-        this.lastSlabCollision = Date.now();
-      }
-      this.floorHeight = slabPosition[1];
+  onSlabCollision(slabPosition: Coords) {
+    if (this.ignoreCollisionHeight.has(slabPosition[1] + this.size / 2)) return;
+    if (this.center[1] > slabPosition[1] + this.size / 2 && this.center[0] > slabPosition[0]) {
+      this.origin.target = [null, null];
+      this.velocity = 0;
+      this.isFrozen = false;
+      this.ignoreCollisionHeight.add(slabPosition[1] + this.size / 2);
       return;
     }
-    if (this.floorHeight <= slabPosition[1]) return;
-    if (this.center[1] > slabPosition[1] + this.decorations.blockSize / 2) return;
+    if (this.center[0] < slabPosition[0] && this.floorHeight > slabPosition[1]) {
+      this.freeze();
+      const closest = closestDeg(this.deg.content);
+      this.deg.target = (closest + 360 > this.deg.content + 360 ? closest + 270 : closest) % 360;
+
+      if (this.isTouchingTheFloor()) {
+        this.origin.content[0] = slabPosition[0] - this.size;
+        this.origin.target[0] = null;
+        return;
+      }
+
+      this.origin.target[0] = slabPosition[0] - this.size;
+
+      return;
+    }
+
+    if (
+      Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock ||
+      this.lastSlabCollision === null
+    ) {
+      this.lastSlabCollision = Date.now();
+    }
+
+    if (this.center[0] < slabPosition[0] + this.size / 2) {
+      this.deg.target = closestDeg(this.deg.content);
+      this.origin.target[1] = slabPosition[1] - this.size;
+    }
+    this.origin.target = [null, null];
+    this.floorHeight = slabPosition[1];
     this.isFalling = true;
-    this.origin.content[0] = slabPosition[0] - this.size;
-    this.freeze();
   }
   reset() {
     this.particules.reset();
