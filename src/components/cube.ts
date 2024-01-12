@@ -35,7 +35,7 @@ export class Cube {
 
     this.deg = {
       content: 0,
-      speed: cubeConf.speedDeg,
+      speed: cubeConf.speedDegCollision,
       target: null,
     };
 
@@ -91,7 +91,7 @@ export class Cube {
       speedFrame,
       (_, preventContent) => {
         if (this.isFalling) {
-          this.deg.content = preventContent + this.deg.speed * this.speedFrame;
+          this.deg.content = preventContent + cubeConf.speedDeg * this.speedFrame;
         }
       },
       360
@@ -131,7 +131,6 @@ export class Cube {
   onSlabCollision(slabPosition: Coords) {
     if (this.ignoreCollisionHeight.has(slabPosition[1] + this.size / 2)) return;
     if (this.center[1] > slabPosition[1] + this.size / 2 && this.center[0] > slabPosition[0]) {
-      console.log("works");
       this.origin.target = [null, null];
       this.velocity = 0;
       this.isFrozen = false;
@@ -140,7 +139,8 @@ export class Cube {
     }
     if (this.center[0] < slabPosition[0] && this.floorHeight > slabPosition[1]) {
       this.freeze();
-      this.deg.target = closestDeg(this.deg.content);
+      const closest = closestDeg(this.deg.content);
+      this.deg.target = (closest + 360 > this.deg.content + 360 ? closest + 270 : closest) % 360;
 
       if (this.isTouchingTheFloor()) {
         this.origin.content[0] = slabPosition[0] - this.size;
