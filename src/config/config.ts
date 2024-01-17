@@ -1,7 +1,3 @@
-import { squareHitbox, triangleHitbox, rectHitbox } from "@/utils/collision";
-import { Cube } from "@/components/cube";
-import { Spike } from "@/components/blocks/spike";
-import { Slab } from "@/components/blocks/slab";
 import { structures } from "./structures";
 import { loadImage } from "@/utils/image";
 
@@ -24,22 +20,13 @@ export const config: Config = {
       speedDegCollision: 1.6,
       jumpSpeed: 0.7,
       jumpVelocity: 225,
-      getHitbox(cube: Cube) {
-        return squareHitbox(cube.origin.content[0], cube.origin.content[1], 360 - cube.deg.content, cube.size);
-      },
       positionX: 0.2,
     },
     spike: {
       img: loadImage("img/components/spike.svg"),
-      getHitbox(spike: Spike) {
-        return triangleHitbox(...spike.position, spike.size);
-      },
     },
     slab: {
       img: loadImage("img/components/slab.svg"),
-      getHitbox(slab: Slab) {
-        return rectHitbox(...slab.position, slab.size, slab.size / 2);
-      },
     },
   },
   decorations: {

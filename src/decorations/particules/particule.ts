@@ -37,6 +37,7 @@ export class Particule {
     this.deg += truncNbr((this.vdeg * speedFrame) / 500);
     this.opacity -= speedFrame / 2000;
     this.opacity = Math.abs(this.opacity);
+
     if (this.opacity < 0) this.onDispawn();
   }
 }

@@ -13,11 +13,13 @@ export class EventList<TGroup extends string> {
       domElement.addEventListener(type, func);
     });
   }
+
   disable(group: TGroup) {
     this.events[group].forEach(({ type, func, domElement }) => {
       domElement.removeEventListener(type, func);
     });
   }
+
   add<TEventType extends keyof HTMLElementEventMap>(
     group: TGroup,
     type: TEventType,

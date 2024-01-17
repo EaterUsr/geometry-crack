@@ -13,9 +13,8 @@ function calcTarget(position: number, target: number, speed: number, resetNumber
   if (Math.abs(value) > speed) {
     if (value > 0) {
       return position + speed;
-    } else {
-      return position - speed;
     }
+    return position - speed;
   }
   return target;
 }

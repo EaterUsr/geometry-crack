@@ -9,8 +9,6 @@ declare type TargetPosition<TPosition extends number[] | number> = {
   speed: TPosition extends number[] ? number[] : number;
 };
 
-declare type HTMLSelector = string;
-
 declare type Color = `#${string}`;
 declare type ColorScheme = {
   readonly [index: string]: Color;
@@ -28,3 +26,24 @@ declare type BlockType = "spike" | "slab";
 declare type StructurePatern = [BlockType, Cooords];
 declare type Structure = [score: Minmax, structure: StructurePatern[], jumps: number];
 declare type Structures = Structure[];
+
+type Elements =
+  | "#game"
+  | "#gameOver"
+  | "#new-record"
+  | "#score"
+  | "#game-over__click-overlay"
+  | "#paused"
+  | "#menu"
+  | "#play"
+  | "#play__click-overlay"
+  | "#jumps-left"
+  | "#highest-score"
+  | "#popup-title"
+  | "#btn-yes"
+  | "#btn-no"
+  | "#reset-progress"
+  | "[data-button]"
+  | "[data-crackcoins-counter]";
+
+declare type Selector = Elements | `${Elements} ${Elements}`;

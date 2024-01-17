@@ -225,8 +225,8 @@ body {
 
   &__new-record {
     position: fixed;
-    top: 7rem;
-    left: calc(50% + 12rem);
+    top: 11rem;
+    left: calc(50% + 7rem);
     background: var(--img-gradient-hs);
     -webkit-text-stroke: var(--stroke-hs);
     color: transparent;

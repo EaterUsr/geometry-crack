@@ -38,20 +38,11 @@ export class DecorationsController {
     this.grass = new GrassController(this.canvas, this.config);
   }
 
-  updateBackground(speedFrame: number) {
-    this.setSky();
-    this.clouds.update(speedFrame);
-  }
-  updateForeground(speedFrame: number) {
-    this.setDirt();
-    this.setGrass();
-    this.dirts.update(speedFrame);
-    this.grass.update(speedFrame);
-  }
   private setSky() {
     this.canvas.ctx.fillStyle = this.colors.sky;
     this.canvas.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
+
   private setDirt() {
     this.canvas.ctx.fillStyle = this.colors.dirt;
     this.canvas.ctx.fillRect(
@@ -61,10 +52,24 @@ export class DecorationsController {
       Math.floor(this.canvas.height / 2 - this.config.blockSize / 2)
     );
   }
+
   private setGrass() {
     this.canvas.ctx.fillStyle = this.colors.grass;
     this.canvas.ctx.fillRect(0, this.config.floorHeight, this.canvas.width, this.config.grassHeight);
   }
+
+  updateBackground(speedFrame: number) {
+    this.setSky();
+    this.clouds.update(speedFrame);
+  }
+
+  updateForeground(speedFrame: number) {
+    this.setDirt();
+    this.setGrass();
+    this.dirts.update(speedFrame);
+    this.grass.update(speedFrame);
+  }
+
   reset() {
     this.clouds.reset();
     this.dirts.reset();

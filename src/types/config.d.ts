@@ -16,7 +16,6 @@ declare type DecorationsConfig = Readonly<{
 }>;
 
 declare type BlockConfig = Readonly<{
-  getHitbox: (block: Block | Cube) => Hitbox;
   img: HTMLImageElement;
 }>;
 
@@ -44,7 +43,6 @@ declare type Config = Readonly<{
     cube: Readonly<{
       timeToDie: number;
       imgs: HTMLImageElement[];
-      getHitbox: (block: Block | Cube) => Hitbox;
       speedDeg: number;
       speedDegCollision: number;
       jumpSpeed: number;

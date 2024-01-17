@@ -8,7 +8,8 @@ import {
   ServiceMap,
 } from "xstate";
 import { EventList } from "@/utils/events";
-import { StorageManager } from "./utils/storageManager";
+import { qs, qsa } from "@/utils/dom";
+import { Store } from "./utils/store";
 import { config } from "@/config";
 import { createPopup } from "./utils/popup";
 
@@ -106,33 +107,29 @@ export class UI {
     )
   );
   private prevState: UIState;
-  private pages: Record<UITypestate["value"], HTMLElement | null>;
-  private readonly jumpsLeftContainer = document.querySelector<HTMLDivElement>("#jumps-left")!;
-  private readonly scoreContainer = document.querySelector("#score")!;
-  private readonly highestScoreContainer = document.querySelector("#highest-score")!;
-  private readonly newRecord = document.querySelector("#new-record")!;
-  private readonly crackcoinsCounters = document.querySelectorAll("[data-crackcoins-counter]");
-  private readonly btnResetProgress = document.querySelector<HTMLElement>("#reset-progress")!;
+  private pages = {} as Record<UITypestate["value"], HTMLElement>;
+
+  private readonly jumpsLeftContainer = qs("#jumps-left");
+  private readonly scoreContainer = qs("#score");
+  private readonly highestScoreContainer = qs("#highest-score");
+  private readonly newRecord = qs("#new-record");
+  private readonly crackcoinsCounters = qsa("[data-crackcoins-counter]");
+  private readonly btnResetProgress = qs("#reset-progress");
+
   private events = new EventList<"state buttons" | "jump" | "restart" | "menu">();
   private isSpaceKeyDisabled = false;
-  onJump = () => {};
+  onJump() {}
 
   constructor() {
-    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play"];
-    this.pages = {
-      menu: null,
-      gameOver: null,
-      paused: null,
-      play: null,
-    };
+    const pagesName = ["menu", "gameOver", "paused", "play"] as const;
 
     pagesName.forEach((pageName: UITypestate["value"]) => {
-      this.pages[pageName] = document.querySelector(`#${pageName}`) as HTMLElement;
+      this.pages[pageName] = qs(`#${pageName}`);
     });
 
-    const buttons = document.querySelectorAll<HTMLElement>("[data-button]");
-    const clickOverlay = document.querySelector("#play__click-overlay") as HTMLElement;
-    const gameOverClickOverlay = document.querySelector("#game-over__click-overlay") as HTMLElement;
+    const buttons = qsa("[data-button]");
+    const clickOverlay = qs("#play__click-overlay");
+    const gameOverClickOverlay = qs("#game-over__click-overlay");
 
     buttons.forEach(button => {
       this.events.add(
@@ -150,6 +147,7 @@ export class UI {
       this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), button);
       button.setAttribute("tabindex", "-1");
     });
+
     this.events.enable("state buttons");
     this.events.add(
       "jump",
@@ -187,13 +185,14 @@ export class UI {
       },
       document.body
     );
+
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
-    const store = StorageManager.new();
+
     this.events.add(
       "menu",
       "click",
       async () => {
-        if (await createPopup("Are you sure you want to reset your progress?")) store.clear();
+        if (await createPopup("Are you sure you want to reset your progress?")) Store.clear();
       },
       this.btnResetProgress
     );
@@ -202,17 +201,21 @@ export class UI {
     this.prevState = this.interpreter.getSnapshot();
     this.render(this.interpreter.getSnapshot());
   }
+
   private handleEvent(event: UIEvent) {
     this.prevState = this.interpreter.getSnapshot();
     this.interpreter.send(event);
+
     const nextState = this.interpreter.getSnapshot();
     if (nextState.value === this.prevState.value) return;
     this.render(nextState);
   }
+
   private render(state: UIState) {
     switch (this.prevState.value) {
       case "menu":
         this.events.disable("menu");
+        break;
       case "play":
         this.events.disable("jump");
         break;
@@ -221,9 +224,11 @@ export class UI {
         this.newRecord.classList.remove("show");
         break;
     }
+
     switch (state.value) {
       case "menu":
         this.events.enable("menu");
+        break;
       case "play":
         this.events.enable("jump");
         break;
@@ -233,36 +238,47 @@ export class UI {
         }, config.delayBeforeRestart);
         break;
     }
-    const button = document.querySelector(`#${state.value} [data-button]`)!;
+
+    const button = qs(`#${state.value as UITypestate["value"]} [data-button]`);
+
     button.setAttribute("tabindex", "0");
-    (this.pages[state.value as UITypestate["value"]] as HTMLElement).style.setProperty("--opacity", "1");
+    this.pages[state.value as UITypestate["value"]].style.setProperty("--opacity", "1");
+
     if (state.value !== this.prevState.value) {
-      (this.pages[this.prevState.value as UITypestate["value"]] as HTMLElement).style.setProperty("--opacity", "0");
+      this.pages[this.prevState.value as UITypestate["value"]].style.setProperty("--opacity", "0");
     }
   }
+
   onEvent(cb: (event: UIEvent) => void) {
     this.interpreter.onTransition(state => {
       cb(state.event);
     });
   }
+
   die() {
     if (this.interpreter.getSnapshot().value !== "gameOver") this.handleEvent({ type: "DIE" });
   }
+
   displayJumpsLeft(jumpsLeft: number) {
     this.jumpsLeftContainer.textContent = `${jumpsLeft}`;
   }
+
   displayTimeToRegen(timeToRegen: number) {
     this.jumpsLeftContainer.style.setProperty("--time-to-regen", `${timeToRegen}`);
   }
+
   displayScore(score: number) {
-    this.scoreContainer.textContent = `score: ${score}`;
+    this.scoreContainer.textContent = `score: ${Math.floor(score)}`;
   }
+
   displayHighestScore(score: number) {
-    this.highestScoreContainer.textContent = `HS: ${score}`;
+    this.highestScoreContainer.textContent = `HS: ${Math.floor(score)}`;
   }
+
   displayNewRecord() {
     this.newRecord.classList.add("show");
   }
+
   displayCrackcoins(crackcoins: number) {
     this.crackcoinsCounters.forEach(crackcoinsCounter => {
       crackcoinsCounter.textContent = `${crackcoins}`;
