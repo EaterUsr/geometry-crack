@@ -109,6 +109,39 @@ body {
 }
 
 .play {
+  &__progress-bar {
+    position: fixed;
+    top: 1.3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44rem;
+    height: 1.4rem;
+    border: 0.45rem solid var(--clr-progress-bar-border);
+    border-radius: 100vw;
+    background: var(--clr-progress-bar-background);
+
+    &::before {
+      content: "";
+      background: var(--clr-progress-bar-inner);
+      border-radius: 100vw;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: var(--js-width, 100%);
+      transition: width 120ms;
+    }
+  }
+
+  &__crackcoin-counter {
+    position: fixed;
+    top: 0.5rem;
+    left: calc(50% + 22rem);
+    width: min-content;
+    height: min-content;
+    padding-top: 0;
+  }
+
   &__top-left-container {
     position: fixed;
     top: 0.5rem;

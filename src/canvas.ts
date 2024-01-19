@@ -104,6 +104,8 @@ export class CanvasController {
         : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
     );
     this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
+    this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
+    this.ui.displayCrackcoinsPlaying(this.config.score / config.crackcoins.scoreDivider);
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();

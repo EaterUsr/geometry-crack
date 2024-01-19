@@ -114,6 +114,8 @@ export class UI {
   private readonly highestScoreContainer = qs("#highest-score");
   private readonly newRecord = qs("#new-record");
   private readonly crackcoinsCounters = qsa("[data-crackcoins-counter]");
+  private readonly playingCrackcoinsCounter = qs("#play__crackcoin-counter");
+  private readonly progressBar = qs("#play__progress-bar");
   private readonly btnResetProgress = qs("#reset-progress");
 
   private events = new EventList<"state buttons" | "jump" | "restart" | "menu">();
@@ -279,9 +281,17 @@ export class UI {
     this.newRecord.classList.add("show");
   }
 
+  displayProgressBar(progress: number) {
+    this.progressBar.style.setProperty("--js-width", `${Math.floor(progress * 100)}%`);
+  }
+
   displayCrackcoins(crackcoins: number) {
     this.crackcoinsCounters.forEach(crackcoinsCounter => {
       crackcoinsCounter.textContent = `${crackcoins}`;
     });
+  }
+
+  displayCrackcoinsPlaying(crackcoins: number) {
+    this.playingCrackcoinsCounter.textContent = `${Math.floor(crackcoins)}`;
   }
 }
