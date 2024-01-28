@@ -83,7 +83,7 @@ declare type Config = Readonly<{
   }>;
   crackcoins: {
     scoreDivider: number;
-    scoreDividerIfHS: number;
+    HSMultiplier: number;
   };
   localStorage: Readonly<{
     default: LocalStorage;

@@ -84,6 +84,6 @@ export const config: Config = {
   },
   crackcoins: {
     scoreDivider: 100,
-    scoreDividerIfHS: 50,
+    HSMultiplier: 2,
   },
 };

@@ -43,6 +43,8 @@ type Elements =
   | "#btn-yes"
   | "#btn-no"
   | "#reset-progress"
+  | "#play__progress-bar"
+  | "#play__crackcoin-counter"
   | "[data-button]"
   | "[data-crackcoins-counter]";
 

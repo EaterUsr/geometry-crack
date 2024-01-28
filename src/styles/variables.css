@@ -20,6 +20,9 @@
   --clr-popup-bg: hsla(0, 0%, 85%, 0.4);
   --clr-popup-backdrop: hsla(0, 0%, 0%, 20%);
   --clr-jumps-left: hsl(0, 0%, 95%);
+  --clr-progress-bar-background: hsla(0, 0%, 63%, 1);
+  --clr-progress-bar-border: hsla(0, 0%, 100%, 1);
+  --clr-progress-bar-inner: hsla(61, 86%, 50%, 1);
 
   --clr-settings-container-border: hsl(0, 0%, 74%);
   --clr-settings-container-bg: hsl(0, 0%, 93%);

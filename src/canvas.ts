@@ -20,6 +20,7 @@ export class CanvasController {
   private lastRegen = Date.now();
   private isActive = false;
   private lastFrame = Date.now();
+  private scoreMultiplier = 1;
 
   constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
     this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
@@ -39,7 +40,7 @@ export class CanvasController {
 
     this.decorations = new DecorationsController(this.config);
     this.cube = new Cube(this.config, this.decorations.config);
-    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision.bind(this));
+    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision);
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
@@ -56,7 +57,7 @@ export class CanvasController {
     this.isActive = true;
   }
 
-  onCollision(block: Block) {
+  onCollision = (block: Block) => {
     switch (block.type) {
       case "spike":
         this.die();
@@ -65,17 +66,16 @@ export class CanvasController {
         this.cube.onSlabCollision(block.position);
         break;
     }
-  }
+  };
 
   die() {
     if (!this.isActive) return;
 
-    if (this.config.score > Store.content.HS + 1) {
+    Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
+
+    if (this.scoreMultiplier !== 1) {
       this.ui.displayNewRecord();
       Store.content.HS = Math.floor(this.config.score);
-      Store.content.crackcoins += this.config.score / config.crackcoins.scoreDividerIfHS;
-    } else {
-      Store.content.crackcoins += this.config.score / config.crackcoins.scoreDivider;
     }
 
     Store.save();
@@ -97,6 +97,9 @@ export class CanvasController {
       this.lastRegen = Date.now();
     }
 
+    if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
+    console.log(this.scoreMultiplier);
+
     this.ui.displayJumpsLeft(this.jumpsLeft);
     this.ui.displayTimeToRegen(
       this.jumpsLeft === cubeConf.jumps
@@ -104,6 +107,10 @@ export class CanvasController {
         : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
     );
     this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
+    this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
+    this.ui.displayCrackcoinsPlaying(
+      Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
+    );
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
@@ -119,6 +126,7 @@ export class CanvasController {
   };
 
   private reset() {
+    this.scoreMultiplier = 0;
     this.config.score = 0;
     this.decorations.reset();
     this.blocks.reset();
