@@ -9,6 +9,8 @@ import {
 } from "xstate";
 import { EventList } from "@/utils/events";
 import { config } from "@/config";
+import { skins } from "./config/skins";
+import { skinUrl } from "./utils/image";
 
 export type UIEvent =
   | { type: "START" }
@@ -125,9 +127,12 @@ export class UI {
   private readonly highestScoreContainer = document.querySelector("#highest-score")!;
   private readonly newRecord = document.querySelector("#new-record")!;
   private readonly crackcoinsCounters = document.querySelectorAll("[data-crackcoins-counter]");
-  private events = new EventList<"state buttons" | "jump" | "restart">();
+  private events = new EventList<"state buttons" | "jump" | "restart" | "shop">();
   private isSpaceKeyDisabled = false;
+  private shopCurrentSkin = document.querySelector<HTMLImageElement>("#shop__current-skin")!;
+  private shopSkins = document.querySelector<HTMLElement>("#shop__skins")!;
   onJump = () => {};
+  onSkinUpdate: (skinName: SkinName) => void = () => {};
 
   constructor() {
     const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop"];
@@ -201,6 +206,26 @@ export class UI {
       document.body
     );
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
+    this.events.add(
+      "shop",
+      "click",
+      e => {
+        const button = e.target as HTMLButtonElement;
+        const skin = skins.find(skin => skin.name === button.dataset.btnSkin) as Skin;
+
+        if (skin.status === "owned") {
+          skin.status = "equipped";
+        }
+
+        if (skin.status === "unbought") {
+          skin.status = "equipped";
+        }
+
+        this.displayShop(skin.name);
+        this.onSkinUpdate(skin.name);
+      },
+      this.shopSkins
+    );
 
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
@@ -220,6 +245,9 @@ export class UI {
         this.events.disable("restart");
         this.newRecord.classList.remove("show");
         break;
+      case "shop":
+        this.events.disable("shop");
+        break;
     }
     switch (nextState.value) {
       case "play":
@@ -229,6 +257,9 @@ export class UI {
         setTimeout(() => {
           this.events.enable("restart");
         }, config.delayBeforeRestart);
+        break;
+      case "shop":
+        this.events.enable("shop");
         break;
     }
   }
@@ -267,5 +298,25 @@ export class UI {
     this.crackcoinsCounters.forEach(crackcoinsCounter => {
       crackcoinsCounter.textContent = `${crackcoins}`;
     });
+  }
+  displayShop(currentSkinName: SkinName) {
+    this.shopCurrentSkin.src = skinUrl(currentSkinName);
+
+    if (this.shopSkins.innerHTML !== "") return;
+
+    this.shopSkins.innerHTML = skins
+      .filter(skin => skin.name !== "default")
+      .map(skin => {
+        return `
+        <div class="skin-card">
+          <span class="skin-card__price">${skin.price}
+            <img src="/img/ui/crackcoin_icon.svg" />
+          </span>
+          <img class="skin-card__img" src=${skin.imgs[4].src} />
+          <button class="skin-card__btn button" data-btn-skin="${skin.name}">buy</button>
+        </div>
+`;
+      })
+      .join("");
   }
 }

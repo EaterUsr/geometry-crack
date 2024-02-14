@@ -11,13 +11,6 @@ export const config: Config = {
   components: {
     cube: {
       timeToDie: 150,
-      imgs: [
-        "img/components/cube/death.svg",
-        "img/components/cube/1_jump.svg",
-        "img/components/cube/half_energy.svg",
-        "img/components/cube/3_jumps.svg",
-        "img/components/cube/full_energy.svg",
-      ].map(loadImage),
       jumps: 4,
       timeToRegen: 1100,
       speedDeg: 0.5,
