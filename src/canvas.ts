@@ -45,6 +45,9 @@ export class CanvasController {
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
     this.ui.displayCrackcoins(this.storage.content.crackcoins);
+    this.ui.onSkinUpdate = this.cube.setSkin;
+
+    this.cube.skin = "default";
 
     this.animate();
   }
@@ -139,6 +142,8 @@ export class CanvasController {
       case "BACK":
         this.reset();
         break;
+      case "SHOP":
+        this.ui.displayShop(this.cube.skin);
     }
   }
 }

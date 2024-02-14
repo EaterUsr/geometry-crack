@@ -1,6 +1,7 @@
 import { closestDeg, toDegrees } from "@/utils/math";
 import { updateTarget } from "@/utils/targetPosition";
 import { config } from "@/config";
+import { skins } from "@/config/skins";
 import { isCollision } from "@/utils/collision";
 import { backward } from "@/utils/move";
 import { ParticulesController } from "@/decorations/particules";
@@ -16,7 +17,6 @@ export class Cube {
   private velocity = 0;
   private isFalling = true;
   readonly size: number;
-  private readonly images: HTMLImageElement[] = cubeConf.imgs;
   get hitbox() {
     return cubeConf.getHitbox(this);
   }
@@ -25,6 +25,8 @@ export class Cube {
   private jumpVelocity = cubeConf.jumpVelocity;
   private isFrozen = false;
   private particules: ParticulesController;
+  skin: SkinName = "default";
+  private images = (skins.find(skin => this.skin === skin.name) as Skin).imgs;
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -163,4 +165,9 @@ export class Cube {
     this.deg.target = null;
     this.deg.content = 0;
   }
+
+  setSkin = (skinName: SkinName) => {
+    this.skin = skinName;
+    this.images = (skins.find(skin => this.skin === skin.name) as Skin).imgs;
+  };
 }

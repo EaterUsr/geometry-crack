@@ -28,3 +28,12 @@ declare type BlockType = "spike" | "slab";
 declare type StructurePatern = [BlockType, Cooords];
 declare type Structure = [score: Minmax, structure: StructurePatern[], jumps: number];
 declare type Structures = Structure[];
+
+declare type SkinName = "default" | "batman" | "fractal" | "gameboy" | "matrix" | "neon" | "twinky";
+declare type Skin = {
+  imgs: HTMLImageElement[];
+  price: number;
+  name: SkinName;
+  status: "owned" | "equipped" | "unbought";
+};
+declare type Skins = Skin[];
