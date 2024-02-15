@@ -42,7 +42,6 @@ declare type Config = Readonly<{
   components: Readonly<{
     cube: Readonly<{
       timeToDie: number;
-      imgs: HTMLImageElement[];
       speedDeg: number;
       speedDegCollision: number;
       jumpSpeed: number;

@@ -44,6 +44,10 @@ export class CanvasController {
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
+    this.ui.displayCrackcoins(Store.content.crackcoins);
+    this.ui.onSkinUpdate = this.cube.setSkin;
+
+    this.cube.skin = "default";
 
     this.animate();
   }
@@ -98,7 +102,6 @@ export class CanvasController {
     }
 
     if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
-    console.log(this.scoreMultiplier);
 
     this.ui.displayJumpsLeft(this.jumpsLeft);
     this.ui.displayTimeToRegen(
@@ -126,7 +129,7 @@ export class CanvasController {
   };
 
   private reset() {
-    this.scoreMultiplier = 0;
+    this.scoreMultiplier = 1;
     this.config.score = 0;
     this.decorations.reset();
     this.blocks.reset();
@@ -156,6 +159,8 @@ export class CanvasController {
       case "BACK":
         this.reset();
         break;
+      case "SHOP":
+        this.ui.displayShop(this.cube.skin);
     }
   }
 }

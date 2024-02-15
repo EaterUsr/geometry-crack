@@ -12,6 +12,8 @@ import { qs, qsa } from "@/utils/dom";
 import { Store } from "./utils/store";
 import { config } from "@/config";
 import { createPopup } from "./utils/popup";
+import { skins } from "./config/skins";
+import { skinUrl } from "./utils/image";
 
 export type UIEvent =
   | { type: "START" }
@@ -19,7 +21,8 @@ export type UIEvent =
   | { type: "RESUME" }
   | { type: "DIE" }
   | { type: "RESTART" }
-  | { type: "BACK" };
+  | { type: "BACK" }
+  | { type: "SHOP" };
 
 interface UIContext {}
 
@@ -38,6 +41,10 @@ type UITypestate =
     }
   | {
       value: "play";
+      context: UIContext;
+    }
+  | {
+      value: "shop";
       context: UIContext;
     };
 
@@ -61,6 +68,9 @@ export class UI {
             on: {
               START: {
                 target: "play",
+              },
+              SHOP: {
+                target: "shop",
               },
             },
           },
@@ -91,6 +101,13 @@ export class UI {
               },
             },
           },
+          shop: {
+            on: {
+              BACK: {
+                target: "menu",
+              },
+            },
+          },
         },
         schema: {
           events: {} as UIEvent,
@@ -107,7 +124,6 @@ export class UI {
     )
   );
   private prevState: UIState;
-  private pages = {} as Record<UITypestate["value"], HTMLElement>;
 
   private readonly jumpsLeftContainer = qs("#jumps-left");
   private readonly scoreContainer = qs("#score");
@@ -118,12 +134,18 @@ export class UI {
   private readonly progressBar = qs("#play__progress-bar");
   private readonly btnResetProgress = qs("#reset-progress");
 
-  private events = new EventList<"state buttons" | "jump" | "restart" | "menu">();
+  private events = new EventList<"state buttons" | "jump" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
-  onJump() {}
+
+  private pages: Record<UITypestate["value"], HTMLElement>;
+  private shopCurrentSkin = qs<HTMLImageElement>("#shop__current-skin");
+  private shopSkins = qs("#shop__skins")!;
+  onJump = () => {};
+  onSkinUpdate: (skinName: SkinName) => void = () => {};
 
   constructor() {
-    const pagesName = ["menu", "gameOver", "paused", "play"] as const;
+    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop"];
+    this.pages = {} as Record<UITypestate["value"], HTMLElement>;
 
     pagesName.forEach((pageName: UITypestate["value"]) => {
       this.pages[pageName] = qs(`#${pageName}`);
@@ -189,6 +211,26 @@ export class UI {
     );
 
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
+    this.events.add(
+      "shop",
+      "click",
+      e => {
+        const button = e.target as HTMLButtonElement;
+        const skin = skins.find(skin => skin.name === button.dataset.btnSkin) as Skin;
+
+        if (skin.status === "owned") {
+          skin.status = "equipped";
+        }
+
+        if (skin.status === "unbought") {
+          skin.status = "equipped";
+        }
+
+        this.displayShop(skin.name);
+        this.onSkinUpdate(skin.name);
+      },
+      this.shopSkins
+    );
 
     this.events.add(
       "menu",
@@ -225,6 +267,9 @@ export class UI {
         this.events.disable("restart");
         this.newRecord.classList.remove("show");
         break;
+      case "shop":
+        this.events.disable("shop");
+        break;
     }
 
     switch (state.value) {
@@ -238,6 +283,9 @@ export class UI {
         setTimeout(() => {
           this.events.enable("restart");
         }, config.delayBeforeRestart);
+        break;
+      case "shop":
+        this.events.enable("shop");
         break;
     }
 
@@ -293,5 +341,26 @@ export class UI {
 
   displayCrackcoinsPlaying(crackcoins: number) {
     this.playingCrackcoinsCounter.textContent = `${Math.floor(crackcoins)}`;
+  }
+
+  displayShop(currentSkinName: SkinName) {
+    this.shopCurrentSkin.src = skinUrl(currentSkinName);
+
+    if (this.shopSkins.innerHTML !== "") return;
+
+    this.shopSkins.innerHTML = skins
+      .filter(skin => skin.name !== "default")
+      .map(skin => {
+        return `
+        <div class="skin-card">
+          <span class="skin-card__price">${skin.price}
+            <img src="/img/ui/crackcoin_icon.svg" />
+          </span>
+          <img class="skin-card__img" src=${skin.imgs[4].src} />
+          <button class="skin-card__btn button" data-btn-skin="${skin.name}">buy</button>
+        </div>
+`;
+      })
+      .join("");
   }
 }

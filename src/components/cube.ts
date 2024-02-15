@@ -1,6 +1,7 @@
 import { closestDeg, toDegrees } from "@/utils/math";
 import { updateTarget } from "@/utils/targetPosition";
 import { config } from "@/config";
+import { skins } from "@/config/skins";
 import { backward } from "@/utils/move";
 import { squareHitbox } from "@/utils/collision";
 import { ParticulesController } from "@/decorations/particules";
@@ -15,7 +16,6 @@ export class Cube {
   readonly origin: TargetPosition<Coords>;
   private velocity = 0;
   private isFalling = true;
-  private readonly images: HTMLImageElement[] = cubeConf.imgs;
   private readonly halfBlockSize: number;
   get hitbox() {
     return squareHitbox(
@@ -31,6 +31,8 @@ export class Cube {
   private isFrozen = false;
   private particules: ParticulesController;
   private ignoreCollisionHeight = new Set<number>();
+  skin: SkinName = "default";
+  private images = (skins.find(skin => this.skin === skin.name) as Skin).imgs;
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -199,4 +201,9 @@ export class Cube {
     this.deg.target = null;
     this.deg.content = 0;
   }
+
+  setSkin = (skinName: SkinName) => {
+    this.skin = skinName;
+    this.images = (skins.find(skin => this.skin === skin.name) as Skin).imgs;
+  };
 }
