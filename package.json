@@ -7,21 +7,30 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --cache --fix --ext=ts,cts,mts,js,cjs,mjs",
+    "lint": "npm run lint:es && npm run lint:style",
+    "lint:es": "eslint . --ext=ts,cts,mts,js,cjs,mjs --fix",
+    "lint:style": "stylelint 'src/**/*.css'",
     "deploy": "npm run build && gh-pages -d dist",
     "prepare": "husky install"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
     "@commitlint/config-conventional": "^17.6.1",
+    "@namics/stylelint-bem": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.33.1",
+    "autoprefixer": "^10.4.16",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-prettier": "^4.2.1",
     "gh-pages": "^5.0.0",
     "husky": "^8.0.3",
+    "postcss": "^8.4.31",
+    "postcss-nested": "^6.0.1",
     "prettier": "^2.7.1",
+    "stylelint": "^15.11.0",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-order": "^6.0.3",
     "typescript": "^4.6.4",
     "vite": "^4.3.5",
     "vite-tsconfig-paths": "^3.5.0"
@@ -36,6 +45,7 @@
     "@fontsource/noto-sans": "^5.0.15",
     "@fontsource/roboto": "^5.0.8",
     "eslint": "^8.52.0",
+    "postcss-import": "^15.1.0",
     "xstate": "^4.38.2"
   }
 }

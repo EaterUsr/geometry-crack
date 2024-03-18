@@ -4,7 +4,6 @@ type EventFunc<TEventType extends keyof HTMLElementEventMap> = {
   domElement: HTMLElement;
 };
 type Events<TGroup extends string> = Record<TGroup, EventFunc<keyof HTMLElementEventMap>[]>;
-// TODO:
 
 export class EventList<TGroup extends string> {
   constructor(private events: Events<TGroup> = {} as Events<TGroup>) {}
@@ -14,11 +13,13 @@ export class EventList<TGroup extends string> {
       domElement.addEventListener(type, func);
     });
   }
+
   disable(group: TGroup) {
     this.events[group].forEach(({ type, func, domElement }) => {
       domElement.removeEventListener(type, func);
     });
   }
+
   add<TEventType extends keyof HTMLElementEventMap>(
     group: TGroup,
     type: TEventType,

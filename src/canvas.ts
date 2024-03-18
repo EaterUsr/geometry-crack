@@ -5,121 +5,138 @@ import { truncNbr } from "@/utils/math";
 import { config } from "@/config";
 import { UI, UIEvent } from "@/ui";
 import { Block } from "@/components/blocks/block";
-import { StorageManager } from "@/utils/localStorage";
+import { Store } from "@/utils/store";
+import { qs } from "@/utils/dom";
 
-const cube = config.components.cube;
+const cubeConf = config.components.cube;
 
 export class CanvasController {
-  readonly config: CanvasConfig;
-  private isActive = false;
-  private lastFrame = Date.now();
   private readonly blocks: BlocksController;
   readonly decorations: DecorationsController;
   readonly cube: Cube;
-  private jumpsLeft = cube.jumps;
-  private lastRegen = Date.now();
   readonly domElement: HTMLCanvasElement;
+  readonly config: CanvasConfig;
+  private jumpsLeft = cubeConf.jumps;
+  private lastRegen = Date.now();
+  private isActive = false;
+  private lastFrame = Date.now();
+  private scoreMultiplier = 1;
 
-  constructor(canvasHTMLQuery: HTMLSelector, private readonly ui: UI, private readonly storage: StorageManager) {
-    const canvas = document.querySelector<HTMLCanvasElement>(canvasHTMLQuery);
-    if (!canvas) throw new Error(`Invalid input: The query ${canvasHTMLQuery} does not match any HTML element`);
-    this.domElement = canvas;
+  constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
+    this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
 
-    canvas.width = config.canvasWidth;
-    canvas.height = config.canvasHeight;
+    this.domElement.width = config.canvasWidth;
+    this.domElement.height = config.canvasHeight;
 
     this.config = {
-      ctx: canvas.getContext("2d")!,
-      width: canvas.width,
-      height: canvas.height,
-      w(size: number) {
-        return truncNbr(size * (canvas.width / 10000));
+      ctx: this.domElement.getContext("2d")!,
+      width: this.domElement.width,
+      height: this.domElement.height,
+      w: (size: number) => {
+        return truncNbr(size * (this.domElement.width / 10000));
       },
       score: 0,
     };
 
     this.decorations = new DecorationsController(this.config);
     this.cube = new Cube(this.config, this.decorations.config);
-    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision.bind(this));
+    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision);
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
-    this.ui.displayCrackcoins(this.storage.content.crackcoins);
+    this.ui.displayCrackcoins(Store.content.crackcoins);
     this.ui.onSkinUpdate = this.cube.setSkin;
 
     this.cube.skin = "default";
 
     this.animate();
   }
+
   jump() {
     if (this.jumpsLeft !== 0) this.cube.jump(() => this.jumpsLeft--);
   }
+
   start() {
     this.lastFrame = Date.now();
     this.isActive = true;
   }
 
-  onCollision(block: Block) {
+  onCollision = (block: Block) => {
     switch (block.type) {
       case "spike":
         this.die();
         break;
       case "slab":
-        this.cube.onSlabCollision.bind(this.cube)(block.position, block.hitbox);
+        this.cube.onSlabCollision(block.position);
         break;
     }
-  }
+  };
+
   die() {
     if (!this.isActive) return;
-    const isHighestScore = this.config.score > this.storage.content.HS + 1;
-    this.storage.content.crackcoins += isHighestScore
-      ? this.config.score / config.crackcoins.scoreDividerIfHS
-      : this.config.score / config.crackcoins.scoreDivider;
-    if (isHighestScore) {
+
+    Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
+
+    if (this.scoreMultiplier !== 1) {
       this.ui.displayNewRecord();
-      this.storage.content.HS = Math.floor(this.config.score);
+      Store.content.HS = Math.floor(this.config.score);
     }
-    this.storage.save();
-    this.ui.displayScore(Math.floor(this.config.score));
-    this.ui.displayCrackcoins(this.storage.content.crackcoins);
+
+    Store.save();
+    this.ui.displayScore(this.config.score);
+    this.ui.displayCrackcoins(Store.content.crackcoins);
     this.ui.die();
     this.isActive = false;
   }
 
-  private animate() {
-    window.requestAnimationFrame(this.animate.bind(this));
+  private animate = () => {
+    window.requestAnimationFrame(this.animate);
 
-    if (this.cube.origin.content[0] < 0) setTimeout(this.die.bind(this), cube.timeToDie);
+    if (this.cube.origin.content[0] < 0) setTimeout(this.die.bind(this), cubeConf.timeToDie);
 
-    if (this.jumpsLeft === cube.jumps) this.lastRegen = Date.now();
+    if (this.jumpsLeft === cubeConf.jumps) this.lastRegen = Date.now();
+
     if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {
       this.jumpsLeft++;
       this.lastRegen = Date.now();
     }
 
-    this.ui.displayJumpsLeft.bind(this.ui)(this.jumpsLeft);
-    this.ui.displayTimeToRegen.bind(this.ui)(
-      this.jumpsLeft === cube.jumps ? 1 : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
+    if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
+
+    this.ui.displayJumpsLeft(this.jumpsLeft);
+    this.ui.displayTimeToRegen(
+      this.jumpsLeft === cubeConf.jumps
+        ? 1
+        : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
     );
-    this.ui.displayHighestScore.bind(this.ui)(Math.floor(Math.max(this.storage.content.HS, this.config.score)));
+    this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
+    this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
+    this.ui.displayCrackcoinsPlaying(
+      Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
+    );
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
 
-    this.config.score += (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize;
+    this.config.score = truncNbr(
+      this.config.score + (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize
+    );
 
     this.decorations.updateBackground(speedFrame);
     this.cube.update(speedFrame, this.jumpsLeft);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.decorations.updateForeground(speedFrame);
-  }
+  };
+
   private reset() {
+    this.scoreMultiplier = 1;
     this.config.score = 0;
     this.decorations.reset();
-    this.blocks.clear();
+    this.blocks.reset();
     this.cube.reset();
-    this.jumpsLeft = cube.jumps;
+    this.jumpsLeft = cubeConf.jumps;
   }
+
   event(event: UIEvent) {
     switch (event.type) {
       case "START":

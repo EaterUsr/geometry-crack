@@ -1,10 +1,10 @@
-import "./style.css";
+import "./main.css";
 import "./fonts.ts";
 import { CanvasController } from "./canvas";
 import { UI } from "./ui";
-import { StorageManager } from "@/utils/localStorage";
+import { Store } from "@/utils/store";
 
-const storage = new StorageManager();
+Store.init();
 const ui = new UI();
 
-new CanvasController("#game", ui, storage);
+new CanvasController("#game", ui);

@@ -1,7 +1,3 @@
-import { squareHitbox, triangleHitbox, rectHitbox } from "@/utils/collision";
-import { Cube } from "@/components/cube";
-import { Spike } from "@/components/blocks/spike";
-import { Slab } from "@/components/blocks/slab";
 import { structures } from "./structures";
 import { loadImage } from "@/utils/image";
 
@@ -14,24 +10,16 @@ export const config: Config = {
       jumps: 4,
       timeToRegen: 1100,
       speedDeg: 0.5,
+      speedDegCollision: 1.6,
       jumpSpeed: 0.7,
-      jumpVelocity: 250,
-      getHitbox(cube: Cube) {
-        return squareHitbox(cube.origin.content[0], cube.origin.content[1], 360 - cube.deg.content, cube.size);
-      },
+      jumpVelocity: 225,
       positionX: 0.2,
     },
     spike: {
       img: loadImage("img/components/spike.svg"),
-      getHitbox(spike: Spike) {
-        return triangleHitbox(...spike.position, spike.size);
-      },
     },
     slab: {
       img: loadImage("img/components/slab.svg"),
-      getHitbox(slab: Slab) {
-        return rectHitbox(...slab.position, slab.size, slab.size / 2);
-      },
     },
   },
   decorations: {
@@ -88,7 +76,7 @@ export const config: Config = {
     },
   },
   crackcoins: {
-    scoreDivider: 60,
-    scoreDividerIfHS: 50,
+    scoreDivider: 100,
+    HSMultiplier: 2,
   },
 };

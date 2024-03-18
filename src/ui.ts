@@ -8,7 +8,10 @@ import {
   ServiceMap,
 } from "xstate";
 import { EventList } from "@/utils/events";
+import { qs, qsa } from "@/utils/dom";
+import { Store } from "./utils/store";
 import { config } from "@/config";
+import { createPopup } from "./utils/popup";
 import { skins } from "./config/skins";
 import { skinUrl } from "./utils/image";
 
@@ -121,36 +124,36 @@ export class UI {
     )
   );
   private prevState: UIState;
-  private pages: Record<UITypestate["value"], HTMLElement | null>;
-  private readonly jumpsLeftContainer = document.querySelector<HTMLDivElement>("#jumps-left")!;
-  private readonly scoreContainer = document.querySelector("#score")!;
-  private readonly highestScoreContainer = document.querySelector("#highest-score")!;
-  private readonly newRecord = document.querySelector("#new-record")!;
-  private readonly crackcoinsCounters = document.querySelectorAll("[data-crackcoins-counter]");
-  private events = new EventList<"state buttons" | "jump" | "restart" | "shop">();
+
+  private readonly jumpsLeftContainer = qs("#jumps-left");
+  private readonly scoreContainer = qs("#score");
+  private readonly highestScoreContainer = qs("#highest-score");
+  private readonly newRecord = qs("#new-record");
+  private readonly crackcoinsCounters = qsa("[data-crackcoins-counter]");
+  private readonly playingCrackcoinsCounter = qs("#play__crackcoin-counter");
+  private readonly progressBar = qs("#play__progress-bar");
+  private readonly btnResetProgress = qs("#reset-progress");
+
+  private events = new EventList<"state buttons" | "jump" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
-  private shopCurrentSkin = document.querySelector<HTMLImageElement>("#shop__current-skin")!;
-  private shopSkins = document.querySelector<HTMLElement>("#shop__skins")!;
+
+  private pages: Record<UITypestate["value"], HTMLElement>;
+  private shopCurrentSkin = qs<HTMLImageElement>("#shop__current-skin");
+  private shopSkins = qs("#shop__skins")!;
   onJump = () => {};
   onSkinUpdate: (skinName: SkinName) => void = () => {};
 
   constructor() {
     const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop"];
-    this.pages = {
-      menu: null,
-      gameOver: null,
-      paused: null,
-      play: null,
-      shop: null,
-    };
+    this.pages = {} as Record<UITypestate["value"], HTMLElement>;
 
     pagesName.forEach((pageName: UITypestate["value"]) => {
-      this.pages[pageName] = document.querySelector(`#${pageName}`) as HTMLElement;
+      this.pages[pageName] = qs(`#${pageName}`);
     });
 
-    const buttons = document.querySelectorAll<HTMLElement>("[data-button]");
-    const clickOverlay = document.querySelector("#click-overlay") as HTMLElement;
-    const gameOverClickOverlay = document.querySelector(".game-over__click-overlay") as HTMLElement;
+    const buttons = qsa("[data-button]");
+    const clickOverlay = qs("#play__click-overlay");
+    const gameOverClickOverlay = qs("#game-over__click-overlay");
 
     buttons.forEach(button => {
       this.events.add(
@@ -168,6 +171,7 @@ export class UI {
       this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), button);
       button.setAttribute("tabindex", "-1");
     });
+
     this.events.enable("state buttons");
     this.events.add(
       "jump",
@@ -205,6 +209,7 @@ export class UI {
       },
       document.body
     );
+
     this.events.add("restart", "click", () => this.handleEvent({ type: "RESTART" }), gameOverClickOverlay);
     this.events.add(
       "shop",
@@ -227,17 +232,34 @@ export class UI {
       this.shopSkins
     );
 
+    this.events.add(
+      "menu",
+      "click",
+      async () => {
+        if (await createPopup("Are you sure you want to reset your progress?")) Store.clear();
+      },
+      this.btnResetProgress
+    );
+
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
     this.render(this.interpreter.getSnapshot());
   }
+
   private handleEvent(event: UIEvent) {
     this.prevState = this.interpreter.getSnapshot();
     this.interpreter.send(event);
+
     const nextState = this.interpreter.getSnapshot();
-    this.render(nextState);
     if (nextState.value === this.prevState.value) return;
+    this.render(nextState);
+  }
+
+  private render(state: UIState) {
     switch (this.prevState.value) {
+      case "menu":
+        this.events.disable("menu");
+        break;
       case "play":
         this.events.disable("jump");
         break;
@@ -249,7 +271,11 @@ export class UI {
         this.events.disable("shop");
         break;
     }
-    switch (nextState.value) {
+
+    switch (state.value) {
+      case "menu":
+        this.events.enable("menu");
+        break;
       case "play":
         this.events.enable("jump");
         break;
@@ -262,43 +288,61 @@ export class UI {
         this.events.enable("shop");
         break;
     }
-  }
-  private render(state: UIState) {
-    const button = document.querySelector(`#${state.value} [data-button]`)!;
+
+    const button = qs(`#${state.value as UITypestate["value"]} [data-button]`);
+
     button.setAttribute("tabindex", "0");
-    (this.pages[state.value as UITypestate["value"]] as HTMLElement).style.setProperty("--opacity", "1");
+    this.pages[state.value as UITypestate["value"]].style.setProperty("--opacity", "1");
+
     if (state.value !== this.prevState.value) {
-      (this.pages[this.prevState.value as UITypestate["value"]] as HTMLElement).style.setProperty("--opacity", "0");
+      this.pages[this.prevState.value as UITypestate["value"]].style.setProperty("--opacity", "0");
     }
   }
+
   onEvent(cb: (event: UIEvent) => void) {
     this.interpreter.onTransition(state => {
       cb(state.event);
     });
   }
+
   die() {
     if (this.interpreter.getSnapshot().value !== "gameOver") this.handleEvent({ type: "DIE" });
   }
+
   displayJumpsLeft(jumpsLeft: number) {
     this.jumpsLeftContainer.textContent = `${jumpsLeft}`;
   }
+
   displayTimeToRegen(timeToRegen: number) {
     this.jumpsLeftContainer.style.setProperty("--time-to-regen", `${timeToRegen}`);
   }
+
   displayScore(score: number) {
-    this.scoreContainer.textContent = `score: ${score}`;
+    this.scoreContainer.textContent = `score: ${Math.floor(score)}`;
   }
+
   displayHighestScore(score: number) {
-    this.highestScoreContainer.textContent = `HS: ${score}`;
+    this.highestScoreContainer.textContent = `HS: ${Math.floor(score)}`;
   }
+
   displayNewRecord() {
     this.newRecord.classList.add("show");
   }
+
+  displayProgressBar(progress: number) {
+    this.progressBar.style.setProperty("--js-width", `${Math.floor(progress * 100)}%`);
+  }
+
   displayCrackcoins(crackcoins: number) {
     this.crackcoinsCounters.forEach(crackcoinsCounter => {
       crackcoinsCounter.textContent = `${crackcoins}`;
     });
   }
+
+  displayCrackcoinsPlaying(crackcoins: number) {
+    this.playingCrackcoinsCounter.textContent = `${Math.floor(crackcoins)}`;
+  }
+
   displayShop(currentSkinName: SkinName) {
     const statusButton: Record<Skin["status"], string> = {
       owned: "equip",
@@ -311,6 +355,7 @@ export class UI {
     if (this.shopSkins.innerHTML !== "") return;
 
     this.shopSkins.innerHTML = skins
+      .filter(skin => skin.name !== "default")
       .map(skin => {
         return `
         <div class="skin-card">
@@ -318,7 +363,7 @@ export class UI {
             <img src="/img/ui/crackcoin_icon.svg" />
           </span>
           <img class="skin-card__img" src=${skin.imgs[4].src} />
-          <button class="skin-card__btn button" data-btn-skin="${skin.name}">${statusButton[skin.status]}</button>
+          <button class="skin-card__btn btn" data-btn-skin="${skin.name}">${statusButton[skin.status]}</button>
         </div>
 `;
       })

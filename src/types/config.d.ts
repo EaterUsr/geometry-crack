@@ -16,7 +16,6 @@ declare type DecorationsConfig = Readonly<{
 }>;
 
 declare type BlockConfig = Readonly<{
-  getHitbox: (block: Block | Cube) => Hitbox;
   img: HTMLImageElement;
 }>;
 
@@ -43,8 +42,8 @@ declare type Config = Readonly<{
   components: Readonly<{
     cube: Readonly<{
       timeToDie: number;
-      getHitbox: (block: Block | Cube) => Hitbox;
       speedDeg: number;
+      speedDegCollision: number;
       jumpSpeed: number;
       jumpVelocity: number;
       jumps: number;
@@ -83,7 +82,7 @@ declare type Config = Readonly<{
   }>;
   crackcoins: {
     scoreDivider: number;
-    scoreDividerIfHS: number;
+    HSMultiplier: number;
   };
   localStorage: Readonly<{
     default: LocalStorage;

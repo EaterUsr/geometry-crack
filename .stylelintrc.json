@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  "plugins": [
+    "stylelint-order",
+    "@namics/stylelint-bem"
+  ],
+  "rules": {
+    "order/order": [
+			"custom-properties",
+			"declarations"
+		],
+		"order/properties-order": [
+			"width",
+			"height"
+		],
+    "color-named": "never",
+    "color-no-hex": true,
+    "function-disallowed-list": ["rgb", "hwb", "lch"],
+    "property-no-vendor-prefix": null,
+    "plugin/stylelint-bem-namics": {
+      "patternPrefixes": [],
+      "helperPrefixes": []
+    },
+    "selector-class-pattern": null
+  },
+  "cache": true,
+  "fix": true
+}
