@@ -45,14 +45,17 @@ body {
   align-items: center;
   flex-direction: column;
 
-  &__btn--start {
-    font-size: 3rem;
-    outline: var(--shadow-stroke-xl);
-    outline-offset: -0.35rem;
+  &__btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
     transform: translateY(-100vh);
     animation: var(--anim-show);
     animation-delay: .2s;
   }
+
   &__title {
     width: 70%;
     animation: var(--anim-show);
@@ -274,6 +277,37 @@ body {
     &.show {
       opacity: 1;
     }
+  }
+}
+
+.shop {
+  &__current-skin {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10rem;
+    width: 7rem;
+  }
+
+  &__skins {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 9rem);
+    justify-content: center;
+    gap: 6rem;
+    height: 22rem;
+    overflow-y: auto;
+
+    &::before, &::after {
+      display: none;
+    }
+  }
+
+  &__crackcoin-counter {
+    top: 0;
+    bottom: auto;
   }
 }
 

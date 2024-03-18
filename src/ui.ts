@@ -344,6 +344,12 @@ export class UI {
   }
 
   displayShop(currentSkinName: SkinName) {
+    const statusButton: Record<Skin["status"], string> = {
+      owned: "equip",
+      equipped: "used",
+      unbought: "buy",
+    };
+
     this.shopCurrentSkin.src = skinUrl(currentSkinName);
 
     if (this.shopSkins.innerHTML !== "") return;
@@ -357,7 +363,7 @@ export class UI {
             <img src="/img/ui/crackcoin_icon.svg" />
           </span>
           <img class="skin-card__img" src=${skin.imgs[4].src} />
-          <button class="skin-card__btn button" data-btn-skin="${skin.name}">buy</button>
+          <button class="skin-card__btn btn" data-btn-skin="${skin.name}">${statusButton[skin.status]}</button>
         </div>
 `;
       })

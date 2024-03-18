@@ -3,7 +3,7 @@ import { loadImage, skinUrl } from "@/utils/image";
 export const skins: Skins = [
   {
     name: "default",
-    price: 50,
+    price: 0,
     imgs: [],
     status: "equipped",
   },

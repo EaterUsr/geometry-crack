@@ -3,7 +3,7 @@
   padding: 0.6rem 5rem;
   background: transparent;
   font-size: 2.3rem;
-  border-radius: 1.5rem;
+  border-radius: 1.3rem;
   box-shadow: var(--shadow-block);
   border: 0;
   outline: var(--shadow-stroke);
@@ -28,6 +28,19 @@
 
   &:hover::before, &:focus::before {
     transform: translateY(-16%);
+  }
+
+  &--start {
+    font-size: 3rem;
+    outline: var(--shadow-stroke-xl);
+    outline-offset: -0.35rem;
+  }
+
+  &--shop {
+    font-size: 2rem;
+    padding: 0.6rem 3rem;
+    outline: var(--shadow-stroke-xl);
+    outline-offset: -0.35rem;
   }
 
   &--icon {
@@ -216,74 +229,42 @@
   filter: drop-shadow(0 0 .5rem hsl(0 0 0 / 40%)) ;
 }
 
-.shop__crackcoin-counter {
-  top: 0;
-  bottom: auto;
-}
-
-.shop__current-skin {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10rem;
-  width: 7rem;
-}
-
-.shop__skins {
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 5rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 9rem);
-  justify-content: center;
-  gap: 6rem;
-  height: 22rem;
-  overflow-y: auto;
-}
-
 .skin-card {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  &__price {
+    background: rgba(0 0 0 / 0.2);
+    border-radius: .5rem;
+    color: var(--clr-stroke);
+    font-family: var(--font-roboto);
+    font-weight: var(--wght-medium);
+    font-size: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 0.6rem;
+    height: 3rem;
+    width: 7rem;
+    margin-left: auto;
+    gap: .6rem;
+
+    img {
+      transform: scale(1.2);
+      height: 100%;
+    }
+  }
+
+  &__img {
+    width: 75%;
+    margin: 0 auto;
+  }
+
+  &__btn {
+    padding: .2rem 0;
+    width: 90%;
+    margin: 0 auto;
+  }
 }
 
-.skin-card__price {
-  background: rgba(0 0 0 / 0.2);
-  border-radius: .5rem;
-  color: var(--clr-stroke);
-  font-weight: 500;
-  font-size: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 .6rem;
-  height: 3rem;
-  width: 7rem;
-  margin-left: auto;
-}
-
-.skin-card__price img {
-  height: 100%;
-}
-
-.skin-card__img {
-  width: 75%;
-  margin: 0 auto;
-}
-
-.skin-card__btn {
-  padding: .2rem 0;
-  width: 90%;
-  margin: 0 auto;
-}
-
-::-webkit-scrollbar {
-  width: .8rem;
-  border-radius: 100vw;
-  background: rgba(0 0 0 / 0.2);
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 100vw;
-  background: rgba(0 0 0 / 0.2);
-}

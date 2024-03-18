@@ -12,3 +12,15 @@
 html {
   text-wrap: balance;
 }
+
+::-webkit-scrollbar {
+  width: .8rem;
+  border-radius: 100vw;
+  background: rgba(0 0 0 / 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 100vw;
+  background: rgba(0 0 0 / 0.2);
+}
+
