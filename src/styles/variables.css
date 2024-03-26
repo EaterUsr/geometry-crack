@@ -1,6 +1,8 @@
 :root, ::backdrop {
   --img-gradient-primary: linear-gradient(hsl(4, 96%, 52%), hsl(22, 96%, 52%));
   --img-gradient-hs: linear-gradient(to top, hsl(32, 100%, 50%), hsl(54, 100%, 50%));
+  --img-gradient-owned: linear-gradient(to top, hsl(61, 96%, 52%), hsl(32, 96%, 52%));
+  --img-gradient-equipped: linear-gradient(to top, hsl(97, 96%, 52%), hsl(119, 96%, 52%));
 
   --clr-stroke: hsla(0, 0%, 0%, 0.55);
   --clr-time-to-regen-indicator: hsla(0, 0%, 100%, 0.27);

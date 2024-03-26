@@ -368,7 +368,9 @@ export class UI {
             <img src="/img/ui/crackcoin_icon.svg" />
           </span>
           <img class="skin-card__img" src=${skin.imgs[4]} />
-          <button class="skin-card__btn btn" data-btn-skin="${skin.name}">${statusButton[skin.status]}</button>
+          <button class="skin-card__btn btn skin-card__btn--${skin.status}" data-btn-skin="${skin.name}">${
+          statusButton[skin.status]
+        }</button>
         </div>
 `;
       })
