@@ -12,8 +12,6 @@ import { qs, qsa } from "@/utils/dom";
 import { Store } from "./utils/store";
 import { config } from "@/config";
 import { createPopup } from "./utils/popup";
-import { skins } from "./config/skins";
-import { skinUrl } from "./utils/image";
 
 export type UIEvent =
   | { type: "START" }
@@ -141,7 +139,7 @@ export class UI {
   private shopCurrentSkin = qs<HTMLImageElement>("#shop__current-skin");
   private shopSkins = qs("#shop__skins")!;
   onJump = () => {};
-  onSkinUpdate: (skinName: SkinName) => void = () => {};
+  onSkinUpdate: (skinsUrl: string[]) => void = () => {};
 
   constructor() {
     const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop"];
@@ -216,18 +214,28 @@ export class UI {
       "click",
       e => {
         const button = e.target as HTMLButtonElement;
-        const skin = skins.find(skin => skin.name === button.dataset.btnSkin) as Skin;
-
-        if (skin.status === "owned") {
-          skin.status = "equipped";
-        }
+        const skin = Store.content.skins.find(skin => skin.name === button.dataset.btnSkin) as Skin;
 
         if (skin.status === "unbought") {
-          skin.status = "equipped";
+          if (skin.price <= Store.content.crackcoins) {
+            Store.content.crackcoins -= skin.price;
+            Store.save();
+            skin.status = "owned";
+          } else {
+            return;
+          }
         }
 
-        this.displayShop(skin.name);
-        this.onSkinUpdate(skin.name);
+        if (skin.status === "owned") {
+          const equippedSkin = Store.content.skins.find(skin => skin.status === "equipped") as Skin;
+          console.log(equippedSkin);
+          skin.status = "equipped";
+          equippedSkin.status = "owned";
+          this.displayShop();
+        }
+
+        this.displayShop();
+        this.onSkinUpdate(skin.imgs);
       },
       this.shopSkins
     );
@@ -343,26 +351,23 @@ export class UI {
     this.playingCrackcoinsCounter.textContent = `${Math.floor(crackcoins)}`;
   }
 
-  displayShop(currentSkinName: SkinName) {
+  displayShop() {
     const statusButton: Record<Skin["status"], string> = {
       owned: "equip",
       equipped: "used",
       unbought: "buy",
     };
 
-    this.shopCurrentSkin.src = skinUrl(currentSkinName);
+    this.shopCurrentSkin.src = (Store.content.skins.find(skin => skin.status === "equipped") as Skin).imgs[4];
 
-    if (this.shopSkins.innerHTML !== "") return;
-
-    this.shopSkins.innerHTML = skins
-      .filter(skin => skin.name !== "default")
+    this.shopSkins.innerHTML = Store.content.skins
       .map(skin => {
         return `
         <div class="skin-card">
           <span class="skin-card__price">${skin.price}
             <img src="/img/ui/crackcoin_icon.svg" />
           </span>
-          <img class="skin-card__img" src=${skin.imgs[4].src} />
+          <img class="skin-card__img" src=${skin.imgs[4]} />
           <button class="skin-card__btn btn" data-btn-skin="${skin.name}">${statusButton[skin.status]}</button>
         </div>
 `;

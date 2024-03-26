@@ -1,10 +1,11 @@
 import { closestDeg, toDegrees } from "@/utils/math";
 import { updateTarget } from "@/utils/targetPosition";
 import { config } from "@/config";
-import { skins } from "@/config/skins";
 import { backward } from "@/utils/move";
 import { squareHitbox } from "@/utils/collision";
 import { ParticulesController } from "@/decorations/particules";
+import { loadImage } from "@/utils/image";
+import { Store } from "@/utils/store";
 
 const cubeConf = config.components.cube;
 const particulesConf = config.decorations.particules.grass;
@@ -31,8 +32,7 @@ export class Cube {
   private isFrozen = false;
   private particules: ParticulesController;
   private ignoreCollisionHeight = new Set<number>();
-  skin: SkinName = "default";
-  private images = (skins.find(skin => this.skin === skin.name) as Skin).imgs;
+  private images = (Store.content.skins.find(skin => skin.status === "equipped") as Skin).imgs.map(loadImage);
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {
@@ -202,8 +202,7 @@ export class Cube {
     this.deg.content = 0;
   }
 
-  setSkin = (skinName: SkinName) => {
-    this.skin = skinName;
-    this.images = (skins.find(skin => this.skin === skin.name) as Skin).imgs;
+  setSkin = (skinsUrl: string[]) => {
+    this.images = skinsUrl.map(loadImage);
   };
 }

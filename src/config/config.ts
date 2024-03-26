@@ -1,4 +1,5 @@
 import { structures } from "./structures";
+import { skins } from "./skins";
 import { loadImage } from "@/utils/image";
 
 export const config: Config = {
@@ -67,6 +68,7 @@ export const config: Config = {
     default: {
       HS: 0,
       crackcoins: 0,
+      skins,
     },
     parser: storage => {
       storage.crackcoins = Math.floor(storage.crackcoins);
