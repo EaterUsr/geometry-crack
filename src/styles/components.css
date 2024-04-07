@@ -3,7 +3,7 @@
   padding: 0.6rem 5rem;
   background: transparent;
   font-size: 2.3rem;
-  border-radius: 1.3rem;
+  border-radius: 1.2rem;
   box-shadow: var(--shadow-block);
   border: 0;
   outline: var(--shadow-stroke);
@@ -34,6 +34,9 @@
     font-size: 3rem;
     outline: var(--shadow-stroke-xl);
     outline-offset: -0.35rem;
+    width: 20rem;
+    height: 5rem;
+    padding: 0;
   }
 
   &--shop {
@@ -133,6 +136,15 @@
     &:hover {
       filter: brightness(130%);
     }
+  }
+
+  &--level {
+    --size: 5rem;
+
+    font-size: 4rem;
+    width: var(--size);
+    height: var(--size);
+    padding: 0;
   }
 }
 

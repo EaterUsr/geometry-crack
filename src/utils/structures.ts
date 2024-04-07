@@ -36,35 +36,7 @@ export class Structures {
     this.lastStructure = structure;
     this.minJumps -= structure[2];
 
-    structure[1].forEach((patern: StructurePatern) => {
-      const origin: Coords = [this.canvas.width, this.decorations.floorHeight - this.decorations.blockSize];
-
-      let block: Block;
-      switch (patern[0]) {
-        case "spike":
-          block = new Spike(
-            this.canvas,
-            this.parseCoords(patern[1], this.decorations.blockSize, origin),
-            this.decorations.speed,
-            this.decorations.blockSize
-          );
-          break;
-        case "slab":
-          block = new Slab(
-            this.canvas,
-            this.parseCoords(patern[1], this.decorations.blockSize, origin),
-            this.decorations.speed,
-            this.decorations.blockSize
-          );
-          break;
-      }
-
-      this.blocks.add(block);
-    });
-  }
-
-  private parseCoords(coords: Coords, blockSize: number, origin: Coords) {
-    return [coords[0] * blockSize + origin[0], -coords[1] * blockSize + origin[1]] as Coords;
+    structure[1].forEach(patern => useStructure(patern, this.canvas, this.decorations, this.blocks));
   }
 
   reset() {
@@ -72,4 +44,38 @@ export class Structures {
     this.lastStructure = null;
     this.lastStructureGeneration = Date.now();
   }
+}
+
+export function useStructure(
+  patern: StructurePatern,
+  canvas: CanvasConfig,
+  decorations: DecorationsConfig,
+  blocks: BlocksController
+) {
+  const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
+  let block: Block;
+  switch (patern[0]) {
+    case "spike":
+      block = new Spike(
+        canvas,
+        parseCoords(patern[1], decorations.blockSize, origin),
+        decorations.speed,
+        decorations.blockSize
+      );
+      break;
+    case "slab":
+      block = new Slab(
+        canvas,
+        parseCoords(patern[1], decorations.blockSize, origin),
+        decorations.speed,
+        decorations.blockSize
+      );
+      break;
+  }
+
+  blocks.add(block);
+}
+
+export function parseCoords(coords: Coords, blockSize: number, origin: Coords) {
+  return [coords[0] * blockSize + origin[0], -coords[1] * blockSize + origin[1]] as Coords;
 }

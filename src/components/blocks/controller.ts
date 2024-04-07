@@ -1,33 +1,58 @@
 import { Block } from "./block";
 import { List } from "@/utils/list";
 import { isCollision } from "@/utils/collision";
-import { Structures } from "@/utils/structures";
+import { Structures, useStructure } from "@/utils/structures";
+import { levels } from "@/config/levels";
 
 export class BlocksController {
   private readonly content = new List<Block>();
-  private readonly stuctures: Structures;
+  private structures: Structures | null = null;
+  private updateChallenge = () => {};
 
   constructor(
-    canvas: CanvasConfig,
+    private readonly canvas: CanvasConfig,
     private readonly decorations: DecorationsConfig,
-    private readonly onCollision: (block: Block) => void
+    private readonly onCollision: (block: Block) => void,
+    levelName: LevelName | "challenge"
   ) {
-    this.stuctures = new Structures(canvas, decorations, this);
+    if (levelName === "challenge") {
+      this.structures = new Structures(canvas, decorations, this);
+      this.updateChallenge = () => {
+        if ((this.content.getLast()?.value.position[0] ?? 0) < 100) {
+          this.structures?.build();
+        }
+      };
+    } else {
+      (levels[levelName] as StructurePatern[]).forEach(patern => useStructure(patern, canvas, decorations, this));
+      this.updateChallenge = () => {};
+    }
   }
 
   add(block: Block) {
     this.content.append(block);
   }
 
-  reset() {
+  reset(levelName: LevelName | "challenge") {
     this.content.clear();
-    this.stuctures.reset();
+    this.structures?.reset();
+    if (levelName === "challenge") {
+      this.structures = new Structures(this.canvas, this.decorations, this);
+      this.updateChallenge = () => {
+        if ((this.content.getLast()?.value.position[0] ?? 0) < 100) {
+          this.structures?.build();
+        }
+      };
+    } else {
+      (levels[levelName] as StructurePatern[]).forEach(patern =>
+        useStructure(patern, this.canvas, this.decorations, this)
+      );
+      this.updateChallenge = () => {};
+      this.structures = null;
+    }
   }
 
   update(cubeOrigin: Coords, speedFrame: number, cubeHitbox: Hitbox) {
-    if ((this.content.getLast()?.value.position[0] ?? 0) < 100) {
-      this.stuctures.build();
-    }
+    this.updateChallenge();
     this.content.forEach(block => {
       block.update(speedFrame);
 

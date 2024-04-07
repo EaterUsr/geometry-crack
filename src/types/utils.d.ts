@@ -37,6 +37,7 @@ type Elements =
   | "#menu"
   | "#play"
   | "#shop"
+  | "#levels"
   | "#play__click-overlay"
   | "#jumps-left"
   | "#highest-score"
@@ -48,6 +49,8 @@ type Elements =
   | "#play__crackcoin-counter"
   | "#shop__current-skin"
   | "#shop__skins"
+  | "#levels-container"
+  | "#challenge-btn"
   | "[data-button]"
   | "[data-crackcoins-counter]";
 
@@ -61,3 +64,6 @@ declare type Skin = {
   status: "owned" | "equipped" | "unbought";
 };
 declare type Skins = Skin[];
+
+declare type LevelName = "1";
+declare type Level = StrucurePatern[];

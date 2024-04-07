@@ -311,6 +311,13 @@ body {
   }
 }
 
+.levels {
+  &__wrapper {
+    width: 70%;
+    margin: 5rem auto;
+  }
+}
+
 @keyframes new-record {
   from {
     transform: scale(0.7) rotate(20deg);

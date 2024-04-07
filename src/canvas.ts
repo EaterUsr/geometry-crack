@@ -40,7 +40,7 @@ export class CanvasController {
 
     this.decorations = new DecorationsController(this.config);
     this.cube = new Cube(this.config, this.decorations.config);
-    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision);
+    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision, this.ui.level);
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
@@ -132,7 +132,7 @@ export class CanvasController {
     this.scoreMultiplier = 1;
     this.config.score = 0;
     this.decorations.reset();
-    this.blocks.reset();
+    this.blocks.reset(this.ui.level);
     this.cube.reset();
     this.jumpsLeft = cubeConf.jumps;
   }

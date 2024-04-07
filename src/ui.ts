@@ -14,6 +14,7 @@ import { config } from "@/config";
 import { createPopup } from "./utils/popup";
 import { skins } from "./config/skins";
 import { skinUrl } from "./utils/image";
+import { levels } from "./config/levels";
 
 export type UIEvent =
   | { type: "START" }
@@ -22,6 +23,7 @@ export type UIEvent =
   | { type: "DIE" }
   | { type: "RESTART" }
   | { type: "BACK" }
+  | { type: "LEVELS" }
   | { type: "SHOP" };
 
 interface UIContext {}
@@ -41,6 +43,10 @@ type UITypestate =
     }
   | {
       value: "play";
+      context: UIContext;
+    }
+  | {
+      value: "levels";
       context: UIContext;
     }
   | {
@@ -71,6 +77,9 @@ export class UI {
               },
               SHOP: {
                 target: "shop",
+              },
+              LEVELS: {
+                target: "levels",
               },
             },
           },
@@ -108,6 +117,16 @@ export class UI {
               },
             },
           },
+          levels: {
+            on: {
+              START: {
+                target: "play",
+              },
+              BACK: {
+                target: "menu",
+              },
+            },
+          },
         },
         schema: {
           events: {} as UIEvent,
@@ -133,6 +152,7 @@ export class UI {
   private readonly playingCrackcoinsCounter = qs("#play__crackcoin-counter");
   private readonly progressBar = qs("#play__progress-bar");
   private readonly btnResetProgress = qs("#reset-progress");
+  private readonly levelsContainer = qs("#levels-container");
 
   private events = new EventList<"state buttons" | "jump" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
@@ -140,11 +160,12 @@ export class UI {
   private pages: Record<UITypestate["value"], HTMLElement>;
   private shopCurrentSkin = qs<HTMLImageElement>("#shop__current-skin");
   private shopSkins = qs("#shop__skins")!;
+  level: LevelName | "challenge" = "challenge";
   onJump = () => {};
   onSkinUpdate: (skinName: SkinName) => void = () => {};
 
   constructor() {
-    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop"];
+    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop", "levels"];
     this.pages = {} as Record<UITypestate["value"], HTMLElement>;
 
     pagesName.forEach((pageName: UITypestate["value"]) => {
@@ -152,6 +173,7 @@ export class UI {
     });
 
     const buttons = qsa("[data-button]");
+    const challengeBtn = qs("#challenge-btn");
     const clickOverlay = qs("#play__click-overlay");
     const gameOverClickOverlay = qs("#game-over__click-overlay");
 
@@ -171,6 +193,34 @@ export class UI {
       this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), button);
       button.setAttribute("tabindex", "-1");
     });
+
+    this.events.add(
+      "state buttons",
+      "click",
+      () => {
+        challengeBtn.blur();
+        challengeBtn.setAttribute("tabindex", "-1");
+
+        this.handleEvent({ type: "START" });
+      },
+      challengeBtn
+    );
+    this.events.add("state buttons", "focus", () => (this.isSpaceKeyDisabled = true), challengeBtn);
+    this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), challengeBtn);
+    challengeBtn.setAttribute("tabindex", "-1");
+
+    this.events.add(
+      "state buttons",
+      "click",
+      e => {
+        const levelBtn = e.target as HTMLButtonElement;
+        const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
+
+        this.level = levelNumber;
+        this.handleEvent({ type: "START" });
+      },
+      this.levelsContainer
+    );
 
     this.events.enable("state buttons");
     this.events.add(
@@ -287,6 +337,9 @@ export class UI {
       case "shop":
         this.events.enable("shop");
         break;
+      case "levels":
+        this.displayLevels();
+        break;
     }
 
     const button = qs(`#${state.value as UITypestate["value"]} [data-button]`);
@@ -366,6 +419,16 @@ export class UI {
           <button class="skin-card__btn btn" data-btn-skin="${skin.name}">${statusButton[skin.status]}</button>
         </div>
 `;
+      })
+      .join("");
+  }
+
+  displayLevels() {
+    if (this.levelsContainer.innerHTML !== "") return;
+
+    this.levelsContainer.innerHTML = Object.keys(levels)
+      .map(levelNumber => {
+        return `<button class="btn btn--level" data-level=${levelNumber}>${levelNumber}</button>`;
       })
       .join("");
   }

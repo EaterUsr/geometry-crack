@@ -33,7 +33,8 @@
     <section class="page menu" id="menu">
       <img class="menu__title" src="/img/ui/title.svg" alt="title">
       <section class="menu__btn-container">
-        <button class="btn btn--start" data-button="START">play</button>
+        <button class="btn btn--start" data-button="LEVELS">levels</button>
+        <button class="btn btn--start" id="challenge-btn">challenge</button>
         <button class="btn btn--shop" data-button="SHOP">shop</button> 
       </section>
       <button class="btn btn--settings btn--icon">
@@ -43,6 +44,13 @@
         <button class="menu__settings__btn" id="reset-progress">reset progress</button>
       </section>
     </section>
+    <section class="page levels" id="levels">
+      <button class="btn btn--back btn--icon" data-button="BACK">
+        <img class="btn__img--back" src="/img/ui/back_button.svg" alt="back">
+      </button>
+      <section class="levels__wrapper" id="levels-container"></section>
+    </section>
+
     <section class="page shop" id="shop">
       <button class="btn btn--back btn--icon" data-button="BACK">
         <img class="btn__img--back" src="/img/ui/back_button.svg" alt="back">
