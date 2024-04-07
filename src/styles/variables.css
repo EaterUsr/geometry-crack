@@ -12,6 +12,9 @@
   --clr-paused-overlay: hsla(0, 0%, 0%, 0.26);
   --clr-paused-title: hsl(0, 0%, 79%);
 
+  --clr-completed-overlay: hsla(0, 0%, 37%, 0.26);
+  --clr-completed-title: hsl(0, 0%, 100%, 1);
+
   --clr-game-over-overlay: hsla(0, 56%, 14%, 0.45);
   --clr-game-over-title: hsl(0, 100%, 38%);
   --clr-game-over-info: hsl(0, 0%, 63%);

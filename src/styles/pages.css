@@ -318,6 +318,27 @@ body {
   }
 }
 
+.completed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__title {
+    text-align: center;
+    color: var(--clr-completed-title);
+    font-family: var(--font-noto);
+    font-weight: var(--wght-black);
+    font-size: 5rem;
+    margin-bottom: 12rem;
+  }
+  
+  &__overlay {
+    background: var(--clr-completed-overlay);
+    backdrop-filter: blur(0.1rem);
+    z-index: -1;
+  }
+}
+
 @keyframes new-record {
   from {
     transform: scale(0.7) rotate(20deg);

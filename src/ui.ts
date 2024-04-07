@@ -24,7 +24,8 @@ export type UIEvent =
   | { type: "RESTART" }
   | { type: "BACK" }
   | { type: "LEVELS" }
-  | { type: "SHOP" };
+  | { type: "SHOP" }
+  | { type: "FINISH" };
 
 interface UIContext {}
 
@@ -51,6 +52,10 @@ type UITypestate =
     }
   | {
       value: "shop";
+      context: UIContext;
+    }
+  | {
+      value: "completed";
       context: UIContext;
     };
 
@@ -91,6 +96,9 @@ export class UI {
               DIE: {
                 target: "gameOver",
               },
+              FINISH: {
+                target: "completed",
+              },
             },
           },
           paused: {
@@ -124,6 +132,13 @@ export class UI {
               },
               BACK: {
                 target: "menu",
+              },
+            },
+          },
+          completed: {
+            on: {
+              BACK: {
+                target: "levels",
               },
             },
           },
@@ -165,7 +180,7 @@ export class UI {
   onSkinUpdate: (skinName: SkinName) => void = () => {};
 
   constructor() {
-    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop", "levels"];
+    const pagesName: UITypestate["value"][] = ["menu", "gameOver", "paused", "play", "shop", "levels", "completed"];
     this.pages = {} as Record<UITypestate["value"], HTMLElement>;
 
     pagesName.forEach((pageName: UITypestate["value"]) => {
@@ -200,6 +215,8 @@ export class UI {
       () => {
         challengeBtn.blur();
         challengeBtn.setAttribute("tabindex", "-1");
+
+        this.level = "challenge";
 
         this.handleEvent({ type: "START" });
       },
@@ -360,6 +377,10 @@ export class UI {
 
   die() {
     if (this.interpreter.getSnapshot().value !== "gameOver") this.handleEvent({ type: "DIE" });
+  }
+
+  finish() {
+    this.handleEvent({ type: "FINISH" });
   }
 
   displayJumpsLeft(jumpsLeft: number) {

@@ -61,11 +61,14 @@ export class List<T> {
 
     return nodeToRemove;
   }
+
   getLast(): Node<T> | null {
     return this.tail;
   }
+
   clear() {
     this.head = null;
     this.tail = null;
+    this.length = 0;
   }
 }

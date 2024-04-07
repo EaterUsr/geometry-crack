@@ -38,6 +38,7 @@ type Elements =
   | "#play"
   | "#shop"
   | "#levels"
+  | "#completed"
   | "#play__click-overlay"
   | "#jumps-left"
   | "#highest-score"

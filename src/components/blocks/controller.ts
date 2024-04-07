@@ -13,6 +13,7 @@ export class BlocksController {
     private readonly canvas: CanvasConfig,
     private readonly decorations: DecorationsConfig,
     private readonly onCollision: (block: Block) => void,
+    private readonly onFinish: () => void,
     levelName: LevelName | "challenge"
   ) {
     if (levelName === "challenge") {
@@ -68,6 +69,7 @@ export class BlocksController {
       if (block.position[0] + block.size < 0) {
         setTimeout(() => {
           this.content.removeFirst();
+          if (this.content.length === 0) this.onFinish();
         }, 0);
       }
     });

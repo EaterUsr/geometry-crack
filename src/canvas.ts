@@ -40,7 +40,13 @@ export class CanvasController {
 
     this.decorations = new DecorationsController(this.config);
     this.cube = new Cube(this.config, this.decorations.config);
-    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision, this.ui.level);
+    this.blocks = new BlocksController(
+      this.config,
+      this.decorations.config,
+      this.onCollision,
+      () => this.ui.finish(),
+      this.ui.level
+    );
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
@@ -161,6 +167,8 @@ export class CanvasController {
         break;
       case "SHOP":
         this.ui.displayShop(this.cube.skin);
+      case "FINISH":
+        this.isActive = false;
     }
   }
 }
