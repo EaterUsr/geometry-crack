@@ -7,6 +7,7 @@ import { UI, UIEvent } from "@/ui";
 import { Block } from "@/components/blocks/block";
 import { Store } from "@/utils/store";
 import { qs } from "@/utils/dom";
+import { levels } from "./config/levels";
 
 const cubeConf = config.components.cube;
 
@@ -44,7 +45,15 @@ export class CanvasController {
       this.config,
       this.decorations.config,
       this.onCollision,
-      () => this.ui.finish(),
+      () => {
+        if (this.ui.level !== "challenge" && Store.content.levelsCompleted < +this.ui.level) {
+          Store.content.crackcoins += levels[this.ui.level].reward;
+          Store.content.levelsCompleted = +this.ui.level;
+          Store.save();
+          this.ui.displayCrackcoins(Store.content.crackcoins);
+        }
+        this.ui.finish();
+      },
       this.ui.level
     );
 

@@ -67,6 +67,7 @@ export const config: Config = {
     default: {
       HS: 0,
       crackcoins: 0,
+      levelsCompleted: 0,
     },
     parser: storage => {
       storage.crackcoins = Math.floor(storage.crackcoins);

@@ -445,11 +445,15 @@ export class UI {
   }
 
   displayLevels() {
-    if (this.levelsContainer.innerHTML !== "") return;
-
     this.levelsContainer.innerHTML = Object.keys(levels)
       .map(levelNumber => {
-        return `<button class="btn btn--level" data-level=${levelNumber}>${levelNumber}</button>`;
+        const isLocked = +levelNumber - 1 > Store.content.levelsCompleted;
+
+        return `
+          <button class="btn btn--level ${isLocked ? "btn--level-locked" : ""}" data-level=${levelNumber}>
+            ${levelNumber}
+            ${isLocked ? '<img src="/img/ui/lock.svg" alt="locked">' : ""}
+          </button>`;
       })
       .join("");
   }

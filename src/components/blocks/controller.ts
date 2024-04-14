@@ -24,7 +24,9 @@ export class BlocksController {
         }
       };
     } else {
-      (levels[levelName] as StructurePatern[]).forEach(patern => useStructure(patern, canvas, decorations, this));
+      (levels[levelName].content as StructurePatern[]).forEach(patern =>
+        useStructure(patern, canvas, decorations, this)
+      );
       this.updateChallenge = () => {};
     }
   }
@@ -44,7 +46,7 @@ export class BlocksController {
         }
       };
     } else {
-      (levels[levelName] as StructurePatern[]).forEach(patern =>
+      (levels[levelName].content as StructurePatern[]).forEach(patern =>
         useStructure(patern, this.canvas, this.decorations, this)
       );
       this.updateChallenge = () => {};

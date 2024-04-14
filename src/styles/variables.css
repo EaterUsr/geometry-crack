@@ -1,18 +1,18 @@
 :root, ::backdrop {
-  --img-gradient-primary: linear-gradient(hsl(4, 96%, 52%), hsl(22, 96%, 52%));
-  --img-gradient-hs: linear-gradient(to top, hsl(32, 100%, 50%), hsl(54, 100%, 50%));
+  --img-gradient-primary: linear-gradient(hsl(4 96% 52%), hsl(22 96% 52%));
+  --img-gradient-hs: linear-gradient(to top, hsl(32 100% 50%), hsl(54 100% 50%));
 
-  --clr-stroke: hsla(0, 0%, 0%, 0.55);
-  --clr-time-to-regen-indicator: hsla(0, 0%, 100%, 0.27);
-  --clr-yes: hsl(115, 63%, 49%);
-  --clr-no: hsl(11, 96%, 52%);
-  --clr-sky: hsl(209, 100%, 51%);
-  --clr-floor: hsl(25, 100%, 23%);
+  --clr-stroke: hsl(0 0% 0% / 0.55);
+  --clr-time-to-regen-indicator: hsl(0 0% 100% / 27%);
+  --clr-yes: hsl(115 63% 49%);
+  --clr-no: hsl(11 96% 52%);
+  --clr-sky: hsl(209 100% 51%);
+  --clr-floor: hsl(25 100% 23%);
 
-  --clr-paused-overlay: hsla(0, 0%, 0%, 0.26);
-  --clr-paused-title: hsl(0, 0%, 79%);
+  --clr-paused-overlay: hsl(0 0% 0% / 26%);
+  --clr-paused-title: hsl(0 0% 79%);
 
-  --clr-completed-overlay: hsla(0, 0%, 37%, 0.26);
+  --clr-completed-overlay: hsl(0 0% 37% / 26%);
   --clr-completed-title: hsl(0, 0%, 100%, 1);
 
   --clr-game-over-overlay: hsla(0, 56%, 14%, 0.45);

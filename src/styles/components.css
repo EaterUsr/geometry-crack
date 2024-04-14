@@ -141,10 +141,25 @@
   &--level {
     --size: 5rem;
 
+    position: relative;
     font-size: 4rem;
     width: var(--size);
     height: var(--size);
     padding: 0;
+  
+    &-locked {
+      --img-gradient-primary: linear-gradient(hsl(4 96% 52% / 50%), hsl(22 96% 52% / 50%));
+
+      cursor: not-allowed;
+
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 45%;
+      }
+    }
   }
 }
 

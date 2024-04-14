@@ -313,8 +313,15 @@ body {
 
 .levels {
   &__wrapper {
+    display: flex;
+    flex-wrap: wrap;
     width: 70%;
     margin: 5rem auto;
+    gap: 2.5rem;
+
+    &::before, &::after {
+      display: none;
+    }
   }
 }
 

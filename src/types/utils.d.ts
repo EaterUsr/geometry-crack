@@ -66,5 +66,5 @@ declare type Skin = {
 };
 declare type Skins = Skin[];
 
-declare type LevelName = "1";
-declare type Level = StrucurePatern[];
+declare type LevelName = "1" | "2";
+declare type Level = { content: StrucurePatern[]; reward: number };
