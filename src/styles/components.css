@@ -262,9 +262,18 @@
   }
 
   &__btn {
+    border-radius: 1.2rem;
     padding: .2rem 0;
     width: 90%;
     margin: 0 auto;
+
+    &--owned::before {
+      background: var(--img-gradient-owned);
+    }
+  
+    &--equipped::before {
+      background: var(--img-gradient-equipped);
+    }
   }
 }
 
