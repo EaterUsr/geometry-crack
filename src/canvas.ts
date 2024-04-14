@@ -62,8 +62,6 @@ export class CanvasController {
     this.ui.displayCrackcoins(Store.content.crackcoins);
     this.ui.onSkinUpdate = this.cube.setSkin;
 
-    this.cube.skin = "default";
-
     this.animate();
   }
 
@@ -175,9 +173,10 @@ export class CanvasController {
         this.reset();
         break;
       case "SHOP":
-        this.ui.displayShop(this.cube.skin);
+        this.ui.displayShop();
       case "FINISH":
         this.isActive = false;
+        this.ui.displayShop();
     }
   }
 }

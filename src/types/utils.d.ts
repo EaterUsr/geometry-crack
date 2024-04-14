@@ -59,12 +59,11 @@ declare type Selector = Elements | `${Elements} ${Elements}`;
 
 declare type SkinName = "default" | "batman" | "fractal" | "gameboy" | "matrix" | "neon" | "twinky";
 declare type Skin = {
-  imgs: HTMLImageElement[];
+  imgs: string[];
   price: number;
   name: SkinName;
   status: "owned" | "equipped" | "unbought";
 };
-declare type Skins = Skin[];
 
 declare type LevelName = "1" | "2";
 declare type Level = { content: StrucurePatern[]; reward: number };

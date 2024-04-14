@@ -4,7 +4,8 @@ export class Store {
   static content: LocalStorage;
 
   static init() {
-    this.content = config.localStorage.default;
+    const content = localStorage.getItem("geometry crack");
+    this.content = content ? JSON.parse(content) : config.localStorage.default;
   }
 
   static save() {
@@ -13,7 +14,7 @@ export class Store {
   }
 
   static clear() {
-    this.init();
+    this.content = config.localStorage.default;
     localStorage.setItem("geometry crack", JSON.stringify(this.content));
   }
 }

@@ -33,6 +33,7 @@ declare type LocalStorage = {
   HS: number;
   crackcoins: number;
   levelsCompleted: number;
+  skins: Skin[];
 };
 
 declare type Config = Readonly<{
