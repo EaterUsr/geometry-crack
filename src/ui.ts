@@ -295,7 +295,6 @@ export class UI {
 
         if (skin.status === "owned") {
           const equippedSkin = Store.content.skins.find(skin => skin.status === "equipped") as Skin;
-          console.log(equippedSkin);
           skin.status = "equipped";
           equippedSkin.status = "owned";
           this.displayShop();
