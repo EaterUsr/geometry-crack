@@ -425,6 +425,8 @@ export class UI {
   }
 
   displayShop() {
+    this.displayCrackcoins(Store.content.crackcoins);
+
     const statusButton: Record<Skin["status"], string> = {
       owned: "equip",
       equipped: "used",

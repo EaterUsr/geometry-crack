@@ -271,7 +271,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 0.6rem;
+    padding-left: 1rem;
     height: 3rem;
     width: 7rem;
     margin-left: auto;
@@ -281,6 +281,8 @@
       transform: scale(1.2);
       height: 100%;
     }
+
+    &::before, &::after { display: none; }
   }
 
   &__img {
