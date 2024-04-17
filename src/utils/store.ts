@@ -5,7 +5,7 @@ export class Store {
 
   static init() {
     const content = localStorage.getItem("geometry crack");
-    this.content = content ? JSON.parse(content) : config.localStorage.default;
+    this.content = content ? this.updateConfig(JSON.parse(content)) : config.localStorage.default;
   }
 
   static save() {
@@ -16,5 +16,17 @@ export class Store {
   static clear() {
     this.content = config.localStorage.default;
     localStorage.setItem("geometry crack", JSON.stringify(this.content));
+  }
+
+  private static updateConfig(content: Record<keyof LocalStorage, unknown>) {
+    Object.keys(config.localStorage.default).forEach(value => {
+      const key = value as keyof LocalStorage;
+
+      if (key in content) return;
+
+      content[key] = config.localStorage.default[key];
+    });
+
+    return content as LocalStorage;
   }
 }
