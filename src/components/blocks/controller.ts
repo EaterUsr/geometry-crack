@@ -1,7 +1,7 @@
 import { Block } from "./block";
 import { List } from "@/utils/list";
 import { isCollision } from "@/utils/collision";
-import { Structures, useStructure } from "@/utils/structures";
+import { Structures, useLevel } from "@/utils/structures";
 import { levels } from "@/config/levels";
 
 export class BlocksController {
@@ -24,9 +24,7 @@ export class BlocksController {
         }
       };
     } else {
-      (levels[levelName].content as StructurePatern[]).forEach(patern =>
-        useStructure(patern, canvas, decorations, this)
-      );
+      useLevel(levels[levelName].content, canvas, decorations, this);
       this.updateChallenge = () => {};
     }
   }
@@ -46,9 +44,7 @@ export class BlocksController {
         }
       };
     } else {
-      (levels[levelName].content as StructurePatern[]).forEach(patern =>
-        useStructure(patern, this.canvas, this.decorations, this)
-      );
+      useLevel(levels[levelName].content, this.canvas, this.decorations, this);
       this.updateChallenge = () => {};
       this.structures = null;
     }

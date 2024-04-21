@@ -79,3 +79,40 @@ export function useStructure(
 export function parseCoords(coords: Coords, blockSize: number, origin: Coords) {
   return [coords[0] * blockSize + origin[0], -coords[1] * blockSize + origin[1]] as Coords;
 }
+
+export function useLevel(
+  level: LevelData,
+  canvas: CanvasConfig,
+  decorations: DecorationsConfig,
+  blocks: BlocksController
+) {
+  const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
+
+  level.forEach((structure, x) => {
+    structure.forEach((blockType, y) => {
+      if (blockType === null) return;
+      let block: Block;
+
+      switch (blockType) {
+        case "slab":
+          block = new Slab(
+            canvas,
+            parseCoords([x, y], decorations.blockSize, origin),
+            decorations.speed,
+            decorations.blockSize
+          );
+          break;
+        case "spike":
+          block = new Spike(
+            canvas,
+            parseCoords([x, y], decorations.blockSize, origin),
+            decorations.speed,
+            decorations.blockSize
+          );
+          break;
+      }
+
+      blocks.add(block);
+    });
+  });
+}

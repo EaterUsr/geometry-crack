@@ -67,4 +67,5 @@ declare type Skin = {
 };
 
 declare type LevelName = "1" | "2";
-declare type Level = { content: StrucurePatern[]; reward: number };
+declare type Level = { content: LevelData; reward: number };
+declare type LevelData = (BlockType | null)[][];
