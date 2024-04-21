@@ -163,6 +163,7 @@ export class UI {
   private readonly newRecord = qs("#new-record");
   private readonly crackcoinsCounters = qsa("[data-crackcoins-counter]");
   private readonly playingCrackcoinsCounter = qs("#play__crackcoin-counter");
+  private readonly playingCrackcoinsCounterContainer = qs("#play__crackcoin-counter-container");
   private readonly progressBar = qs("#play__progress-bar");
   private readonly btnResetProgress = qs("#reset-progress");
   private readonly levelsContainer = qs("#levels-container");
@@ -422,6 +423,14 @@ export class UI {
 
   displayCrackcoinsPlaying(crackcoins: number) {
     this.playingCrackcoinsCounter.textContent = `${Math.floor(crackcoins)}`;
+  }
+
+  addCrackcoinsPlaying() {
+    this.playingCrackcoinsCounterContainer.style.visibility = "visible";
+  }
+
+  removeCrackcoinsPlaying() {
+    this.playingCrackcoinsCounterContainer.style.visibility = "hidden";
   }
 
   displayShop() {

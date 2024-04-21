@@ -114,8 +114,6 @@ export class CanvasController {
       this.lastRegen = Date.now();
     }
 
-    if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
-
     this.ui.displayJumpsLeft(this.jumpsLeft);
     this.ui.displayTimeToRegen(
       this.jumpsLeft === cubeConf.jumps
@@ -123,10 +121,6 @@ export class CanvasController {
         : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
     );
     this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
-    this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
-    this.ui.displayCrackcoinsPlaying(
-      Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
-    );
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
@@ -139,6 +133,16 @@ export class CanvasController {
     this.cube.update(speedFrame, this.jumpsLeft);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.decorations.updateForeground(speedFrame);
+
+    if (this.ui.level === "challenge") {
+      if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
+      this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
+      this.ui.displayCrackcoinsPlaying(
+        Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
+      );
+
+      return;
+    }
   };
 
   private reset() {
@@ -148,6 +152,12 @@ export class CanvasController {
     this.blocks.reset(this.ui.level);
     this.cube.reset();
     this.jumpsLeft = cubeConf.jumps;
+
+    if (this.ui.level === "challenge") {
+      this.ui.addCrackcoinsPlaying();
+      return;
+    }
+    this.ui.removeCrackcoinsPlaying();
   }
 
   event(event: UIEvent) {

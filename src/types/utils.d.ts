@@ -48,6 +48,7 @@ type Elements =
   | "#reset-progress"
   | "#play__progress-bar"
   | "#play__crackcoin-counter"
+  | "#play__crackcoin-counter-container"
   | "#shop__current-skin"
   | "#shop__skins"
   | "#levels-container"
