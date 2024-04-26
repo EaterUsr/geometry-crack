@@ -87,6 +87,7 @@ export class CanvasController {
 
   die() {
     if (!this.isActive) return;
+    this.ui.die();
 
     Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
 
@@ -98,14 +99,12 @@ export class CanvasController {
     Store.save();
     this.ui.displayScore(this.config.score);
     this.ui.displayCrackcoins(Store.content.crackcoins);
-    this.ui.die();
-    this.isActive = false;
   }
 
   private animate = () => {
     window.requestAnimationFrame(this.animate);
 
-    if (this.cube.origin.content[0] < 0) setTimeout(this.die.bind(this), cubeConf.timeToDie);
+    if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.die.bind(this), cubeConf.timeToDie);
 
     if (this.jumpsLeft === cubeConf.jumps) this.lastRegen = Date.now();
 
@@ -144,9 +143,9 @@ export class CanvasController {
   private reset() {
     this.scoreMultiplier = 1;
     this.config.score = 0;
+    this.cube.reset();
     this.decorations.reset();
     this.blocks.reset(this.ui.level);
-    this.cube.reset();
     this.jumpsLeft = cubeConf.jumps;
   }
 
