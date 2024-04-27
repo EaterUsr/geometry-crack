@@ -167,7 +167,7 @@ export class UI {
   private readonly btnResetProgress = qs("#reset-progress");
   private readonly levelsContainer = qs("#levels-container");
 
-  private events = new EventList<"state buttons" | "jump" | "restart" | "menu" | "shop">();
+  private events = new EventList<"state buttons" | "playing" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
 
   private pages: Record<UITypestate["value"], HTMLElement>;
@@ -239,7 +239,7 @@ export class UI {
 
     this.events.enable("state buttons");
     this.events.add(
-      "jump",
+      "playing",
       "keydown",
       e => {
         const { key } = e;
@@ -252,10 +252,10 @@ export class UI {
     );
 
     if (/Android|iPhone/i.test(navigator.userAgent)) {
-      this.events.add("jump", "touchstart", () => this.onJump(), clickOverlay);
+      this.events.add("playing", "touchstart", () => this.onJump(), clickOverlay);
     } else {
       this.events.add(
-        "jump",
+        "playing",
         "click",
         () => {
           this.onJump();
@@ -315,6 +315,10 @@ export class UI {
       this.btnResetProgress
     );
 
+    this.events.addDocument("playing", "visibilitychange", () => {
+      this.handleEvent({ type: "PAUSE" });
+    });
+
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
     this.render(this.interpreter.getSnapshot());
@@ -335,7 +339,7 @@ export class UI {
         this.events.disable("menu");
         break;
       case "play":
-        this.events.disable("jump");
+        this.events.disable("playing");
         break;
       case "gameOver":
         this.events.disable("restart");
@@ -351,7 +355,7 @@ export class UI {
         this.events.enable("menu");
         break;
       case "play":
-        this.events.enable("jump");
+        this.events.enable("playing");
         break;
       case "gameOver":
         setTimeout(() => {
