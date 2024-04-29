@@ -1,6 +1,9 @@
 export const levels: Record<LevelName, Level> = {
   1: {
-    content: [["slab", [0, 0]]],
+    content: [
+      ["rock", [0, 2]],
+      ["slab", [9, 2]],
+    ],
     reward: 10,
   },
   2: {

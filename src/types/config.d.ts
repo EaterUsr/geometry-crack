@@ -54,6 +54,7 @@ declare type Config = Readonly<{
     }>;
     spike: BlockConfig;
     slab: blockconfig;
+    rock: blockconfig;
   }>;
   decorations: Readonly<{
     speed: number;

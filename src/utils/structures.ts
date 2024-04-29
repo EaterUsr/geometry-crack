@@ -4,6 +4,7 @@ import { Spike } from "@/components/blocks/spike";
 import { Slab } from "@/components/blocks/slab";
 import { BlocksController } from "@/components/blocks";
 import { config } from "@/config";
+import { Rock } from "@/components/blocks/rock";
 
 export class Structures {
   private readonly structuresPatern = config.structures;
@@ -54,22 +55,22 @@ export function useStructure(
 ) {
   const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
   let block: Block;
+  const props = [
+    canvas,
+    parseCoords(patern[1], decorations.blockSize, origin),
+    decorations.speed,
+    decorations.blockSize,
+  ] as const;
+
   switch (patern[0]) {
     case "spike":
-      block = new Spike(
-        canvas,
-        parseCoords(patern[1], decorations.blockSize, origin),
-        decorations.speed,
-        decorations.blockSize
-      );
+      block = new Spike(...props);
       break;
     case "slab":
-      block = new Slab(
-        canvas,
-        parseCoords(patern[1], decorations.blockSize, origin),
-        decorations.speed,
-        decorations.blockSize
-      );
+      block = new Slab(...props);
+      break;
+    case "rock":
+      block = new Rock(...props);
       break;
   }
 

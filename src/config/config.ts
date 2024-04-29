@@ -22,6 +22,9 @@ export const config: Config = {
     slab: {
       img: loadImage("img/components/slab.svg"),
     },
+    rock: {
+      img: loadImage("img/components/rock.svg"),
+    },
   },
   decorations: {
     particules: {

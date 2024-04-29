@@ -80,7 +80,10 @@ export class CanvasController {
         this.die();
         break;
       case "slab":
-        this.cube.onSlabCollision(block.position);
+        this.cube.onCollision(block.position, block.type);
+        break;
+      case "rock":
+        this.cube.onCollision(block.position, block.type);
         break;
     }
   };
