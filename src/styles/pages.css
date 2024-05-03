@@ -270,6 +270,7 @@ body {
     font-size: 3rem;
     font-weight: var(--wght-black);
     font-family: var(--font-noto);
+    text-align: center;
     animation: new-record 1s alternate infinite ease-in-out;
     opacity: 0;
     z-index: 1;

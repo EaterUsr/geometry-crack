@@ -53,6 +53,7 @@ type Elements =
   | "#levels-container"
   | "#challenge-btn"
   | "[data-button]"
+  | "[data-level]"
   | "[data-crackcoins-counter]";
 
 declare type Selector = Elements | `${Elements} ${Elements}`;

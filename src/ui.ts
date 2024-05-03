@@ -185,7 +185,10 @@ export class UI {
       this.pages[pageName] = qs(`#${pageName}`);
     });
 
+    this.displayLevels();
+
     const buttons = qsa("[data-button]");
+    const levelButtons = qsa("[data-level]");
     const challengeBtn = qs("#challenge-btn");
     const clickOverlay = qs("#play__click-overlay");
     const gameOverClickOverlay = qs("#game-over__click-overlay");
@@ -224,18 +227,21 @@ export class UI {
     this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), challengeBtn);
     challengeBtn.setAttribute("tabindex", "-1");
 
-    this.events.add(
-      "state buttons",
-      "click",
-      e => {
-        const levelBtn = e.target as HTMLButtonElement;
-        const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
+    levelButtons.forEach(levelBtn => {
+      this.events.add(
+        "state buttons",
+        "click",
+        () => {
+          const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
 
-        this.level = levelNumber;
-        this.handleEvent({ type: "START" });
-      },
-      this.levelsContainer
-    );
+          if (Store.content.levelsCompleted + 1 < +levelNumber) return;
+
+          this.level = levelNumber;
+          this.handleEvent({ type: "START" });
+        },
+        levelBtn
+      );
+    });
 
     this.events.enable("state buttons");
     this.events.add(
@@ -364,9 +370,6 @@ export class UI {
         break;
       case "shop":
         this.events.enable("shop");
-        break;
-      case "levels":
-        this.displayLevels();
         break;
     }
 
