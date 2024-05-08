@@ -41,21 +41,7 @@ export class CanvasController {
 
     this.decorations = new DecorationsController(this.config);
     this.cube = new Cube(this.config, this.decorations.config);
-    this.blocks = new BlocksController(
-      this.config,
-      this.decorations.config,
-      this.onCollision,
-      () => {
-        if (this.ui.level !== "challenge" && Store.content.levelsCompleted < +this.ui.level) {
-          Store.content.crackcoins += levels[this.ui.level].reward;
-          Store.content.levelsCompleted = +this.ui.level;
-          Store.save();
-          this.ui.displayCrackcoins(Store.content.crackcoins);
-        }
-        this.ui.finish();
-      },
-      this.ui.level
-    );
+    this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision, this.ui.level);
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
@@ -74,6 +60,16 @@ export class CanvasController {
     this.isActive = true;
   }
 
+  finish() {
+    if (this.ui.level !== "challenge" && Store.content.levelsCompleted < +this.ui.level) {
+      Store.content.crackcoins += levels[this.ui.level].reward;
+      Store.content.levelsCompleted = +this.ui.level;
+      Store.save();
+      this.ui.displayCrackcoins(Store.content.crackcoins);
+    }
+    this.ui.finish();
+  }
+
   onCollision = (block: Block) => {
     switch (block.type) {
       case "spike":
@@ -84,6 +80,9 @@ export class CanvasController {
         break;
       case "rock":
         this.cube.onCollision(block.position, block.type);
+        break;
+      case "flag":
+        this.finish();
         break;
     }
   };

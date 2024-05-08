@@ -5,6 +5,7 @@ import { Slab } from "@/components/blocks/slab";
 import { BlocksController } from "@/components/blocks";
 import { config } from "@/config";
 import { Rock } from "@/components/blocks/rock";
+import { Flag } from "@/components/blocks/flag";
 
 export class Structures {
   private readonly structuresPatern = config.structures;
@@ -71,6 +72,9 @@ export function useStructure(
       break;
     case "rock":
       block = new Rock(...props);
+      break;
+    case "flag":
+      block = new Flag(...props);
       break;
   }
 

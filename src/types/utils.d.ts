@@ -22,7 +22,7 @@ declare type AreNull<TValue extends null | unknown | (null | unknown)[]> = TValu
   ? boolean[]
   : boolean;
 
-declare type BlockType = "spike" | "slab" | "rock";
+declare type BlockType = "spike" | "slab" | "rock" | "flag";
 declare type StructurePatern = [BlockType, Cooords];
 declare type Structure = [score: Minmax, structure: StructurePatern[], jumps: number];
 declare type Structures = Structure[];

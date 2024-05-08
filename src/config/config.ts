@@ -25,6 +25,9 @@ export const config: Config = {
     rock: {
       img: loadImage("img/components/rock.svg"),
     },
+    flag: {
+      img: loadImage("img/components/flag.svg"),
+    },
   },
   decorations: {
     particules: {
