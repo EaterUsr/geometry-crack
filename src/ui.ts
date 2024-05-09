@@ -13,6 +13,7 @@ import { Store } from "./utils/store";
 import { config } from "@/config";
 import { createPopup } from "./utils/popup";
 import { levels } from "./config/levels";
+import { getGamemode } from "./utils/gamemode";
 
 export type UIEvent =
   | { type: "START" }
@@ -166,6 +167,8 @@ export class UI {
   private readonly progressBar = qs("#play__progress-bar");
   private readonly btnResetProgress = qs("#reset-progress");
   private readonly levelsContainer = qs("#levels-container");
+  private readonly fpsContainer = qs("#play__fps");
+  private readonly gamemode = getGamemode();
 
   private events = new EventList<"state buttons" | "playing" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
@@ -325,6 +328,8 @@ export class UI {
       this.handleEvent({ type: "PAUSE" });
     });
 
+    if (this.gamemode === "debug") this.fpsContainer.style.visibility = "visible";
+
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
     this.render(this.interpreter.getSnapshot());
@@ -471,5 +476,9 @@ export class UI {
           </button>`;
       })
       .join("");
+  }
+
+  displayFPS(fps: number) {
+    this.fpsContainer.textContent = `fps: ${fps}`;
   }
 }

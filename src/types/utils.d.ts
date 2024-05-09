@@ -52,6 +52,7 @@ type Elements =
   | "#shop__skins"
   | "#levels-container"
   | "#challenge-btn"
+  | "#play__fps"
   | "[data-button]"
   | "[data-level]"
   | "[data-crackcoins-counter]";
@@ -68,3 +69,5 @@ declare type Skin = {
 
 declare type LevelName = "1" | "2";
 declare type Level = { content: StrucurePatern[]; reward: number };
+
+declare type Gamemode = "default" | "debug";

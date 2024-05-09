@@ -39,6 +39,7 @@ declare type LocalStorage = {
 declare type Config = Readonly<{
   canvasWidth: number;
   canvasHeight: number;
+  fpsCalculationTime: number;
   structures: Structures;
   delayBeforeRestart: number;
   components: Readonly<{

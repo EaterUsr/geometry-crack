@@ -22,6 +22,7 @@ export class CanvasController {
   private isActive = false;
   private lastFrame = Date.now();
   private scoreMultiplier = 1;
+  private fps = 0;
 
   constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
     this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
@@ -48,6 +49,10 @@ export class CanvasController {
     this.ui.displayCrackcoins(Store.content.crackcoins);
     this.ui.onSkinUpdate = this.cube.setSkin;
 
+    setInterval(() => {
+      this.ui.displayFPS(Math.floor((this.fps * 1000) / config.fpsCalculationTime));
+      this.fps = 0;
+    }, config.fpsCalculationTime);
     this.animate();
   }
 
@@ -105,6 +110,7 @@ export class CanvasController {
 
   private animate = () => {
     window.requestAnimationFrame(this.animate);
+    this.fps++;
 
     if (this.cube.origin.content[0] < 0 && this.isActive) setTimeout(this.die.bind(this), cubeConf.timeToDie);
 

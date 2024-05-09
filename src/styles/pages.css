@@ -192,6 +192,17 @@ body {
     background-clip: text;
     color: transparent;
   }
+
+  &__fps {
+    position: fixed;
+    top: 5rem;
+    right: 1rem;
+    font-size: 2rem;
+    color: hsl(0 0 100%);
+    font-family: system-ui, sans-serif;
+    font-weight: var(--wght-medium);
+    -webkit-text-stroke: .1rem hsl(0 0 0);
+  }
 }
 
 .paused {
