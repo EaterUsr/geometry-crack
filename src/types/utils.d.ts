@@ -22,8 +22,8 @@ declare type AreNull<TValue extends null | unknown | (null | unknown)[]> = TValu
   ? boolean[]
   : boolean;
 
-declare type BlockType = "spike" | "slab";
-declare type StructurePatern = [BlockType, Cooords];
+declare type BlockType = "spike" | "slab" | "rock" | "flag";
+declare type StructurePatern = [BlockType, Coords];
 declare type Structure = [score: Minmax, structure: StructurePatern[], jumps: number];
 declare type Structures = Structure[];
 
@@ -53,7 +53,9 @@ type Elements =
   | "#shop__skins"
   | "#levels-container"
   | "#challenge-btn"
+  | "#play__fps"
   | "[data-button]"
+  | "[data-level]"
   | "[data-crackcoins-counter]";
 
 declare type Selector = Elements | `${Elements} ${Elements}`;
@@ -69,3 +71,5 @@ declare type Skin = {
 declare type LevelName = "1" | "2";
 declare type Level = { content: LevelData; reward: number };
 declare type LevelData = (BlockType | null)[][];
+
+declare type Gamemode = "default" | "debug";

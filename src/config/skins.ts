@@ -7,33 +7,33 @@ export const skins = [
     status: "equipped",
   },
   {
+    name: "twinky",
+    price: 20,
+    status: "unbought",
+  },
+  {
     name: "batman",
     price: 50,
     status: "unbought",
   },
   {
-    name: "fractal",
-    price: 50,
-    status: "unbought",
-  },
-  {
     name: "gameboy",
-    price: 50,
-    status: "unbought",
-  },
-  {
-    name: "matrix",
-    price: 50,
+    price: 100,
     status: "unbought",
   },
   {
     name: "neon",
-    price: 50,
+    price: 120,
     status: "unbought",
   },
   {
-    name: "twinky",
-    price: 10,
+    name: "fractal",
+    price: 150,
+    status: "unbought",
+  },
+  {
+    name: "matrix",
+    price: 250,
     status: "unbought",
   },
 ]

@@ -4,6 +4,8 @@ import { Spike } from "@/components/blocks/spike";
 import { Slab } from "@/components/blocks/slab";
 import { BlocksController } from "@/components/blocks";
 import { config } from "@/config";
+import { Rock } from "@/components/blocks/rock";
+import { Flag } from "@/components/blocks/flag";
 
 export class Structures {
   private readonly structuresPatern = config.structures;
@@ -54,22 +56,25 @@ export function useStructure(
 ) {
   const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
   let block: Block;
+  const props = [
+    canvas,
+    parseCoords(patern[1], decorations.blockSize, origin),
+    decorations.speed,
+    decorations.blockSize,
+  ] as const;
+
   switch (patern[0]) {
     case "spike":
-      block = new Spike(
-        canvas,
-        parseCoords(patern[1], decorations.blockSize, origin),
-        decorations.speed,
-        decorations.blockSize
-      );
+      block = new Spike(...props);
       break;
     case "slab":
-      block = new Slab(
-        canvas,
-        parseCoords(patern[1], decorations.blockSize, origin),
-        decorations.speed,
-        decorations.blockSize
-      );
+      block = new Slab(...props);
+      break;
+    case "rock":
+      block = new Rock(...props);
+      break;
+    case "flag":
+      block = new Flag(...props);
       break;
   }
 
@@ -86,33 +91,11 @@ export function useLevel(
   decorations: DecorationsConfig,
   blocks: BlocksController
 ) {
-  const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
-
   level.forEach((structure, x) => {
     structure.forEach((blockType, y) => {
       if (blockType === null) return;
-      let block: Block;
 
-      switch (blockType) {
-        case "slab":
-          block = new Slab(
-            canvas,
-            parseCoords([x, y], decorations.blockSize, origin),
-            decorations.speed,
-            decorations.blockSize
-          );
-          break;
-        case "spike":
-          block = new Spike(
-            canvas,
-            parseCoords([x, y], decorations.blockSize, origin),
-            decorations.speed,
-            decorations.blockSize
-          );
-          break;
-      }
-
-      blocks.add(block);
+      useStructure([blockType, [x, y]], canvas, decorations, blocks);
     });
   });
 }

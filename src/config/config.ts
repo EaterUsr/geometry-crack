@@ -22,6 +22,12 @@ export const config: Config = {
     slab: {
       img: loadImage("img/components/slab.svg"),
     },
+    rock: {
+      img: loadImage("img/components/rock.svg"),
+    },
+    flag: {
+      img: loadImage("img/components/flag.svg"),
+    },
   },
   decorations: {
     particules: {
@@ -64,6 +70,7 @@ export const config: Config = {
   },
   canvasWidth: 800,
   canvasHeight: 365,
+  fpsCalculationTime: 300,
   localStorage: {
     default: {
       HS: 0,

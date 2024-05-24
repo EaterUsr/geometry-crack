@@ -39,6 +39,7 @@ declare type LocalStorage = {
 declare type Config = Readonly<{
   canvasWidth: number;
   canvasHeight: number;
+  fpsCalculationTime: number;
   structures: Structures;
   delayBeforeRestart: number;
   components: Readonly<{
@@ -53,7 +54,9 @@ declare type Config = Readonly<{
       positionX: number;
     }>;
     spike: BlockConfig;
-    slab: blockconfig;
+    slab: BlockConfig;
+    rock: BlockConfig;
+    flag: BlockConfig;
   }>;
   decorations: Readonly<{
     speed: number;

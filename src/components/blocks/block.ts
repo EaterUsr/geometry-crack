@@ -6,8 +6,13 @@ export abstract class Block {
   protected abstract readonly image: HTMLImageElement;
   abstract readonly type: BlockType;
 
-  constructor({ ctx }: CanvasConfig, public position: Coords, public speed: number, public size: number) {
-    this.ctx = ctx;
+  constructor(
+    protected readonly canvas: CanvasConfig,
+    public position: Coords,
+    public speed: number,
+    public size: number
+  ) {
+    this.ctx = canvas.ctx;
   }
 
   protected abstract drawPatern(): void;

@@ -140,32 +140,34 @@ export class Cube {
     }
   }
 
-  onSlabCollision = (slabPosition: Coords) => {
-    if (this.ignoreCollisionHeight.has(slabPosition[1] + this.halfBlockSize)) return;
+  onCollision = (blockPosition: Coords, blockType: BlockType) => {
+    const blockHeight = blockType === "slab" ? this.halfBlockSize : this.decorations.blockSize;
 
-    const isTouchingBottom = this.center[1] > slabPosition[1] + this.halfBlockSize;
-    const doesCenterExeedsSlabSide = this.center[0] > slabPosition[0];
+    if (this.ignoreCollisionHeight.has(blockPosition[1] + blockHeight)) return;
+
+    const isTouchingBottom = this.center[1] > blockPosition[1] + blockHeight;
+    const doesCenterExeedsSlabSide = this.center[0] > blockPosition[0];
 
     if (isTouchingBottom && doesCenterExeedsSlabSide) {
       this.origin.target = [null, null];
       this.velocity = 0;
       this.isFrozen = false;
-      this.ignoreCollisionHeight.add(slabPosition[1] + this.halfBlockSize);
+      this.ignoreCollisionHeight.add(blockPosition[1] + blockHeight);
       return;
     }
 
-    if (!doesCenterExeedsSlabSide && this.floorHeight > slabPosition[1]) {
+    if (!doesCenterExeedsSlabSide && this.floorHeight > blockPosition[1]) {
       this.isFrozen = true;
       const closest = closestDeg(this.deg.content);
       this.deg.target = (closest + 360 > this.deg.content + 360 ? closest + 270 : closest) % 360;
 
       if (this.isTouchingTheFloor()) {
-        this.origin.content[0] = slabPosition[0] - this.decorations.blockSize;
+        this.origin.content[0] = blockPosition[0] - this.decorations.blockSize;
         this.origin.target[0] = null;
         return;
       }
 
-      this.origin.target[0] = slabPosition[0] - this.decorations.blockSize;
+      this.origin.target[0] = blockPosition[0] - this.decorations.blockSize;
 
       return;
     }
@@ -177,13 +179,13 @@ export class Cube {
       this.lastSlabCollision = Date.now();
     }
 
-    if (this.center[0] < slabPosition[0] + this.halfBlockSize) {
+    if (this.center[0] < blockPosition[0] + blockHeight) {
       this.deg.target = closestDeg(this.deg.content);
-      this.origin.target[1] = slabPosition[1] - this.decorations.blockSize;
+      this.origin.target[1] = blockPosition[1] - this.decorations.blockSize;
     }
 
     this.origin.target = [null, null];
-    this.floorHeight = slabPosition[1];
+    this.floorHeight = blockPosition[1];
     this.isFalling = true;
   };
 

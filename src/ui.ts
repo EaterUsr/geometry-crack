@@ -13,6 +13,7 @@ import { Store } from "./utils/store";
 import { config } from "@/config";
 import { createPopup } from "./utils/popup";
 import { levels } from "./config/levels";
+import { getGamemode } from "./utils/gamemode";
 
 export type UIEvent =
   | { type: "START" }
@@ -167,8 +168,10 @@ export class UI {
   private readonly progressBar = qs("#play__progress-bar");
   private readonly btnResetProgress = qs("#reset-progress");
   private readonly levelsContainer = qs("#levels-container");
+  private readonly fpsContainer = qs("#play__fps");
+  private readonly gamemode = getGamemode();
 
-  private events = new EventList<"state buttons" | "jump" | "restart" | "menu" | "shop">();
+  private events = new EventList<"state buttons" | "playing" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
 
   private pages: Record<UITypestate["value"], HTMLElement>;
@@ -186,7 +189,10 @@ export class UI {
       this.pages[pageName] = qs(`#${pageName}`);
     });
 
+    this.displayLevels();
+
     const buttons = qsa("[data-button]");
+    const levelButtons = qsa("[data-level]");
     const challengeBtn = qs("#challenge-btn");
     const clickOverlay = qs("#play__click-overlay");
     const gameOverClickOverlay = qs("#game-over__click-overlay");
@@ -225,22 +231,25 @@ export class UI {
     this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), challengeBtn);
     challengeBtn.setAttribute("tabindex", "-1");
 
-    this.events.add(
-      "state buttons",
-      "click",
-      e => {
-        const levelBtn = e.target as HTMLButtonElement;
-        const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
+    levelButtons.forEach(levelBtn => {
+      this.events.add(
+        "state buttons",
+        "click",
+        () => {
+          const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
 
-        this.level = levelNumber;
-        this.handleEvent({ type: "START" });
-      },
-      this.levelsContainer
-    );
+          if (Store.content.levelsCompleted + 1 < +levelNumber) return;
+
+          this.level = levelNumber;
+          this.handleEvent({ type: "START" });
+        },
+        levelBtn
+      );
+    });
 
     this.events.enable("state buttons");
     this.events.add(
-      "jump",
+      "playing",
       "keydown",
       e => {
         const { key } = e;
@@ -253,10 +262,10 @@ export class UI {
     );
 
     if (/Android|iPhone/i.test(navigator.userAgent)) {
-      this.events.add("jump", "touchstart", () => this.onJump(), clickOverlay);
+      this.events.add("playing", "touchstart", () => this.onJump(), clickOverlay);
     } else {
       this.events.add(
-        "jump",
+        "playing",
         "click",
         () => {
           this.onJump();
@@ -316,6 +325,12 @@ export class UI {
       this.btnResetProgress
     );
 
+    this.events.addDocument("playing", "visibilitychange", () => {
+      this.handleEvent({ type: "PAUSE" });
+    });
+
+    if (this.gamemode === "debug") this.fpsContainer.style.visibility = "visible";
+
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
     this.render(this.interpreter.getSnapshot());
@@ -336,7 +351,7 @@ export class UI {
         this.events.disable("menu");
         break;
       case "play":
-        this.events.disable("jump");
+        this.events.disable("playing");
         break;
       case "gameOver":
         this.events.disable("restart");
@@ -352,7 +367,7 @@ export class UI {
         this.events.enable("menu");
         break;
       case "play":
-        this.events.enable("jump");
+        this.events.enable("playing");
         break;
       case "gameOver":
         setTimeout(() => {
@@ -361,9 +376,6 @@ export class UI {
         break;
       case "shop":
         this.events.enable("shop");
-        break;
-      case "levels":
-        this.displayLevels();
         break;
     }
 
@@ -473,5 +485,9 @@ export class UI {
           </button>`;
       })
       .join("");
+  }
+
+  displayFPS(fps: number) {
+    this.fpsContainer.textContent = `fps: ${fps}`;
   }
 }
