@@ -23,6 +23,7 @@ export class CanvasController {
   private lastFrame = Date.now();
   private scoreMultiplier = 1;
   private fps = 0;
+  private startDate = Date.now();
 
   constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
     this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
@@ -63,6 +64,7 @@ export class CanvasController {
   start() {
     this.lastFrame = Date.now();
     this.isActive = true;
+    this.startDate = Date.now();
   }
 
   finish() {
@@ -133,7 +135,7 @@ export class CanvasController {
     this.lastFrame = Date.now();
 
     this.config.score = truncNbr(
-      this.config.score + (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize
+      ((Date.now() - this.startDate) * this.decorations.config.speed) / this.decorations.config.blockSize
     );
 
     this.decorations.updateBackground(speedFrame);
@@ -150,6 +152,8 @@ export class CanvasController {
 
       return;
     }
+
+    this.ui.displayProgressBar(1 - (this.blocks.flagDistance as number) / (this.blocks.levelSize as number));
   };
 
   private reset() {
@@ -159,6 +163,7 @@ export class CanvasController {
     this.decorations.reset();
     this.blocks.reset(this.ui.level);
     this.jumpsLeft = cubeConf.jumps;
+    this.startDate = Date.now();
 
     if (this.ui.level === "challenge") {
       this.ui.addCrackcoinsPlaying();

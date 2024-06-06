@@ -14,6 +14,7 @@ import { config } from "@/config";
 import { createPopup } from "./utils/popup";
 import { levels } from "./config/levels";
 import { getGamemode } from "./utils/gamemode";
+import { truncNbr } from "./utils/math";
 
 export type UIEvent =
   | { type: "START" }
@@ -424,7 +425,7 @@ export class UI {
   }
 
   displayProgressBar(progress: number) {
-    this.progressBar.style.setProperty("--js-width", `${Math.floor(progress * 100)}%`);
+    this.progressBar.style.setProperty("--js-width", `${Math.min(100, truncNbr(progress * 100))}%`);
   }
 
   displayCrackcoins(crackcoins: number) {
