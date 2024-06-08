@@ -239,7 +239,7 @@ export class UI {
         () => {
           const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
 
-          if (Store.content.levelsCompleted + 1 < +levelNumber) return;
+          if (Store.content.levels[levelNumber].completed) return;
 
           this.level = levelNumber;
           this.handleEvent({ type: "START" });
@@ -477,7 +477,7 @@ export class UI {
   displayLevels() {
     this.levelsContainer.innerHTML = Object.keys(levels)
       .map(levelNumber => {
-        const isLocked = +levelNumber - 1 > Store.content.levelsCompleted;
+        const isLocked = Store.content.levels[+levelNumber - 1].completed;
 
         return `
           <button class="btn btn--level ${isLocked ? "btn--level-locked" : ""}" data-level=${levelNumber}>

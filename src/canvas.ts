@@ -68,9 +68,10 @@ export class CanvasController {
   }
 
   finish() {
-    if (this.ui.level !== "challenge" && Store.content.levelsCompleted < +this.ui.level) {
+    if (this.ui.level !== "challenge" && !Store.content.levels[this.ui.level].completed) {
       Store.content.crackcoins += levels[this.ui.level].reward;
-      Store.content.levelsCompleted = +this.ui.level;
+      Store.content.levels[this.ui.level].completed = true;
+      Store.content.levels[this.ui.level].HS = this.config.score;
       Store.save();
       this.ui.displayCrackcoins(Store.content.crackcoins);
     }
@@ -98,11 +99,18 @@ export class CanvasController {
     if (!this.isActive) return;
     this.ui.die();
 
-    Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
+    if (this.ui.level === "challenge") {
+      Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
 
-    if (this.scoreMultiplier !== 1) {
-      this.ui.displayNewRecord();
-      Store.content.HS = Math.floor(this.config.score);
+      if (this.scoreMultiplier !== 1) {
+        this.ui.displayNewRecord();
+        Store.content.HS = Math.floor(this.config.score);
+      }
+    } else {
+      if (Store.content.levels[this.ui.level].HS < this.config.score) {
+        this.ui.displayNewRecord();
+        Store.content.levels[this.ui.level].HS = Math.floor(this.config.score);
+      }
     }
 
     Store.save();
@@ -129,7 +137,6 @@ export class CanvasController {
         ? 1
         : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
     );
-    this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
@@ -145,15 +152,19 @@ export class CanvasController {
 
     if (this.ui.level === "challenge") {
       if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
+
       this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
       this.ui.displayCrackcoinsPlaying(
         Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
       );
 
+      this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
+
       return;
     }
 
     this.ui.displayProgressBar(1 - (this.blocks.flagDistance as number) / (this.blocks.levelSize as number));
+    this.ui.displayHighestScore(Math.max(Store.content.levels[this.ui.level].HS, this.config.score));
   };
 
   private reset() {

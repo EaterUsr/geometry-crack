@@ -32,8 +32,8 @@ declare type ParticuleConfig = Readonly<{
 declare type LocalStorage = {
   HS: number;
   crackcoins: number;
-  levelsCompleted: number;
   skins: Skin[];
+  levels: { completed: boolean; HS: number }[];
 };
 
 declare type Config = Readonly<{
