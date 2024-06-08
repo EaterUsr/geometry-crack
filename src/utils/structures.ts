@@ -84,3 +84,18 @@ export function useStructure(
 export function parseCoords(coords: Coords, blockSize: number, origin: Coords) {
   return [coords[0] * blockSize + origin[0], -coords[1] * blockSize + origin[1]] as Coords;
 }
+
+export function useLevel(
+  level: LevelData,
+  canvas: CanvasConfig,
+  decorations: DecorationsConfig,
+  blocks: BlocksController
+) {
+  level.forEach((structure, x) => {
+    structure.forEach((blockType, y) => {
+      if (blockType === null) return;
+
+      useStructure([blockType, [x, y]], canvas, decorations, blocks);
+    });
+  });
+}

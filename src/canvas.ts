@@ -23,6 +23,7 @@ export class CanvasController {
   private lastFrame = Date.now();
   private scoreMultiplier = 1;
   private fps = 0;
+  private startDate = Date.now();
 
   constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
     this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
@@ -63,12 +64,14 @@ export class CanvasController {
   start() {
     this.lastFrame = Date.now();
     this.isActive = true;
+    this.startDate = Date.now();
   }
 
   finish() {
-    if (this.ui.level !== "challenge" && Store.content.levelsCompleted < +this.ui.level) {
+    if (this.ui.level !== "challenge" && !Store.content.levels[this.ui.level].completed) {
       Store.content.crackcoins += levels[this.ui.level].reward;
-      Store.content.levelsCompleted = +this.ui.level;
+      Store.content.levels[this.ui.level].completed = true;
+      Store.content.levels[this.ui.level].HS = this.config.score;
       Store.save();
       this.ui.displayCrackcoins(Store.content.crackcoins);
     }
@@ -96,11 +99,18 @@ export class CanvasController {
     if (!this.isActive) return;
     this.ui.die();
 
-    Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
+    if (this.ui.level === "challenge") {
+      Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
 
-    if (this.scoreMultiplier !== 1) {
-      this.ui.displayNewRecord();
-      Store.content.HS = Math.floor(this.config.score);
+      if (this.scoreMultiplier !== 1) {
+        this.ui.displayNewRecord();
+        Store.content.HS = Math.floor(this.config.score);
+      }
+    } else {
+      if (Store.content.levels[this.ui.level].HS < this.config.score) {
+        this.ui.displayNewRecord();
+        Store.content.levels[this.ui.level].HS = Math.floor(this.config.score);
+      }
     }
 
     Store.save();
@@ -121,31 +131,40 @@ export class CanvasController {
       this.lastRegen = Date.now();
     }
 
-    if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
-
     this.ui.displayJumpsLeft(this.jumpsLeft);
     this.ui.displayTimeToRegen(
       this.jumpsLeft === cubeConf.jumps
         ? 1
         : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
     );
-    this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
-    this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
-    this.ui.displayCrackcoinsPlaying(
-      Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
-    );
 
     const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
     this.lastFrame = Date.now();
 
     this.config.score = truncNbr(
-      this.config.score + (speedFrame * this.decorations.config.speed) / this.decorations.config.blockSize
+      ((Date.now() - this.startDate) * this.decorations.config.speed) / this.decorations.config.blockSize
     );
 
     this.decorations.updateBackground(speedFrame);
     this.cube.update(speedFrame, this.jumpsLeft);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.decorations.updateForeground(speedFrame);
+
+    if (this.ui.level === "challenge") {
+      if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
+
+      this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
+      this.ui.displayCrackcoinsPlaying(
+        Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
+      );
+
+      this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
+
+      return;
+    }
+
+    this.ui.displayProgressBar(1 - (this.blocks.flagDistance as number) / (this.blocks.levelSize as number));
+    this.ui.displayHighestScore(Math.max(Store.content.levels[this.ui.level].HS, this.config.score));
   };
 
   private reset() {
@@ -155,6 +174,13 @@ export class CanvasController {
     this.decorations.reset();
     this.blocks.reset(this.ui.level);
     this.jumpsLeft = cubeConf.jumps;
+    this.startDate = Date.now();
+
+    if (this.ui.level === "challenge") {
+      this.ui.addCrackcoinsPlaying();
+      return;
+    }
+    this.ui.removeCrackcoinsPlaying();
   }
 
   event(event: UIEvent) {

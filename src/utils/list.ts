@@ -1,4 +1,4 @@
-type Node<TValue> = { value: TValue; next: null | Node<TValue> };
+export type Node<TValue> = { value: TValue; next: null | Node<TValue> };
 
 export class List<T> {
   private head: null | Node<T>;

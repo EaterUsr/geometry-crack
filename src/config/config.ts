@@ -1,6 +1,7 @@
 import { structures } from "./structures";
 import { skins } from "./skins";
 import { loadImage } from "@/utils/image";
+import { levels } from "./levels";
 
 export const config: Config = {
   structures,
@@ -75,8 +76,8 @@ export const config: Config = {
     default: {
       HS: 0,
       crackcoins: 0,
-      levelsCompleted: 0,
       skins,
+      levels: Object.keys(levels).map(() => ({ completed: false, HS: 0 })),
     },
     parser: storage => {
       storage.crackcoins = Math.floor(storage.crackcoins);

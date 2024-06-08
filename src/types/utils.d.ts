@@ -23,7 +23,7 @@ declare type AreNull<TValue extends null | unknown | (null | unknown)[]> = TValu
   : boolean;
 
 declare type BlockType = "spike" | "slab" | "rock" | "flag";
-declare type StructurePatern = [BlockType, Cooords];
+declare type StructurePatern = [BlockType, Coords];
 declare type Structure = [score: Minmax, structure: StructurePatern[], jumps: number];
 declare type Structures = Structure[];
 
@@ -48,6 +48,7 @@ type Elements =
   | "#reset-progress"
   | "#play__progress-bar"
   | "#play__crackcoin-counter"
+  | "#play__crackcoin-counter-container"
   | "#shop__current-skin"
   | "#shop__skins"
   | "#levels-container"
@@ -68,6 +69,7 @@ declare type Skin = {
 };
 
 declare type LevelName = "1" | "2";
-declare type Level = { content: StrucurePatern[]; reward: number };
+declare type Level = { content: LevelData; reward: number };
+declare type LevelData = (BlockType | null)[][];
 
 declare type Gamemode = "default" | "debug";

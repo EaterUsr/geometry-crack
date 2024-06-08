@@ -1,13 +1,15 @@
 import { Block } from "./block";
-import { List } from "@/utils/list";
+import { List, Node } from "@/utils/list";
 import { isCollision } from "@/utils/collision";
-import { Structures, useStructure } from "@/utils/structures";
+import { Structures, useLevel } from "@/utils/structures";
 import { levels } from "@/config/levels";
 
 export class BlocksController {
   private readonly content = new List<Block>();
   private structures: Structures | null = null;
   private updateChallenge = () => {};
+  flagDistance: null | number = null;
+  levelSize: null | number = null;
 
   constructor(
     private readonly canvas: CanvasConfig,
@@ -15,19 +17,7 @@ export class BlocksController {
     private readonly onCollision: (block: Block) => void,
     levelName: LevelName | "challenge"
   ) {
-    if (levelName === "challenge") {
-      this.structures = new Structures(canvas, decorations, this);
-      this.updateChallenge = () => {
-        if ((this.content.getLast()?.value.position[0] ?? 0) < 100) {
-          this.structures?.build();
-        }
-      };
-    } else {
-      (levels[levelName].content as StructurePatern[]).forEach(patern =>
-        useStructure(patern, canvas, decorations, this)
-      );
-      this.updateChallenge = () => {};
-    }
+    this.reset(levelName);
   }
 
   add(block: Block) {
@@ -44,16 +34,28 @@ export class BlocksController {
           this.structures?.build();
         }
       };
+      this.flagDistance = null;
+      this.levelSize = null;
     } else {
-      (levels[levelName].content as StructurePatern[]).forEach(patern =>
-        useStructure(patern, this.canvas, this.decorations, this)
-      );
+      useLevel(levels[levelName].content, this.canvas, this.decorations, this);
+      this.levelSize = this.calcFlagDistance();
+      this.flagDistance = this.levelSize;
       this.updateChallenge = () => {};
       this.structures = null;
     }
   }
 
+  private calcFlagDistance() {
+    return (
+      (this.content.getLast() as Node<Block>).value.position[0] -
+      this.decorations.cubeOrigin[0] -
+      this.decorations.blockSize
+    );
+  }
+
   update(cubeOrigin: Coords, speedFrame: number, cubeHitbox: Hitbox) {
+    if (this.content.length !== 0) this.flagDistance = this.calcFlagDistance();
+
     this.updateChallenge();
     this.content.forEach(block => {
       block.update(speedFrame);

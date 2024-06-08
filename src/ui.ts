@@ -14,6 +14,7 @@ import { config } from "@/config";
 import { createPopup } from "./utils/popup";
 import { levels } from "./config/levels";
 import { getGamemode } from "./utils/gamemode";
+import { truncNbr } from "./utils/math";
 
 export type UIEvent =
   | { type: "START" }
@@ -164,6 +165,7 @@ export class UI {
   private readonly newRecord = qs("#new-record");
   private readonly crackcoinsCounters = qsa("[data-crackcoins-counter]");
   private readonly playingCrackcoinsCounter = qs("#play__crackcoin-counter");
+  private readonly playingCrackcoinsCounterContainer = qs("#play__crackcoin-counter-container");
   private readonly progressBar = qs("#play__progress-bar");
   private readonly btnResetProgress = qs("#reset-progress");
   private readonly levelsContainer = qs("#levels-container");
@@ -237,7 +239,7 @@ export class UI {
         () => {
           const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
 
-          if (Store.content.levelsCompleted + 1 < +levelNumber) return;
+          if (Store.content.levels[levelNumber].completed) return;
 
           this.level = levelNumber;
           this.handleEvent({ type: "START" });
@@ -423,7 +425,7 @@ export class UI {
   }
 
   displayProgressBar(progress: number) {
-    this.progressBar.style.setProperty("--js-width", `${Math.floor(progress * 100)}%`);
+    this.progressBar.style.setProperty("--js-width", `${Math.min(100, truncNbr(progress * 100))}%`);
   }
 
   displayCrackcoins(crackcoins: number) {
@@ -434,6 +436,14 @@ export class UI {
 
   displayCrackcoinsPlaying(crackcoins: number) {
     this.playingCrackcoinsCounter.textContent = `${Math.floor(crackcoins)}`;
+  }
+
+  addCrackcoinsPlaying() {
+    this.playingCrackcoinsCounterContainer.style.visibility = "visible";
+  }
+
+  removeCrackcoinsPlaying() {
+    this.playingCrackcoinsCounterContainer.style.visibility = "hidden";
   }
 
   displayShop() {
@@ -467,7 +477,7 @@ export class UI {
   displayLevels() {
     this.levelsContainer.innerHTML = Object.keys(levels)
       .map(levelNumber => {
-        const isLocked = +levelNumber - 1 > Store.content.levelsCompleted;
+        const isLocked = Store.content.levels[+levelNumber - 1].completed;
 
         return `
           <button class="btn btn--level ${isLocked ? "btn--level-locked" : ""}" data-level=${levelNumber}>
