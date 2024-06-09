@@ -7,7 +7,8 @@ import { UI, UIEvent } from "@/ui";
 import { Block } from "@/components/blocks/block";
 import { Store } from "@/utils/store";
 import { qs } from "@/utils/dom";
-import { levels } from "./config/levels";
+import { levels } from "@/config/levels";
+import { CanvasConfig, LevelStorage } from "@/types/config";
 
 const cubeConf = config.components.cube;
 
@@ -68,9 +69,9 @@ export class CanvasController {
   }
 
   finish() {
-    if (this.ui.level !== "challenge" && !Store.content.levels[this.ui.level].completed) {
+    if (this.ui.level !== 0 && !(Store.content.levels[this.ui.level] as LevelStorage).completed) {
       Store.content.crackcoins += levels[this.ui.level].reward;
-      Store.content.levels[this.ui.level].completed = true;
+      (Store.content.levels[this.ui.level] as LevelStorage).completed = true;
       Store.content.levels[this.ui.level].HS = this.config.score;
       Store.save();
       this.ui.displayCrackcoins(Store.content.crackcoins);
@@ -99,12 +100,12 @@ export class CanvasController {
     if (!this.isActive) return;
     this.ui.die();
 
-    if (this.ui.level === "challenge") {
+    if (this.ui.level === 0) {
       Store.content.crackcoins += Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier;
 
       if (this.scoreMultiplier !== 1) {
         this.ui.displayNewRecord();
-        Store.content.HS = Math.floor(this.config.score);
+        Store.content.levels[0].HS = Math.floor(this.config.score);
       }
     } else {
       if (Store.content.levels[this.ui.level].HS < this.config.score) {
@@ -150,15 +151,15 @@ export class CanvasController {
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.decorations.updateForeground(speedFrame);
 
-    if (this.ui.level === "challenge") {
-      if (this.config.score > Store.content.HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
+    if (this.ui.level === 0) {
+      if (this.config.score > Store.content.levels[0].HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
 
       this.ui.displayProgressBar((this.config.score % config.crackcoins.scoreDivider) / config.crackcoins.scoreDivider);
       this.ui.displayCrackcoinsPlaying(
         Math.floor(this.config.score / config.crackcoins.scoreDivider) * this.scoreMultiplier
       );
 
-      this.ui.displayHighestScore(Math.max(Store.content.HS, this.config.score));
+      this.ui.displayHighestScore(Math.max(Store.content.levels[0].HS, this.config.score));
 
       return;
     }
@@ -176,7 +177,7 @@ export class CanvasController {
     this.jumpsLeft = cubeConf.jumps;
     this.startDate = Date.now();
 
-    if (this.ui.level === "challenge") {
+    if (this.ui.level === 0) {
       this.ui.addCrackcoinsPlaying();
       return;
     }

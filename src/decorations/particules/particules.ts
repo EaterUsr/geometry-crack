@@ -1,6 +1,7 @@
 import { Particule } from "./particule";
 import { List } from "@/utils/list";
 import { randomMinMax } from "@/utils/math";
+import { CanvasConfig, ParticuleConfig } from "@/types/config";
 
 export class ParticulesController {
   private readonly content = new List<Particule>();

@@ -4,6 +4,7 @@ import { Spike } from "@/components/blocks/spike";
 import { Slab } from "@/components/blocks/slab";
 import { BlocksController } from "@/components/blocks";
 import { config } from "@/config";
+import { CanvasConfig, DecorationsConfig } from "@/types/config";
 import { Rock } from "@/components/blocks/rock";
 import { Flag } from "@/components/blocks/flag";
 

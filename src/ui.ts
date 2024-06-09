@@ -15,6 +15,7 @@ import { createPopup } from "./utils/popup";
 import { levels } from "./config/levels";
 import { getGamemode } from "./utils/gamemode";
 import { truncNbr } from "./utils/math";
+import { LevelStorage } from "./types/config";
 
 export type UIEvent =
   | { type: "START" }
@@ -172,13 +173,13 @@ export class UI {
   private readonly fpsContainer = qs("#play__fps");
   private readonly gamemode = getGamemode();
 
-  private events = new EventList<"state buttons" | "playing" | "restart" | "menu" | "shop">();
+  private events = new EventList<"state buttons" | "level buttons" | "playing" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
 
   private pages: Record<UITypestate["value"], HTMLElement>;
   private shopCurrentSkin = qs<HTMLImageElement>("#shop__current-skin");
   private shopSkins = qs("#shop__skins")!;
-  level: LevelName | "challenge" = "challenge";
+  level: LevelName = 0;
   onJump = () => {};
   onSkinUpdate: (skinsUrl: string[]) => void = () => {};
 
@@ -193,7 +194,6 @@ export class UI {
     this.displayLevels();
 
     const buttons = qsa("[data-button]");
-    const levelButtons = qsa("[data-level]");
     const challengeBtn = qs("#challenge-btn");
     const clickOverlay = qs("#play__click-overlay");
     const gameOverClickOverlay = qs("#game-over__click-overlay");
@@ -222,7 +222,7 @@ export class UI {
         challengeBtn.blur();
         challengeBtn.setAttribute("tabindex", "-1");
 
-        this.level = "challenge";
+        this.level = 0;
 
         this.handleEvent({ type: "START" });
       },
@@ -231,22 +231,6 @@ export class UI {
     this.events.add("state buttons", "focus", () => (this.isSpaceKeyDisabled = true), challengeBtn);
     this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), challengeBtn);
     challengeBtn.setAttribute("tabindex", "-1");
-
-    levelButtons.forEach(levelBtn => {
-      this.events.add(
-        "state buttons",
-        "click",
-        () => {
-          const levelNumber = levelBtn.getAttribute("data-level") as LevelName;
-
-          if (Store.content.levels[levelNumber].completed) return;
-
-          this.level = levelNumber;
-          this.handleEvent({ type: "START" });
-        },
-        levelBtn
-      );
-    });
 
     this.events.enable("state buttons");
     this.events.add(
@@ -292,7 +276,7 @@ export class UI {
       "click",
       e => {
         const button = e.target as HTMLButtonElement;
-        const skin = Store.content.skins.find(skin => skin.name === button.dataset.btnSkin) as Skin;
+        const skin = Store.content.skins.find((skin: Skin) => skin.name === button.dataset.btnSkin) as Skin;
 
         if (skin.status === "unbought") {
           if (skin.price <= Store.content.crackcoins) {
@@ -305,7 +289,7 @@ export class UI {
         }
 
         if (skin.status === "owned") {
-          const equippedSkin = Store.content.skins.find(skin => skin.status === "equipped") as Skin;
+          const equippedSkin = Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin;
           skin.status = "equipped";
           equippedSkin.status = "owned";
           this.displayShop();
@@ -371,12 +355,16 @@ export class UI {
         this.events.enable("playing");
         break;
       case "gameOver":
+        this.displayLevels();
         setTimeout(() => {
           this.events.enable("restart");
         }, config.delayBeforeRestart);
         break;
       case "shop":
         this.events.enable("shop");
+        break;
+      case "completed":
+        this.displayLevels();
         break;
     }
 
@@ -455,10 +443,10 @@ export class UI {
       unbought: "buy",
     };
 
-    this.shopCurrentSkin.src = (Store.content.skins.find(skin => skin.status === "equipped") as Skin).imgs[4];
+    this.shopCurrentSkin.src = (Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin).imgs[4];
 
     this.shopSkins.innerHTML = Store.content.skins
-      .map(skin => {
+      .map((skin: Skin) => {
         return `
         <div class="skin-card">
           <span class="skin-card__price">${skin.price}
@@ -477,15 +465,39 @@ export class UI {
   displayLevels() {
     this.levelsContainer.innerHTML = Object.keys(levels)
       .map(levelNumber => {
-        const isLocked = Store.content.levels[+levelNumber - 1].completed;
+        const isLocked =
+          levelNumber === "1" ? false : !(Store.content.levels[+levelNumber - 1] as LevelStorage).completed;
 
         return `
-          <button class="btn btn--level ${isLocked ? "btn--level-locked" : ""}" data-level=${levelNumber}>
+          <button class="btn btn--level ${isLocked ? "btn--level-locked" : ""}" data-level=${levelNumber} ${
+          isLocked ? "data-locked" : ""
+        }>
             ${levelNumber}
             ${isLocked ? '<img src="/img/ui/lock.svg" alt="locked">' : ""}
           </button>`;
       })
       .join("");
+
+    const levelButtons = qsa("[data-level]");
+
+    levelButtons.forEach(levelBtn => {
+      this.events.add(
+        "level buttons",
+        "click",
+        () => {
+          const levelNumber = +levelBtn.getAttribute("data-level")! as LevelName;
+          const isLocked = levelBtn.hasAttribute("data-locked");
+
+          if (isLocked) return;
+
+          this.level = levelNumber;
+          this.handleEvent({ type: "START" });
+        },
+        levelBtn
+      );
+    });
+
+    this.events.enable("level buttons");
   }
 
   displayFPS(fps: number) {

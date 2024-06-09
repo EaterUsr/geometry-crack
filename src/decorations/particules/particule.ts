@@ -1,5 +1,6 @@
 import { trunc } from "@/utils/decorators";
 import { truncNbr } from "@/utils/math";
+import { CanvasConfig } from "@/types/config";
 
 export class Particule {
   @trunc(0)

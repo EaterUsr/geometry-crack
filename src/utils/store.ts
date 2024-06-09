@@ -1,4 +1,5 @@
 import { config } from "@/config";
+import { LocalStorage } from "@/types/config";
 
 export class Store {
   static content: LocalStorage;

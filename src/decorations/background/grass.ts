@@ -1,6 +1,7 @@
 import { calcCarousel } from "@/utils/carousel";
 import { trunc } from "@/utils/decorators";
 import { config } from "@/config";
+import { CanvasConfig, DecorationsConfig } from "@/types/config";
 import { forward } from "@/utils/move";
 
 const grassConf = config.decorations.grass;

@@ -2,6 +2,7 @@ import { structures } from "./structures";
 import { skins } from "./skins";
 import { loadImage } from "@/utils/image";
 import { levels } from "./levels";
+import { Config } from "@/types/config";
 
 export const config: Config = {
   structures,
@@ -74,14 +75,13 @@ export const config: Config = {
   fpsCalculationTime: 300,
   localStorage: {
     default: {
-      HS: 0,
       crackcoins: 0,
       skins,
-      levels: Object.keys(levels).map(() => ({ completed: false, HS: 0 })),
+      levels: [{ HS: 0 }, ...Object.keys(levels).map(() => ({ completed: false, HS: 0 }))],
     },
     parser: storage => {
       storage.crackcoins = Math.floor(storage.crackcoins);
-      storage.HS = Math.floor(storage.HS);
+      storage.levels.forEach(({ HS }, i) => (storage.levels[i].HS = Math.floor(HS)));
 
       return storage;
     },

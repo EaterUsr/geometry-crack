@@ -29,11 +29,13 @@ declare type ParticuleConfig = Readonly<{
   img: HTMLImageElement;
 }>;
 
+export type ChallengeStorage = { HS: number };
+export type LevelStorage = { completed: boolean; HS: number };
+
 declare type LocalStorage = {
-  HS: number;
   crackcoins: number;
   skins: Skin[];
-  levels: { completed: boolean; HS: number }[];
+  levels: [ChallengeStorage, ...LevelStorage[]];
 };
 
 declare type Config = Readonly<{

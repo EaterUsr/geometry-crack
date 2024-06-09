@@ -1,6 +1,7 @@
 import { closestDeg, toDegrees } from "@/utils/math";
 import { updateTarget } from "@/utils/targetPosition";
 import { config } from "@/config";
+import { CanvasConfig, DecorationsConfig } from "@/types/config";
 import { backward } from "@/utils/move";
 import { squareHitbox } from "@/utils/collision";
 import { ParticulesController } from "@/decorations/particules";
@@ -32,7 +33,7 @@ export class Cube {
   private isFrozen = false;
   private particules: ParticulesController;
   private ignoreCollisionHeight = new Set<number>();
-  private images = (Store.content.skins.find(skin => skin.status === "equipped") as Skin).imgs.map(loadImage);
+  private images = (Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin).imgs.map(loadImage);
 
   constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
     this.origin = {

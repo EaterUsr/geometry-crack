@@ -68,7 +68,7 @@ declare type Skin = {
   status: "owned" | "equipped" | "unbought";
 };
 
-declare type LevelName = "1" | "2";
+declare type LevelName = number;
 declare type Level = { content: LevelData; reward: number };
 declare type LevelData = (BlockType | null)[][];
 

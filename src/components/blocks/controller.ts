@@ -3,6 +3,7 @@ import { List, Node } from "@/utils/list";
 import { isCollision } from "@/utils/collision";
 import { Structures, useLevel } from "@/utils/structures";
 import { levels } from "@/config/levels";
+import { CanvasConfig, DecorationsConfig } from "@/types/config";
 
 export class BlocksController {
   private readonly content = new List<Block>();
@@ -15,7 +16,7 @@ export class BlocksController {
     private readonly canvas: CanvasConfig,
     private readonly decorations: DecorationsConfig,
     private readonly onCollision: (block: Block) => void,
-    levelName: LevelName | "challenge"
+    levelName: LevelName
   ) {
     this.reset(levelName);
   }
@@ -24,10 +25,10 @@ export class BlocksController {
     this.content.append(block);
   }
 
-  reset(levelName: LevelName | "challenge") {
+  reset(levelName: LevelName) {
     this.content.clear();
     this.structures?.reset();
-    if (levelName === "challenge") {
+    if (levelName === 0) {
       this.structures = new Structures(this.canvas, this.decorations, this);
       this.updateChallenge = () => {
         if ((this.content.getLast()?.value.position[0] ?? 0) < 100) {

@@ -3,6 +3,7 @@ import { CloudsController } from "@/decorations/background/clouds";
 import { DirtsController } from "./background/dirts";
 import { truncNbr } from "@/utils/math";
 import { GrassController } from "./background/grass";
+import { CanvasConfig, DecorationsConfig } from "@/types/config";
 
 const decorationsConf = config.decorations;
 

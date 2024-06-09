@@ -1,3 +1,4 @@
+import { CanvasConfig } from "@/types/config";
 import { backward } from "@/utils/move";
 
 export abstract class Block {
