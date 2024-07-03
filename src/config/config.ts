@@ -79,6 +79,15 @@ export const config: Config = {
       skins,
       levels: [{ HS: 0 }, ...Object.keys(levels).map(() => ({ completed: false, HS: 0 }))],
     },
+    op: {
+      crackcoins: 999999,
+      skins: skins.map((skin: Skin) => {
+        if (skin.status === "equipped") return skin;
+
+        return { ...skin, status: "owned" };
+      }),
+      levels: [{ HS: 0 }, ...Object.keys(levels).map(() => ({ completed: true, HS: 0 }))],
+    },
     parser: storage => {
       storage.crackcoins = Math.floor(storage.crackcoins);
       storage.levels.forEach(({ HS }, i) => (storage.levels[i].HS = Math.floor(HS)));

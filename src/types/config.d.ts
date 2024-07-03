@@ -93,6 +93,7 @@ declare type Config = Readonly<{
   };
   localStorage: Readonly<{
     default: LocalStorage;
+    op: LocalStorage;
     parser: (storage: LocalStorage) => LocalStorage;
   }>;
 }>;

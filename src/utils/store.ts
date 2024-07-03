@@ -1,10 +1,17 @@
 import { config } from "@/config";
 import { LocalStorage } from "@/types/config";
+import { getGamemode } from "./gamemode";
 
 export class Store {
   static content: LocalStorage;
 
   static init() {
+    if (getGamemode() === "debug") {
+      this.content = config.localStorage.op;
+      this.save = () => {};
+      return;
+    }
+
     const content = localStorage.getItem("geometry crack");
     this.content = content ? this.updateConfig(JSON.parse(content)) : config.localStorage.default;
   }
