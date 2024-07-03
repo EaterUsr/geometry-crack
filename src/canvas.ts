@@ -9,8 +9,15 @@ import { Store } from "@/utils/store";
 import { qs } from "@/utils/dom";
 import { levels } from "@/config/levels";
 import { CanvasConfig, LevelStorage } from "@/types/config";
+import { getGamemode } from "./utils/gamemode";
 
 const cubeConf = config.components.cube;
+const collisionBlocks: Record<string, BlockType[]> = {
+  all: ["slab", "rock", "spike"],
+  "rock+slab": ["rock", "slab"],
+  spike: ["spike"],
+  none: [],
+};
 
 export class CanvasController {
   private readonly blocks: BlocksController;
@@ -25,6 +32,21 @@ export class CanvasController {
   private scoreMultiplier = 1;
   private fps = 0;
   private startDate = Date.now();
+  private onCollisionDebug = (block: Block) => {
+    if (block.type === "flag") {
+      this.finish();
+      return;
+    }
+
+    if (collisionBlocks[this.ui.getCollisionSelect()].includes(block.type)) {
+      if (block.type === "spike") {
+        this.die();
+        return;
+      }
+
+      this.cube.onCollision(block.position, block.type);
+    }
+  };
 
   constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
     this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
@@ -56,6 +78,12 @@ export class CanvasController {
       this.fps = 0;
     }, config.fpsCalculationTime);
     this.animate();
+
+    if (getGamemode() === "default") return;
+
+    window.addEventListener("keydown", e => {
+      if (e.key === "ArrowRight") this.lastFrame = Date.now() - 5000;
+    });
   }
 
   jump() {
@@ -79,22 +107,25 @@ export class CanvasController {
     this.ui.finish();
   }
 
-  onCollision = (block: Block) => {
-    switch (block.type) {
-      case "spike":
-        this.die();
-        break;
-      case "slab":
-        this.cube.onCollision(block.position, block.type);
-        break;
-      case "rock":
-        this.cube.onCollision(block.position, block.type);
-        break;
-      case "flag":
-        this.finish();
-        break;
-    }
-  };
+  onCollision =
+    getGamemode() === "debug"
+      ? this.onCollisionDebug
+      : (block: Block) => {
+          switch (block.type) {
+            case "spike":
+              this.die();
+              break;
+            case "slab":
+              this.cube.onCollision(block.position, block.type);
+              break;
+            case "rock":
+              this.cube.onCollision(block.position, block.type);
+              break;
+            case "flag":
+              this.finish();
+              break;
+          }
+        };
 
   die() {
     if (!this.isActive) return;

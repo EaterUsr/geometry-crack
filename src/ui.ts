@@ -171,7 +171,7 @@ export class UI {
   private readonly btnResetProgress = qs("#reset-progress");
   private readonly levelsContainer = qs("#levels-container");
   private readonly fpsContainer = qs("#play__fps");
-  private readonly gamemode = getGamemode();
+  private readonly collisionSelect = qs<HTMLSelectElement>("#play__collision");
 
   private events = new EventList<"state buttons" | "level buttons" | "playing" | "restart" | "menu" | "shop">();
   private isSpaceKeyDisabled = false;
@@ -314,11 +314,14 @@ export class UI {
       this.handleEvent({ type: "PAUSE" });
     });
 
-    if (this.gamemode === "debug") this.fpsContainer.style.visibility = "visible";
-
     this.interpreter.start();
     this.prevState = this.interpreter.getSnapshot();
     this.render(this.interpreter.getSnapshot());
+
+    if (getGamemode() === "default") return;
+
+    this.fpsContainer.style.visibility = "visible";
+    this.collisionSelect.style.visibility = "visible";
   }
 
   private handleEvent(event: UIEvent) {
@@ -502,5 +505,9 @@ export class UI {
 
   displayFPS(fps: number) {
     this.fpsContainer.textContent = `fps: ${fps}`;
+  }
+
+  getCollisionSelect() {
+    return this.collisionSelect.value as "all" | "rock+slab" | "spike" | "none";
   }
 }

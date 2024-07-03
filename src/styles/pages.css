@@ -203,6 +203,14 @@ body {
     font-weight: var(--wght-medium);
     -webkit-text-stroke: .1rem hsl(0 0 0);
   }
+
+  &__collision {
+    position: fixed;
+    top: 7rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    font-family: system-ui, sans-serif;
+  }
 }
 
 .paused {
