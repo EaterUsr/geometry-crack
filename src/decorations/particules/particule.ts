@@ -16,13 +16,12 @@ export class Particule {
     private readonly vx: number,
     private readonly vy: number,
     private readonly vdeg: number,
-    private readonly onDispawn: () => void,
     { ctx }: CanvasConfig
   ) {
     this.ctx = ctx;
   }
 
-  update(speedFrame: number) {
+  update(speedFrame: number): boolean | void {
     this.ctx.save();
 
     this.ctx.translate(...this.position);
@@ -39,6 +38,6 @@ export class Particule {
     this.opacity -= speedFrame / 2000;
     this.opacity = Math.abs(this.opacity);
 
-    if (this.opacity < 0) this.onDispawn();
+    if (this.opacity < 0) return true;
   }
 }

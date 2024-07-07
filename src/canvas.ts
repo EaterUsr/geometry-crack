@@ -12,11 +12,11 @@ import { CanvasConfig, LevelStorage } from "@/types/config";
 import { getGamemode } from "./utils/gamemode";
 
 const cubeConf = config.components.cube;
-const collisionBlocks: Record<string, BlockType[]> = {
-  all: ["slab", "rock", "spike"],
-  "rock+slab": ["rock", "slab"],
-  spike: ["spike"],
-  none: [],
+const collisionBlocksDebug: Record<string, BlockType[]> = {
+  all: ["slab", "rock", "spike", "flag"],
+  "rock+slab": ["rock", "slab", "flag"],
+  spike: ["spike", "flag"],
+  none: ["flag"],
 };
 
 export class CanvasController {
@@ -32,21 +32,6 @@ export class CanvasController {
   private scoreMultiplier = 1;
   private fps = 0;
   private startDate = Date.now();
-  private onCollisionDebug = (block: Block) => {
-    if (block.type === "flag") {
-      this.finish();
-      return;
-    }
-
-    if (collisionBlocks[this.ui.getCollisionSelect()].includes(block.type)) {
-      if (block.type === "spike") {
-        this.die();
-        return;
-      }
-
-      this.cube.onCollision(block.position, block.type);
-    }
-  };
 
   constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
     this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
@@ -94,6 +79,7 @@ export class CanvasController {
     this.lastFrame = Date.now();
     this.isActive = true;
     this.startDate = Date.now();
+    this.blocks.build();
   }
 
   finish() {
@@ -107,25 +93,30 @@ export class CanvasController {
     this.ui.finish();
   }
 
-  onCollision =
-    getGamemode() === "debug"
-      ? this.onCollisionDebug
-      : (block: Block) => {
-          switch (block.type) {
-            case "spike":
-              this.die();
-              break;
-            case "slab":
-              this.cube.onCollision(block.position, block.type);
-              break;
-            case "rock":
-              this.cube.onCollision(block.position, block.type);
-              break;
-            case "flag":
-              this.finish();
-              break;
-          }
-        };
+  private collisionDebug(block: Block) {
+    if (collisionBlocksDebug[this.ui.getCollisionSelect()].includes(block.type)) {
+      this.collisionAction(block);
+    }
+  }
+
+  private collisionAction(block: Block) {
+    switch (block.type) {
+      case "spike":
+        this.die();
+        break;
+      case "slab":
+        this.cube.onCollision(block.position, block.type);
+        break;
+      case "rock":
+        this.cube.onCollision(block.position, block.type);
+        break;
+      case "flag":
+        this.finish();
+        break;
+    }
+  }
+
+  onCollision = getGamemode() === "debug" ? this.collisionDebug.bind(this) : this.collisionAction.bind(this);
 
   die() {
     if (!this.isActive) return;
@@ -178,7 +169,7 @@ export class CanvasController {
     );
 
     this.decorations.updateBackground(speedFrame);
-    this.cube.update(speedFrame, this.jumpsLeft);
+    this.cube.update(speedFrame, this.jumpsLeft, this.isActive);
     this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
     this.decorations.updateForeground(speedFrame);
 
@@ -204,7 +195,7 @@ export class CanvasController {
     this.config.score = 0;
     this.cube.reset();
     this.decorations.reset();
-    this.blocks.reset(this.ui.level);
+    this.blocks.reset();
     this.jumpsLeft = cubeConf.jumps;
     this.startDate = Date.now();
 

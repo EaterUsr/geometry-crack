@@ -1,10 +1,10 @@
 import { Particule } from "./particule";
-import { List } from "@/utils/list";
+import { ViewItems } from "@/utils/viewItems";
 import { randomMinMax } from "@/utils/math";
 import { CanvasConfig, ParticuleConfig } from "@/types/config";
 
 export class ParticulesController {
-  private readonly content = new List<Particule>();
+  private readonly content = new ViewItems<Particule>();
   isActive = true;
   private lastParticule = Date.now();
 
@@ -23,13 +23,12 @@ export class ParticulesController {
       randomMinMax(this.config.vx),
       randomMinMax(this.config.vy),
       randomMinMax(this.config.vdeg),
-      () => this.content.removeFirst(),
       this.canvas
     );
   }
 
   update(speedFrame: number) {
-    this.content.forEach(particule => particule.update(speedFrame));
+    this.content.forEach((particule: Particule) => particule.update(speedFrame));
     if (Date.now() - this.lastParticule > this.config.delay) {
       this.lastParticule = Date.now();
       if (this.isActive) this.content.append(this.newParticule());

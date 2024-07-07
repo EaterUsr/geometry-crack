@@ -1,12 +1,12 @@
 import { Block } from "./block";
-import { List, Node } from "@/utils/list";
+import { ViewItems, Node } from "@/utils/viewItems";
 import { isCollision } from "@/utils/collision";
 import { Structures, useLevel } from "@/utils/structures";
 import { levels } from "@/config/levels";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
 
 export class BlocksController {
-  private readonly content = new List<Block>();
+  private readonly content = new ViewItems<Block>();
   private structures: Structures | null = null;
   private updateChallenge = () => {};
   flagDistance: null | number = null;
@@ -16,33 +16,45 @@ export class BlocksController {
     private readonly canvas: CanvasConfig,
     private readonly decorations: DecorationsConfig,
     private readonly onCollision: (block: Block) => void,
-    levelName: LevelName
+    private readonly levelName: LevelName
   ) {
-    this.reset(levelName);
+    this.reset();
   }
 
-  add(block: Block) {
-    this.content.append(block);
+  add(...blocks: Block[]) {
+    this.content.append(...blocks);
   }
 
-  reset(levelName: LevelName) {
+  reset() {
     this.content.clear();
     this.structures?.reset();
-    if (levelName === 0) {
+
+    this.flagDistance = null;
+    this.levelSize = null;
+    this.structures = null;
+  }
+
+  build() {
+    if (this.levelName === 0) {
       this.structures = new Structures(this.canvas, this.decorations, this);
+
       this.updateChallenge = () => {
-        if ((this.content.getLast()?.value.position[0] ?? 0) < 100) {
-          this.structures?.build();
+        const lastBlock = this.content.getLast();
+
+        if (lastBlock === null) {
+          (this.structures as Structures).build();
+          return;
+        }
+
+        if (lastBlock.value.position[0] < 100) {
+          (this.structures as Structures).build();
         }
       };
-      this.flagDistance = null;
-      this.levelSize = null;
     } else {
-      useLevel(levels[levelName].content, this.canvas, this.decorations, this);
+      useLevel(levels[this.levelName].content, this.canvas, this.decorations, this);
       this.levelSize = this.calcFlagDistance();
       this.flagDistance = this.levelSize;
       this.updateChallenge = () => {};
-      this.structures = null;
     }
   }
 
@@ -55,10 +67,10 @@ export class BlocksController {
   }
 
   update(cubeOrigin: Coords, speedFrame: number, cubeHitbox: Hitbox) {
-    if (this.content.length !== 0) this.flagDistance = this.calcFlagDistance();
+    if (this.levelName !== 0) this.flagDistance = this.calcFlagDistance();
 
     this.updateChallenge();
-    this.content.forEach(block => {
+    this.content.forEach((block: Block) => {
       block.update(speedFrame);
 
       if (
@@ -70,11 +82,9 @@ export class BlocksController {
         }
       }
 
-      if (block.position[0] + block.size < 0) {
-        setTimeout(() => {
-          this.content.removeFirst();
-        }, 0);
-      }
+      if (block.position[0] + block.size < 0) return true;
+
+      return;
     });
   }
 }

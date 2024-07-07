@@ -11,7 +11,7 @@ import { Flag } from "@/components/blocks/flag";
 export class Structures {
   private readonly structuresPatern = config.structures;
   private lastStructure: null | Structure = null;
-  private minJumps = config.components.cube.jumps;
+  private maxJumpsLeft = config.components.cube.jumps;
   private lastStructureGeneration = Date.now();
 
   constructor(
@@ -21,40 +21,38 @@ export class Structures {
   ) {}
 
   build() {
-    let filtred = this.structuresPatern
-      .filter(
-        structure =>
-          structure[0].min < this.canvas.score && structure[0].max > this.canvas.score && structure[2] <= this.minJumps
-      )
-      .filter(structure => structure !== this.lastStructure)
-      .filter(structure => structure[2] <= this.minJumps);
+    let filtred = this.structuresPatern.filter(
+      structure =>
+        structure[0].min < this.canvas.score &&
+        structure[0].max > this.canvas.score &&
+        structure[2] <= this.maxJumpsLeft &&
+        structure !== this.lastStructure
+    );
 
-    if (filtred.length === 0) filtred = this.structuresPatern.filter(structure => structure[2] <= this.minJumps);
+    if (filtred.length === 0) filtred = this.structuresPatern.filter(structure => structure[2] <= this.maxJumpsLeft);
 
-    this.minJumps += truncNbr((Date.now() - this.lastStructureGeneration) / config.components.cube.timeToRegen);
+    this.maxJumpsLeft += truncNbr((Date.now() - this.lastStructureGeneration) / config.components.cube.timeToRegen);
 
     let structure = filtred[Math.floor(random(0, filtred.length - 1) + 0.5)];
 
+    if (!structure) return;
+
     this.lastStructureGeneration = Date.now();
     this.lastStructure = structure;
-    this.minJumps -= structure[2];
+    this.maxJumpsLeft -= structure[2];
 
-    structure[1].forEach(patern => useStructure(patern, this.canvas, this.decorations, this.blocks));
+    const levelBlocks = structure[1].map(patern => useBlockPatern(patern, this.canvas, this.decorations));
+    this.blocks.add(...levelBlocks);
   }
 
   reset() {
-    this.minJumps = config.components.cube.jumps;
+    this.maxJumpsLeft = config.components.cube.jumps;
     this.lastStructure = null;
     this.lastStructureGeneration = Date.now();
   }
 }
 
-export function useStructure(
-  patern: StructurePatern,
-  canvas: CanvasConfig,
-  decorations: DecorationsConfig,
-  blocks: BlocksController
-) {
+export function useBlockPatern(patern: BlockPatern, canvas: CanvasConfig, decorations: DecorationsConfig) {
   const origin: Coords = [canvas.width, decorations.floorHeight - decorations.blockSize];
   let block: Block;
   const props = [
@@ -79,7 +77,7 @@ export function useStructure(
       break;
   }
 
-  blocks.add(block);
+  return block;
 }
 
 export function parseCoords(coords: Coords, blockSize: number, origin: Coords) {
@@ -92,11 +90,15 @@ export function useLevel(
   decorations: DecorationsConfig,
   blocks: BlocksController
 ) {
+  const levelBlocks: Block[] = [];
+
   level.forEach((structure, x) => {
     structure.forEach((blockType, y) => {
       if (blockType === null) return;
 
-      useStructure([blockType, [x, y]], canvas, decorations, blocks);
+      levelBlocks.push(useBlockPatern([blockType, [x, y]], canvas, decorations));
     });
   });
+
+  blocks.add(...levelBlocks);
 }

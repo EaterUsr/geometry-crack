@@ -66,10 +66,10 @@ export class Cube {
     return this.origin.content[1] + this.decorations.blockSize >= this.floorHeight;
   }
 
-  update(speedFrame: number, jumpsLeft: number) {
+  update(speedFrame: number, jumpsLeft: number, isActive: boolean) {
     this.speedFrame = speedFrame;
 
-    this.particules.update(speedFrame);
+    if (isActive) this.particules.update(speedFrame);
 
     this.velocity -= speedFrame;
 
