@@ -79,7 +79,7 @@ export class CanvasController {
     this.lastFrame = Date.now();
     this.isActive = true;
     this.startDate = Date.now();
-    this.blocks.build();
+    this.blocks.build(this.ui.level);
   }
 
   finish() {

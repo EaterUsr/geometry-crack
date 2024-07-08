@@ -16,7 +16,7 @@ export class BlocksController {
     private readonly canvas: CanvasConfig,
     private readonly decorations: DecorationsConfig,
     private readonly onCollision: (block: Block) => void,
-    private readonly levelName: LevelName
+    private levelName: LevelName
   ) {
     this.reset();
   }
@@ -32,9 +32,12 @@ export class BlocksController {
     this.flagDistance = null;
     this.levelSize = null;
     this.structures = null;
+    this.levelName = 0;
   }
 
-  build() {
+  build(levelName: LevelName) {
+    this.levelName = levelName;
+
     if (this.levelName === 0) {
       this.structures = new Structures(this.canvas, this.decorations, this);
 

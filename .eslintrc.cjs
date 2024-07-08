@@ -13,5 +13,6 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     "no-warning-comments": "error",
+    "prefer-template": "error",
   },
 };

@@ -1,6 +1,6 @@
 import { truncNbr } from "@/utils/math";
 
-export function trunc(decimals?: number) {
+export function trunc(decimals?: number, max?: number) {
   return function <T extends Object, U extends keyof T>(target: T, key: U) {
     const value = target[key];
 
@@ -9,7 +9,11 @@ export function trunc(decimals?: number) {
       set: (nbr: unknown): number => {
         if (typeof nbr !== "number") throw new Error("Invalid property: Must receive a number");
 
-        return truncNbr(nbr, decimals);
+        const trunced = truncNbr(nbr, decimals);
+
+        if (max) return Math.max(trunced, max);
+
+        return trunced;
       },
     });
   };

@@ -1,5 +1,5 @@
 import { Block } from "@/components/blocks/block";
-import { random, truncNbr } from "@/utils/math";
+import { random } from "@/utils/math";
 import { Spike } from "@/components/blocks/spike";
 import { Slab } from "@/components/blocks/slab";
 import { BlocksController } from "@/components/blocks";
@@ -7,11 +7,16 @@ import { config } from "@/config";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
 import { Rock } from "@/components/blocks/rock";
 import { Flag } from "@/components/blocks/flag";
+import { trunc } from "./decorators";
+
+const cubeConf = config.components.cube;
 
 export class Structures {
   private readonly structuresPatern = config.structures;
   private lastStructure: null | Structure = null;
-  private maxJumpsLeft = config.components.cube.jumps;
+
+  @trunc(1, cubeConf.jumps)
+  maxJumpsLeft = cubeConf.jumps;
   private lastStructureGeneration = Date.now();
 
   constructor(
@@ -21,6 +26,7 @@ export class Structures {
   ) {}
 
   build() {
+    console.log(this.maxJumpsLeft);
     let filtred = this.structuresPatern.filter(
       structure =>
         structure[0].min < this.canvas.score &&
@@ -31,7 +37,7 @@ export class Structures {
 
     if (filtred.length === 0) filtred = this.structuresPatern.filter(structure => structure[2] <= this.maxJumpsLeft);
 
-    this.maxJumpsLeft += truncNbr((Date.now() - this.lastStructureGeneration) / config.components.cube.timeToRegen);
+    this.maxJumpsLeft += (Date.now() - this.lastStructureGeneration) / cubeConf.timeToRegen;
 
     let structure = filtred[Math.floor(random(0, filtred.length - 1) + 0.5)];
 
@@ -46,7 +52,7 @@ export class Structures {
   }
 
   reset() {
-    this.maxJumpsLeft = config.components.cube.jumps;
+    this.maxJumpsLeft = cubeConf.jumps;
     this.lastStructure = null;
     this.lastStructureGeneration = Date.now();
   }
