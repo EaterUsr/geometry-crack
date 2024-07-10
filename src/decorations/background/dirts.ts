@@ -3,6 +3,7 @@ import { trunc } from "@/utils/decorators";
 import { config } from "@/config";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
 import { forward } from "@/utils/move";
+import { DrawOptions } from "@/utils/layers";
 
 const dirtConf = config.decorations.dirts;
 
@@ -14,32 +15,34 @@ export class DirtsController {
   private readonly depths = dirtConf.depths;
   private readonly margins = dirtConf.margins;
   @trunc(0)
-  readonly scale: number;
+  readonly layerCategory: LayerCategory = "dirt";
 
   constructor(private readonly canvas: CanvasConfig, { speed, floorHeight }: DecorationsConfig) {
     this.speed = speed;
     this.floorHeight = floorHeight;
-    this.scale = this.canvas.w(dirtConf.scale);
-  }
-
-  private draw(position: number, img: HTMLImageElement, depth: number) {
-    this.canvas.ctx.save();
-    this.canvas.ctx.translate(position, Math.floor(this.floorHeight + (this.canvas.width / 100) * depth));
-    this.canvas.ctx.scale(this.scale, this.scale);
-    this.canvas.ctx.drawImage(img, 0, 0);
-    this.canvas.ctx.restore();
   }
 
   update(speedFrame: number) {
     this.position = forward(this.position, speedFrame, this.speed);
-    if (this.images[0].width !== 0) this.position %= Math.floor(this.images[0].width * this.scale);
+  }
+
+  draw({ ctx, w }: DrawOptions) {
+    const scale = w(dirtConf.scale);
+
+    if (this.images[0].width !== 0) this.position %= Math.floor(this.images[0].width * scale);
 
     this.images.forEach((img, index) => {
-      calcCarousel(img.width * this.scale, this.canvas.width).forEach(position => {
-        this.draw(position - this.position + this.canvas.w(this.margins[index] * 1000), img, this.depths[index]);
+      calcCarousel(img.width * scale, this.canvas.width).forEach(position => {
+        const posX = position - this.position + w(this.margins[index] * 1000);
+        ctx.save();
+        ctx.translate(posX, Math.floor(this.floorHeight + (this.canvas.width / 100) * this.depths[index]));
+        ctx.scale(scale, scale);
+        ctx.drawImage(img, 0, 0);
+        ctx.restore();
       });
     });
   }
+
   reset() {
     this.position = 0;
   }

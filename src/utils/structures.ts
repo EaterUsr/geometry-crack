@@ -26,7 +26,6 @@ export class Structures {
   ) {}
 
   build() {
-    console.log(this.maxJumpsLeft);
     let filtred = this.structuresPatern.filter(
       structure =>
         structure[0].min < this.canvas.score &&

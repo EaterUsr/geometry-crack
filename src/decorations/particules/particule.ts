@@ -1,6 +1,5 @@
 import { trunc } from "@/utils/decorators";
 import { truncNbr } from "@/utils/math";
-import { CanvasConfig } from "@/types/config";
 
 export class Particule {
   @trunc(0)
@@ -8,30 +7,16 @@ export class Particule {
 
   @trunc(1)
   opacity = 1;
-  private readonly ctx: CanvasRenderingContext2D;
 
   constructor(
     private readonly position: Coords,
     private readonly img: HTMLImageElement,
     private readonly vx: number,
     private readonly vy: number,
-    private readonly vdeg: number,
-    { ctx }: CanvasConfig
-  ) {
-    this.ctx = ctx;
-  }
+    private readonly vdeg: number
+  ) {}
 
   update(speedFrame: number): boolean | void {
-    this.ctx.save();
-
-    this.ctx.translate(...this.position);
-    this.ctx.rotate(this.deg);
-
-    this.ctx.globalAlpha = this.opacity;
-    this.ctx.drawImage(this.img, 0, 0);
-
-    this.ctx.restore();
-
     this.position[0] += truncNbr((this.vx * speedFrame) / 40, 0);
     this.position[1] += truncNbr((this.vy * speedFrame) / 40, 0);
     this.deg += truncNbr((this.vdeg * speedFrame) / 500);
@@ -39,5 +24,17 @@ export class Particule {
     this.opacity = Math.abs(this.opacity);
 
     if (this.opacity < 0) return true;
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+
+    ctx.translate(...this.position);
+    ctx.rotate(this.deg);
+
+    ctx.globalAlpha = this.opacity;
+    ctx.drawImage(this.img, 0, 0);
+
+    ctx.restore();
   }
 }

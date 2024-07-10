@@ -2,7 +2,6 @@ import { CanvasConfig } from "@/types/config";
 import { backward } from "@/utils/move";
 
 export abstract class Block {
-  protected readonly ctx: CanvasRenderingContext2D;
   abstract readonly hitbox: Hitbox;
   protected abstract readonly image: HTMLImageElement;
   abstract readonly type: BlockType;
@@ -12,18 +11,18 @@ export abstract class Block {
     public position: Coords,
     public speed: number,
     public size: number
-  ) {
-    this.ctx = canvas.ctx;
-  }
+  ) {}
 
-  protected abstract drawPatern(): void;
+  protected abstract drawPatern(ctx: CanvasRenderingContext2D): void;
 
   update(speedFrame: number) {
     this.position[0] = backward(this.position[0], this.speed, speedFrame);
+  }
 
-    this.ctx.save();
-    this.ctx.translate(...this.position);
-    this.drawPatern();
-    this.ctx.restore();
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.save();
+    ctx.translate(...this.position);
+    this.drawPatern(ctx);
+    ctx.restore();
   }
 }

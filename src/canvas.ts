@@ -10,7 +10,10 @@ import { qs } from "@/utils/dom";
 import { levels } from "@/config/levels";
 import { CanvasConfig, LevelStorage } from "@/types/config";
 import { getGamemode } from "./utils/gamemode";
+import { Layers } from "./utils/layers";
+import { ParticulesController } from "./decorations/particules";
 
+const particulesConf = config.decorations.particules.grass;
 const cubeConf = config.components.cube;
 const collisionBlocksDebug: Record<string, BlockType[]> = {
   all: ["slab", "rock", "spike", "flag"],
@@ -21,10 +24,7 @@ const collisionBlocksDebug: Record<string, BlockType[]> = {
 
 export class CanvasController {
   private readonly blocks: BlocksController;
-  readonly decorations: DecorationsController;
-  readonly cube: Cube;
-  readonly domElement: HTMLCanvasElement;
-  readonly config: CanvasConfig;
+  private readonly particules: ParticulesController;
   private jumpsLeft = cubeConf.jumps;
   private lastRegen = Date.now();
   private isActive = false;
@@ -32,6 +32,11 @@ export class CanvasController {
   private scoreMultiplier = 1;
   private fps = 0;
   private startDate = Date.now();
+  private layers: Layers;
+  readonly decorations: DecorationsController;
+  readonly cube: Cube;
+  readonly domElement: HTMLCanvasElement;
+  readonly config: CanvasConfig;
 
   constructor(canvasHTMLQuery: Selector, private readonly ui: UI) {
     this.domElement = qs<HTMLCanvasElement>(canvasHTMLQuery);
@@ -40,18 +45,24 @@ export class CanvasController {
     this.domElement.height = config.canvasHeight;
 
     this.config = {
-      ctx: this.domElement.getContext("2d")!,
       width: this.domElement.width,
       height: this.domElement.height,
-      w: (size: number) => {
-        return truncNbr(size * (this.domElement.width / 10000));
-      },
       score: 0,
     };
 
-    this.decorations = new DecorationsController(this.config);
-    this.cube = new Cube(this.config, this.decorations.config);
+    const w = (size: number) => {
+      return truncNbr(size * (this.domElement.width / 10000));
+    };
+
+    this.layers = new Layers(this.domElement.getContext("2d")!, w);
+    this.decorations = new DecorationsController(this.config, this.layers);
+    this.cube = new Cube(this.config, this.decorations.config, w);
     this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision, this.ui.level);
+    this.particules = new ParticulesController(particulesConf, this.cube, this.decorations.config);
+
+    this.layers.use(this.cube);
+    this.layers.use(this.blocks);
+    this.layers.use(this.particules);
 
     this.ui.onJump = this.jump.bind(this);
     this.ui.onEvent(this.event.bind(this));
@@ -168,10 +179,13 @@ export class CanvasController {
       ((Date.now() - this.startDate) * this.decorations.config.speed) / this.decorations.config.blockSize
     );
 
-    this.decorations.updateBackground(speedFrame);
-    this.cube.update(speedFrame, this.jumpsLeft, this.isActive);
-    this.blocks.update(this.cube.origin.content, speedFrame, this.cube.hitbox);
-    this.decorations.updateForeground(speedFrame);
+    this.decorations.update(speedFrame);
+    this.cube.update(speedFrame, this.jumpsLeft);
+    this.blocks.update(speedFrame, this.cube.origin.content, this.cube.hitbox);
+
+    if (this.isActive) this.particules.update(speedFrame);
+
+    this.layers.draw();
 
     if (this.ui.level === 0) {
       if (this.config.score > Store.content.levels[0].HS) this.scoreMultiplier = config.crackcoins.HSMultiplier;
@@ -196,6 +210,7 @@ export class CanvasController {
     this.cube.reset();
     this.decorations.reset();
     this.blocks.reset();
+    this.particules.reset();
     this.jumpsLeft = cubeConf.jumps;
     this.startDate = Date.now();
 

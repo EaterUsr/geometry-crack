@@ -5,6 +5,7 @@ import { levels } from "./levels";
 import { Config } from "@/types/config";
 
 export const config: Config = {
+  layers: ["sky", "clouds", "particules", "cube", "blocks", "dirt background", "dirt", "grass"],
   structures,
   delayBeforeRestart: 150,
   components: {

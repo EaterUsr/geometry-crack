@@ -11,7 +11,7 @@ export class Flag extends Block {
   readonly type = "flag";
   protected readonly image = flagConf.img;
 
-  protected drawPatern() {
-    this.ctx.drawImage(this.image, 0, 0, this.size, this.size);
+  protected drawPatern(ctx: CanvasRenderingContext2D) {
+    ctx.drawImage(this.image, 0, 0, this.size, this.size);
   }
 }

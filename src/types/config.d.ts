@@ -1,8 +1,6 @@
 declare type CanvasConfig = {
-  readonly ctx: CanvasRenderingContext2D;
   readonly width: number;
   readonly height: number;
-  readonly w: (size: number) => number;
   score: number;
 };
 
@@ -18,8 +16,6 @@ declare type DecorationsConfig = Readonly<{
 declare type BlockConfig = Readonly<{
   img: HTMLImageElement;
 }>;
-
-type ParticuleName = "grass";
 
 declare type ParticuleConfig = Readonly<{
   delay: number;
@@ -39,6 +35,7 @@ declare type LocalStorage = {
 };
 
 declare type Config = Readonly<{
+  layers: LayerCategory[];
   canvasWidth: number;
   canvasHeight: number;
   fpsCalculationTime: number;

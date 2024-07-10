@@ -11,7 +11,7 @@ export class Spike extends Block {
   protected readonly image: HTMLImageElement = spikeConf.img;
   readonly type = "spike";
 
-  protected drawPatern() {
-    this.ctx.drawImage(this.image, 0, 0, this.size, this.size);
+  protected drawPatern(ctx: CanvasRenderingContext2D) {
+    ctx.drawImage(this.image, 0, 0, this.size, this.size);
   }
 }

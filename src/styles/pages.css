@@ -132,7 +132,6 @@ body {
       left: 0;
       height: 100%;
       width: var(--js-width, 100%);
-      transition: width 200ms;
     }
   }
 
@@ -198,10 +197,10 @@ body {
     top: 5rem;
     right: 1rem;
     font-size: 2rem;
-    color: hsl(0 0 100%);
+    color: hsl(0deg 0% 100%);
     font-family: system-ui, sans-serif;
     font-weight: var(--wght-medium);
-    -webkit-text-stroke: .1rem hsl(0 0 0);
+    -webkit-text-stroke: .1rem hsl(0deg 0% 0%);
   }
 
   &__collision {

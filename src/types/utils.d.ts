@@ -74,3 +74,16 @@ declare type Level = { content: LevelData; reward: number };
 declare type LevelData = (BlockType | null)[][];
 
 declare type Gamemode = "default" | "debug";
+
+declare type ParticuleName = "grass";
+
+declare type LayerCategory =
+  | "grass"
+  | "sky"
+  | "clouds"
+  | "grass"
+  | "dirt background"
+  | "dirt"
+  | "cube"
+  | "blocks"
+  | "particules";

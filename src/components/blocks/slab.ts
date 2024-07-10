@@ -11,7 +11,7 @@ export class Slab extends Block {
   readonly type = "slab";
   protected readonly image = slabConf.img;
 
-  protected drawPatern() {
-    this.ctx.drawImage(this.image, 0, 0, this.size, this.size / 2);
+  protected drawPatern(ctx: CanvasRenderingContext2D) {
+    ctx.drawImage(this.image, 0, 0, this.size, this.size / 2);
   }
 }

@@ -4,21 +4,26 @@ import { config } from "@/config";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
 import { backward } from "@/utils/move";
 import { squareHitbox } from "@/utils/collision";
-import { ParticulesController } from "@/decorations/particules";
 import { loadImage } from "@/utils/image";
 import { Store } from "@/utils/store";
+import { DrawOptions } from "@/utils/layers";
 
 const cubeConf = config.components.cube;
-const particulesConf = config.decorations.particules.grass;
 
 export class Cube {
+  private readonly halfBlockSize: number;
   private floorHeight: number;
   private speedFrame = 0;
+  private velocity = 0;
+  private lastSlabCollision: null | number = null;
+  private jumpVelocity = cubeConf.jumpVelocity;
+  private isFrozen = false;
+  private ignoreCollisionHeight = new Set<number>();
+  private images = (Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin).imgs.map(loadImage);
+  private jumpsLeft = cubeConf.jumps;
   readonly deg: TargetPosition<number>;
   readonly origin: TargetPosition<Coords>;
-  private velocity = 0;
-  private isFalling = true;
-  private readonly halfBlockSize: number;
+  readonly layerCategory: LayerCategory = "cube";
   get hitbox() {
     return squareHitbox(
       this.origin.content[0],
@@ -28,14 +33,13 @@ export class Cube {
     );
   }
   center: Coords;
-  private lastSlabCollision: null | number = null;
-  private jumpVelocity = cubeConf.jumpVelocity;
-  private isFrozen = false;
-  private particules: ParticulesController;
-  private ignoreCollisionHeight = new Set<number>();
-  private images = (Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin).imgs.map(loadImage);
+  isFalling = true;
 
-  constructor(private readonly canvas: CanvasConfig, private readonly decorations: DecorationsConfig) {
+  constructor(
+    private readonly canvas: CanvasConfig,
+    private readonly decorations: DecorationsConfig,
+    private readonly w: (size: number) => number
+  ) {
     this.origin = {
       content: decorations.cubeOrigin,
       target: [null, null],
@@ -51,11 +55,6 @@ export class Cube {
     this.halfBlockSize = Math.floor(decorations.blockSize / 2);
     this.floorHeight = decorations.floorHeight;
     this.center = this.updateCenter();
-    this.particules = new ParticulesController(
-      canvas,
-      [decorations.cubeOrigin[0], this.center[1] + decorations.blockSize],
-      particulesConf
-    );
   }
 
   private updateCenter(): Coords {
@@ -66,14 +65,11 @@ export class Cube {
     return this.origin.content[1] + this.decorations.blockSize >= this.floorHeight;
   }
 
-  update(speedFrame: number, jumpsLeft: number, isActive: boolean) {
+  update(speedFrame: number, jumpsLeft: number) {
+    this.jumpsLeft = jumpsLeft;
     this.speedFrame = speedFrame;
 
-    if (isActive) this.particules.update(speedFrame);
-
     this.velocity -= speedFrame;
-
-    this.origin.content[1] -= this.velocity * this.canvas.w((cubeConf.jumpSpeed / 10) * speedFrame);
 
     if (Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock) {
       this.isFalling = true;
@@ -81,15 +77,16 @@ export class Cube {
       this.lastSlabCollision = null;
     }
 
+    this.deg.content = (this.deg.content + 360) % 360;
+
+    this.origin.content[1] -= this.velocity * this.w((cubeConf.jumpSpeed / 10) * speedFrame);
+
     if (this.isTouchingTheFloor()) {
       this.origin.content[1] = this.floorHeight - this.decorations.blockSize;
       this.velocity = 0;
     }
 
-    this.deg.content = (this.deg.content + 360) % 360;
-
     if (this.isTouchingTheFloor() && this.isFalling) {
-      this.particules.isActive = true;
       this.isFalling = false;
       this.velocity = 0;
       this.origin.content[1] = this.floorHeight - this.decorations.blockSize;
@@ -115,26 +112,28 @@ export class Cube {
 
     this.center = this.updateCenter();
     this.ignoreCollisionHeight.clear();
+  }
 
-    this.canvas.ctx.save();
+  draw({ ctx }: DrawOptions) {
+    ctx.save();
 
-    this.canvas.ctx.translate(...this.center);
-    this.canvas.ctx.rotate(toDegrees(this.deg.content));
-    this.canvas.ctx.translate(-this.center[0], -this.center[1]);
+    ctx.translate(...this.center);
+    ctx.rotate(toDegrees(this.deg.content));
+    ctx.translate(-this.center[0], -this.center[1]);
 
-    this.canvas.ctx.drawImage(
-      this.images[jumpsLeft],
+    ctx.drawImage(
+      this.images[this.jumpsLeft],
       ...this.origin.content,
       this.decorations.blockSize,
       this.decorations.blockSize
     );
-    this.canvas.ctx.restore();
+
+    ctx.restore();
   }
 
   jump(cb: () => void) {
     if (this.isFrozen) return;
     if (this.isTouchingTheFloor()) {
-      this.particules.isActive = false;
       this.velocity = this.jumpVelocity;
       this.isFalling = true;
       cb();
@@ -191,7 +190,6 @@ export class Cube {
   };
 
   reset() {
-    this.particules.reset();
     this.velocity = 0;
     this.isFrozen = false;
     this.jumpVelocity = cubeConf.jumpVelocity;

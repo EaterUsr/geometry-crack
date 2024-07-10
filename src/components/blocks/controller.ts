@@ -4,6 +4,7 @@ import { isCollision } from "@/utils/collision";
 import { Structures, useLevel } from "@/utils/structures";
 import { levels } from "@/config/levels";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
+import { DrawOptions } from "@/utils/layers";
 
 export class BlocksController {
   private readonly content = new ViewItems<Block>();
@@ -11,6 +12,7 @@ export class BlocksController {
   private updateChallenge = () => {};
   flagDistance: null | number = null;
   levelSize: null | number = null;
+  layerCategory: LayerCategory = "blocks";
 
   constructor(
     private readonly canvas: CanvasConfig,
@@ -69,7 +71,7 @@ export class BlocksController {
     );
   }
 
-  update(cubeOrigin: Coords, speedFrame: number, cubeHitbox: Hitbox) {
+  update(speedFrame: number, cubeOrigin: Coords, cubeHitbox: Hitbox) {
     if (this.levelName !== 0) this.flagDistance = this.calcFlagDistance();
 
     this.updateChallenge();
@@ -89,5 +91,9 @@ export class BlocksController {
 
       return;
     });
+  }
+
+  draw({ ctx }: DrawOptions) {
+    this.content.forEach(block => block.draw(ctx));
   }
 }

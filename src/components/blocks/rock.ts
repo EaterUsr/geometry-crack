@@ -11,7 +11,7 @@ export class Rock extends Block {
   readonly type = "rock";
   protected readonly image = rockConf.img;
 
-  protected drawPatern() {
-    this.ctx.drawImage(this.image, 0, 0, this.size, this.size);
+  protected drawPatern(ctx: CanvasRenderingContext2D) {
+    ctx.drawImage(this.image, 0, 0, this.size, this.size);
   }
 }

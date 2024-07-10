@@ -4,6 +4,7 @@ import { DirtsController } from "./background/dirts";
 import { truncNbr } from "@/utils/math";
 import { GrassController } from "./background/grass";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
+import { DrawOptions, Layers } from "@/utils/layers";
 
 const decorationsConf = config.decorations;
 
@@ -14,7 +15,7 @@ export class DecorationsController {
   readonly dirts: DirtsController;
   readonly grass: GrassController;
 
-  constructor(private readonly canvas: CanvasConfig) {
+  constructor(private readonly canvas: CanvasConfig, layers: Layers) {
     const speed = truncNbr(canvas.width / decorationsConf.speed);
     const blockSize = Math.floor(canvas.height / decorationsConf.blockSize);
     const cubeOrigin: Coords = [
@@ -37,36 +38,34 @@ export class DecorationsController {
     this.clouds = new CloudsController(this.canvas, this.config);
     this.dirts = new DirtsController(this.canvas, this.config);
     this.grass = new GrassController(this.canvas, this.config);
+
+    layers.use(this.clouds);
+    layers.use(this.dirts);
+    layers.use(this.grass);
+    layers.add("sky", this.drawSky.bind(this));
+    layers.add("dirt background", this.drawDirtBackground.bind(this));
   }
 
-  private setSky() {
-    this.canvas.ctx.fillStyle = this.colors.sky;
-    this.canvas.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  drawSky({ ctx }: DrawOptions) {
+    ctx.fillStyle = this.colors.sky;
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  private setDirt() {
-    this.canvas.ctx.fillStyle = this.colors.dirt;
-    this.canvas.ctx.fillRect(
+  drawDirtBackground({ ctx }: DrawOptions) {
+    ctx.fillStyle = this.colors.dirt;
+    ctx.fillRect(
       0,
       this.config.floorHeight,
       this.canvas.width,
       Math.floor(this.canvas.height / 2 - this.config.blockSize / 2)
     );
+
+    ctx.fillStyle = this.colors.grass;
+    ctx.fillRect(0, this.config.floorHeight, this.canvas.width, this.config.grassHeight);
   }
 
-  private setGrass() {
-    this.canvas.ctx.fillStyle = this.colors.grass;
-    this.canvas.ctx.fillRect(0, this.config.floorHeight, this.canvas.width, this.config.grassHeight);
-  }
-
-  updateBackground(speedFrame: number) {
-    this.setSky();
+  update(speedFrame: number) {
     this.clouds.update(speedFrame);
-  }
-
-  updateForeground(speedFrame: number) {
-    this.setDirt();
-    this.setGrass();
     this.dirts.update(speedFrame);
     this.grass.update(speedFrame);
   }
