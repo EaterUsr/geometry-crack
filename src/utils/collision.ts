@@ -12,6 +12,7 @@ export function squareHitbox(x: number, y: number, deg: number, size: number): H
 
   return vertices;
 }
+
 export function rectHitbox(x: number, y: number, sizeX: number, sizeY: number): Hitbox {
   const vertices: Hitbox = [...new Array(4)];
   const center: Coords = [x + sizeX / 2, y + sizeY / 2];
@@ -24,6 +25,11 @@ export function rectHitbox(x: number, y: number, sizeX: number, sizeY: number): 
 
   return vertices;
 }
+
+export function collisionRectHitbox(x: number, y: number, sizeX: number, sizeY: number): Hitbox {
+  return rectHitbox(x, y - 1, sizeX, sizeY + 1);
+}
+
 export function triangleHitbox(x: number, y: number, size: number): Hitbox {
   return [
     [x, y + size],

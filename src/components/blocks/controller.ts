@@ -30,6 +30,7 @@ export class BlocksController {
   reset() {
     this.content.clear();
     this.structures?.reset();
+    this.updateChallenge = () => {};
 
     this.flagDistance = null;
     this.levelSize = null;

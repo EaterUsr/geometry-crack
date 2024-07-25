@@ -16,12 +16,12 @@ export function closestDeg(deg: number) {
   return (Math.floor((45 + deg) / 90) * 90) % 360;
 }
 
-export function toDegrees(angle: number) {
+export function toRadians(angle: number) {
   return (angle * Math.PI) / 180;
 }
 
-export function toRadians(angle: number) {
-  return (angle / 180) * Math.PI;
+export function toDegrees(angle: number) {
+  return (angle / Math.PI) * 180;
 }
 
 export function smallest<T extends unknown[]>(cb: (...args: T) => number, ...args: T[]) {

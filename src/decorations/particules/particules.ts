@@ -29,7 +29,7 @@ export class ParticulesController {
   update(speedFrame: number) {
     this.content.forEach((particule: Particule) => particule.update(speedFrame));
 
-    if (Date.now() - this.lastParticule > this.config.delay && !this.cube.isFalling) {
+    if (Date.now() - this.lastParticule > this.config.delay && !this.cube.isJumping()) {
       this.lastParticule = Date.now();
       this.content.append(this.newParticule());
     }

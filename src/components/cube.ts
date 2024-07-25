@@ -1,4 +1,4 @@
-import { closestDeg, toDegrees } from "@/utils/math";
+import { closestDeg, toRadians } from "@/utils/math";
 import { updateTarget } from "@/utils/targetPosition";
 import { config } from "@/config";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
@@ -9,17 +9,19 @@ import { Store } from "@/utils/store";
 import { DrawOptions } from "@/utils/layers";
 
 const cubeConf = config.components.cube;
+const blocksHeight = {
+  slab: 0.5,
+  rock: 1,
+} as const;
 
 export class Cube {
   private readonly halfBlockSize: number;
   private floorHeight: number;
-  private speedFrame = 0;
   private velocity = 0;
-  private lastSlabCollision: null | number = null;
   private jumpVelocity = cubeConf.jumpVelocity;
   private isFrozen = false;
-  private ignoreCollisionHeight = new Set<number>();
   private images = (Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin).imgs.map(loadImage);
+  private isTouchingTheFloor = true;
   private jumpsLeft = cubeConf.jumps;
   readonly deg: TargetPosition<number>;
   readonly origin: TargetPosition<Coords>;
@@ -33,7 +35,6 @@ export class Cube {
     );
   }
   center: Coords;
-  isFalling = true;
 
   constructor(
     private readonly canvas: CanvasConfig,
@@ -61,64 +62,13 @@ export class Cube {
     return [this.origin.content[0] + this.halfBlockSize, this.origin.content[1] + this.halfBlockSize];
   }
 
-  private isTouchingTheFloor() {
-    return this.origin.content[1] + this.decorations.blockSize >= this.floorHeight;
-  }
-
-  update(speedFrame: number, jumpsLeft: number) {
-    this.jumpsLeft = jumpsLeft;
-    this.speedFrame = speedFrame;
-
-    this.velocity -= speedFrame;
-
-    if (Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock) {
-      this.isFalling = true;
-      this.floorHeight = this.decorations.floorHeight;
-      this.lastSlabCollision = null;
-    }
-
-    this.deg.content = (this.deg.content + 360) % 360;
-
-    this.origin.content[1] -= this.velocity * this.w((cubeConf.jumpSpeed / 10) * speedFrame);
-
-    if (this.isTouchingTheFloor()) {
-      this.origin.content[1] = this.floorHeight - this.decorations.blockSize;
-      this.velocity = 0;
-    }
-
-    if (this.isTouchingTheFloor() && this.isFalling) {
-      this.isFalling = false;
-      this.velocity = 0;
-      this.origin.content[1] = this.floorHeight - this.decorations.blockSize;
-      this.deg.target = closestDeg(this.deg.content);
-      this.origin.content[1] = this.floorHeight - this.decorations.blockSize;
-    }
-
-    updateTarget(
-      this.deg,
-      speedFrame,
-      (_, preventContent) => {
-        if (this.isFalling) {
-          this.deg.content = preventContent + cubeConf.speedDeg * this.speedFrame;
-        }
-      },
-      360
-    );
-    updateTarget(this.origin, speedFrame, areNull => {
-      if (this.isFrozen && areNull[0] === true) {
-        this.origin.content[0] = backward(this.origin.content[0], this.decorations.speed, speedFrame);
-      }
-    });
-
-    this.center = this.updateCenter();
-    this.ignoreCollisionHeight.clear();
-  }
-
   draw({ ctx }: DrawOptions) {
+    this.center = this.updateCenter();
+
     ctx.save();
 
     ctx.translate(...this.center);
-    ctx.rotate(toDegrees(this.deg.content));
+    ctx.rotate(toRadians(this.deg.content));
     ctx.translate(-this.center[0], -this.center[1]);
 
     ctx.drawImage(
@@ -127,67 +77,97 @@ export class Cube {
       this.decorations.blockSize,
       this.decorations.blockSize
     );
-
     ctx.restore();
   }
 
+  update(speedFrame: number, jumpsLeft: number) {
+    this.jumpsLeft = jumpsLeft;
+
+    this.velocity -= speedFrame === 0 ? this.velocity : speedFrame;
+    this.origin.content[1] -= this.velocity * this.w(cubeConf.jumpSpeed);
+    this.deg.content = (this.deg.content + 360) % 360;
+
+    this.isTouchingTheFloor = this.origin.content[1] + this.decorations.blockSize >= this.floorHeight;
+
+    if (this.isTouchingTheFloor) {
+      this.origin.content[1] = this.floorHeight - this.decorations.blockSize;
+      this.velocity = 0;
+      this.deg.target = closestDeg(this.deg.content);
+    }
+
+    updateTarget(
+      this.deg,
+      speedFrame,
+      (_, preventContent) => {
+        if (this.isTouchingTheFloor) return;
+        this.deg.content = preventContent + cubeConf.speedDeg * speedFrame;
+      },
+      360
+    );
+
+    updateTarget(this.origin, speedFrame, areNull => {
+      if (this.isFrozen && areNull[0]) {
+        this.origin.content[0] = backward(this.origin.content[0], this.decorations.speed, speedFrame);
+      }
+    });
+
+    this.floorHeight = this.decorations.floorHeight;
+    this.center = this.updateCenter();
+  }
+
+  onCollision = (blockPosition: Coords, blockType: "slab" | "rock") => {
+    const blockHeight = blocksHeight[blockType] * this.decorations.blockSize;
+    const doesExeedsTop = this.center[1] < blockPosition[1];
+    const doesExeedsBlockSide = this.center[0] > blockPosition[0];
+    const doesFloorExeedsBottom = this.floorHeight > blockPosition[1];
+
+    if (doesExeedsBlockSide && doesExeedsTop) {
+      this.floorHeight = blockPosition[1];
+      return;
+    }
+
+    if (!doesExeedsTop && !this.isTouchingTheFloor && !this.isFrozen) {
+      this.velocity = 0;
+      this.origin.target[1] = null;
+
+      if (blockPosition[1] + blockHeight + this.decorations.blockSize >= this.floorHeight) {
+        this.origin.content[1] = blockPosition[1] + blockHeight;
+        this.deg.content = closestDeg(this.deg.content);
+        return;
+      }
+
+      this.origin.content[1] =
+        blockPosition[1] + blockHeight + Math.sin(toRadians(this.deg.content % 90)) * this.halfBlockSize;
+      return;
+    }
+
+    if (this.isTouchingTheFloor && doesFloorExeedsBottom) {
+      this.isFrozen = true;
+      this.origin.target[0] = null;
+      this.origin.content[0] = blockPosition[0] - this.decorations.blockSize;
+      return;
+    }
+
+    if (!doesExeedsBlockSide && doesFloorExeedsBottom) {
+      this.isFrozen = true;
+      const closest = closestDeg(this.deg.content);
+      this.deg.target = (closest > this.deg.content ? closest + 270 : closest) % 360;
+      this.origin.target[0] = blockPosition[0] - this.decorations.blockSize;
+      return;
+    }
+  };
+
   jump(cb: () => void) {
     if (this.isFrozen) return;
-    if (this.isTouchingTheFloor()) {
+    if (this.isTouchingTheFloor) {
       this.velocity = this.jumpVelocity;
-      this.isFalling = true;
       cb();
     }
   }
 
-  onCollision = (blockPosition: Coords, blockType: BlockType) => {
-    const blockHeight = blockType === "slab" ? this.halfBlockSize : this.decorations.blockSize;
-
-    if (this.ignoreCollisionHeight.has(blockPosition[1] + blockHeight)) return;
-
-    const isTouchingBottom = this.center[1] > blockPosition[1] + blockHeight;
-    const doesCenterExeedsSlabSide = this.center[0] > blockPosition[0];
-
-    if (isTouchingBottom && doesCenterExeedsSlabSide) {
-      this.origin.target = [null, null];
-      this.velocity = 0;
-      this.isFrozen = false;
-      this.ignoreCollisionHeight.add(blockPosition[1] + blockHeight);
-      return;
-    }
-
-    if (!doesCenterExeedsSlabSide && this.floorHeight > blockPosition[1]) {
-      this.isFrozen = true;
-      const closest = closestDeg(this.deg.content);
-      this.deg.target = (closest + 360 > this.deg.content + 360 ? closest + 270 : closest) % 360;
-
-      if (this.isTouchingTheFloor()) {
-        this.origin.content[0] = blockPosition[0] - this.decorations.blockSize;
-        this.origin.target[0] = null;
-        return;
-      }
-
-      this.origin.target[0] = blockPosition[0] - this.decorations.blockSize;
-
-      return;
-    }
-
-    if (
-      Date.now() - (this.lastSlabCollision ?? Date.now()) >= this.decorations.timePerBlock ||
-      this.lastSlabCollision === null
-    ) {
-      this.lastSlabCollision = Date.now();
-    }
-
-    if (this.center[0] < blockPosition[0] + blockHeight) {
-      this.deg.target = closestDeg(this.deg.content);
-      this.origin.target[1] = blockPosition[1] - this.decorations.blockSize;
-    }
-
-    this.origin.target = [null, null];
-    this.floorHeight = blockPosition[1];
-    this.isFalling = true;
-  };
+  isJumping() {
+    return this.center[1] + this.halfBlockSize < this.decorations.floorHeight;
+  }
 
   reset() {
     this.velocity = 0;

@@ -56,8 +56,8 @@ export class CanvasController {
 
     this.layers = new Layers(this.domElement.getContext("2d")!, w);
     this.decorations = new DecorationsController(this.config, this.layers);
-    this.cube = new Cube(this.config, this.decorations.config, w);
     this.blocks = new BlocksController(this.config, this.decorations.config, this.onCollision, this.ui.level);
+    this.cube = new Cube(this.config, this.decorations.config, w);
     this.particules = new ParticulesController(particulesConf, this.cube, this.decorations.config);
 
     this.layers.use(this.cube);
