@@ -160,7 +160,7 @@ export class CanvasController {
 
     if (this.jumpsLeft === cubeConf.jumps) this.lastRegen = Date.now();
 
-    if (Date.now() - this.lastRegen > config.components.cube.timeToRegen) {
+    if (Date.now() - this.lastRegen > config.components.cube.timeToRegen && this.isActive) {
       this.jumpsLeft++;
       this.lastRegen = Date.now();
     }
