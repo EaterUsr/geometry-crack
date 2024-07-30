@@ -8,8 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "npm run lint:es && npm run lint:style",
-    "lint:es": "eslint . --ext=ts,cts,mts,js,cjs,mjs --fix",
-    "lint:style": "stylelint 'src/**/*.css'",
+    "lint:es": "eslint . --ext=ts,cts,mts,js,cjs,mjs --fix --cache",
+    "lint:style": "stylelint 'src/**/*.css' --cache",
     "deploy": "npm run build && gh-pages -d dist",
     "prepare": "husky install"
   },
