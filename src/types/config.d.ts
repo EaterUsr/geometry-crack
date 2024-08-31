@@ -39,6 +39,7 @@ declare type Config = Readonly<{
   layers: LayerCategory[];
   canvasWidth: number;
   canvasHeight: number;
+  maxSpeedFrame: number;
   fpsCalculationTime: number;
   structures: Structures;
   delayBeforeRestart: number;

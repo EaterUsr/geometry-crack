@@ -73,6 +73,7 @@ export const config: Config = {
   },
   canvasWidth: 800,
   canvasHeight: 365,
+  maxSpeedFrame: 25,
   fpsCalculationTime: 300,
   localStorage: {
     default: {

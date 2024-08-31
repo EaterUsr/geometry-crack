@@ -172,7 +172,7 @@ export class CanvasController {
         : truncNbr((Date.now() - this.lastRegen) / config.components.cube.timeToRegen)
     );
 
-    const speedFrame = this.isActive ? Date.now() - this.lastFrame : 0;
+    const speedFrame = this.isActive ? Math.min(Date.now() - this.lastFrame, config.maxSpeedFrame) : 0;
     this.lastFrame = Date.now();
 
     this.config.score = truncNbr(
