@@ -76,13 +76,15 @@ export const config: Config = {
   fpsCalculationTime: 300,
   localStorage: {
     default: {
+      version: 0,
       crackcoins: 0,
-      skins,
+      skins: skins,
       levels: [{ HS: 0 }, ...Object.keys(levels).map(() => ({ completed: false, HS: 0 }))],
     },
     op: {
+      version: 0,
       crackcoins: 999999,
-      skins: skins.map((skin: Skin) => {
+      skins: skins.map(skin => {
         if (skin.status === "equipped") return skin;
 
         return { ...skin, status: "owned" };

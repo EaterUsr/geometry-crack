@@ -29,6 +29,7 @@ export type ChallengeStorage = { HS: number };
 export type LevelStorage = { completed: boolean; HS: number };
 
 declare type LocalStorage = {
+  version: 0;
   crackcoins: number;
   skins: Skin[];
   levels: [ChallengeStorage, ...LevelStorage[]];

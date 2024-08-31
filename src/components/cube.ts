@@ -4,7 +4,7 @@ import { config } from "@/config";
 import { CanvasConfig, DecorationsConfig } from "@/types/config";
 import { backward } from "@/utils/move";
 import { squareHitbox } from "@/utils/collision";
-import { loadImage } from "@/utils/image";
+import { loadImage, skinNameToUrls } from "@/utils/image";
 import { Store } from "@/utils/store";
 import { DrawOptions } from "@/utils/layers";
 
@@ -20,7 +20,7 @@ export class Cube {
   private velocity = 0;
   private jumpVelocity = cubeConf.jumpVelocity;
   private isFrozen = false;
-  private images = (Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin).imgs.map(loadImage);
+  private images = skinNameToUrls(Store.content.skins.find(skin => skin.status === "equipped")!.name).map(loadImage);
   private isTouchingTheFloor = true;
   private jumpsLeft = cubeConf.jumps;
   readonly deg: TargetPosition<number>;
@@ -41,6 +41,7 @@ export class Cube {
     private readonly decorations: DecorationsConfig,
     private readonly w: (size: number) => number
   ) {
+    console.log(skinNameToUrls(Store.content.skins.find(skin => skin.status === "equipped")!.name));
     this.origin = {
       content: decorations.cubeOrigin,
       target: [null, null],

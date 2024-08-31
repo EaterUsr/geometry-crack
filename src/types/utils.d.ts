@@ -63,7 +63,6 @@ declare type Selector = Elements | `${Elements} ${Elements}`;
 
 declare type SkinName = "default" | "batman" | "fractal" | "gameboy" | "matrix" | "neon" | "twinky";
 declare type Skin = {
-  imgs: string[];
   price: number;
   name: SkinName;
   status: "owned" | "equipped" | "unbought";

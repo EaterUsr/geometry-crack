@@ -1,6 +1,4 @@
-import { skinUrl } from "@/utils/image";
-
-export const skins = [
+export const skins: Skin[] = [
   {
     name: "default",
     price: 0,
@@ -36,15 +34,4 @@ export const skins = [
     price: 250,
     status: "unbought",
   },
-]
-  .map(skin => {
-    const imgs = [];
-    for (let i = 0; i <= 4; i++) {
-      imgs[i] = skinUrl(skin.name as SkinName, i);
-    }
-    return {
-      ...skin,
-      imgs,
-    };
-  })
-  .sort((a, b) => a.price - b.price) as Skin[];
+];

@@ -16,6 +16,7 @@ import { levels } from "./config/levels";
 import { getGamemode } from "./utils/gamemode";
 import { truncNbr } from "./utils/math";
 import { LevelStorage } from "./types/config";
+import { skinNameToUrl, skinNameToUrls } from "./utils/image";
 
 export type UIEvent =
   | { type: "START" }
@@ -276,7 +277,7 @@ export class UI {
       "click",
       e => {
         const button = e.target as HTMLButtonElement;
-        const skin = Store.content.skins.find((skin: Skin) => skin.name === button.dataset.btnSkin) as Skin;
+        const skin = Store.content.skins.find(skin => skin.name === button.dataset.btnSkin)!;
 
         if (skin.status === "unbought") {
           if (skin.price <= Store.content.crackcoins) {
@@ -289,14 +290,14 @@ export class UI {
         }
 
         if (skin.status === "owned") {
-          const equippedSkin = Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin;
+          const equippedSkin = Store.content.skins.find(skin => skin.status === "equipped")!;
           skin.status = "equipped";
           equippedSkin.status = "owned";
           this.displayShop();
         }
 
         this.displayShop();
-        this.onSkinUpdate(skin.imgs);
+        this.onSkinUpdate(skinNameToUrls(skin.name));
       },
       this.shopSkins
     );
@@ -446,16 +447,16 @@ export class UI {
       unbought: "buy",
     };
 
-    this.shopCurrentSkin.src = (Store.content.skins.find((skin: Skin) => skin.status === "equipped") as Skin).imgs[4];
+    this.shopCurrentSkin.src = skinNameToUrl(Store.content.skins.find(skin => skin.status === "equipped")!.name);
 
     this.shopSkins.innerHTML = Store.content.skins
-      .map((skin: Skin) => {
+      .map(skin => {
         return `
         <div class="skin-card">
           <span class="skin-card__price">${skin.price}
             <img src="/img/ui/crackcoin_icon.svg" />
           </span>
-          <img class="skin-card__img" src=${skin.imgs[4]} />
+          <img class="skin-card__img" src=${skinNameToUrl(skin.name)} />
           <button class="skin-card__btn btn skin-card__btn--${skin.status}" data-btn-skin="${skin.name}">${
           statusButton[skin.status]
         }</button>
