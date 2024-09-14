@@ -348,6 +348,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   &__title {
     text-align: center;
@@ -355,7 +356,7 @@ body {
     font-family: var(--font-noto);
     font-weight: var(--wght-black);
     font-size: 5rem;
-    margin-bottom: 12rem;
+    margin-bottom: 6rem;
   }
   
   &__overlay {

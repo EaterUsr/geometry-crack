@@ -101,6 +101,9 @@ export class CanvasController {
       Store.save();
       this.ui.displayCrackcoins(Store.content.crackcoins);
     }
+
+    this.ui.displayNextBtn(this.ui.level < Store.content.levels.length - 1);
+
     this.ui.finish();
   }
 

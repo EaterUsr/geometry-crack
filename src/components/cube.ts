@@ -41,7 +41,6 @@ export class Cube {
     private readonly decorations: DecorationsConfig,
     private readonly w: (size: number) => number
   ) {
-    console.log(skinNameToUrls(Store.content.skins.find(skin => skin.status === "equipped")!.name));
     this.origin = {
       content: decorations.cubeOrigin,
       target: [null, null],

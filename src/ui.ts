@@ -142,6 +142,9 @@ export class UI {
               BACK: {
                 target: "levels",
               },
+              START: {
+                target: "play",
+              },
             },
           },
         },
@@ -172,6 +175,7 @@ export class UI {
   private readonly btnResetProgress = qs("#reset-progress");
   private readonly levelsContainer = qs("#levels-container");
   private readonly fpsContainer = qs("#play__fps");
+  private readonly btnNextLevel = qs("#completed__btn--next");
   private readonly collisionSelect = qs<HTMLSelectElement>("#play__collision");
 
   private events = new EventList<"state buttons" | "level buttons" | "playing" | "restart" | "menu" | "shop">();
@@ -232,6 +236,16 @@ export class UI {
     this.events.add("state buttons", "focus", () => (this.isSpaceKeyDisabled = true), challengeBtn);
     this.events.add("state buttons", "blur", () => (this.isSpaceKeyDisabled = false), challengeBtn);
     challengeBtn.setAttribute("tabindex", "-1");
+
+    this.events.add(
+      "state buttons",
+      "click",
+      () => {
+        this.level++;
+        this.handleEvent({ type: "START" });
+      },
+      this.btnNextLevel
+    );
 
     this.events.enable("state buttons");
     this.events.add(
@@ -489,12 +503,12 @@ export class UI {
         "level buttons",
         "click",
         () => {
-          const levelNumber = +levelBtn.getAttribute("data-level")! as LevelName;
+          const levelNumber = levelBtn.getAttribute("data-level")!;
           const isLocked = levelBtn.hasAttribute("data-locked");
 
           if (isLocked) return;
 
-          this.level = levelNumber;
+          this.level = +levelNumber;
           this.handleEvent({ type: "START" });
         },
         levelBtn
@@ -510,5 +524,9 @@ export class UI {
 
   getCollisionSelect() {
     return this.collisionSelect.value as "all" | "rock+slab" | "spike" | "none";
+  }
+
+  displayNextBtn(show = true) {
+    this.btnNextLevel.style.visibility = show ? "visible" : "hidden";
   }
 }

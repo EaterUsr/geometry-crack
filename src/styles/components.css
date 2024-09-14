@@ -87,6 +87,23 @@
     width: 70%;
     transform: translate(-50%, -50%);
   }
+
+  &--next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.2rem 1.8rem;
+    margin-bottom: 3rem;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  &__img--next {
+    height: 70%; 
+  }
   
   &--settings {
     --gap: 0.7rem;

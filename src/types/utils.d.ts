@@ -55,6 +55,8 @@ type Elements =
   | "#challenge-btn"
   | "#play__fps"
   | "#play__collision"
+  | "#play__collision"
+  | "#completed__btn--next"
   | "[data-button]"
   | "[data-level]"
   | "[data-crackcoins-counter]";
